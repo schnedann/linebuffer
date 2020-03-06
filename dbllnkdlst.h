@@ -1,15 +1,18 @@
 #ifndef DBLLNKDLST_H
 #define DBLLNKDLST_H
 
+#include "dtypes.h"
+#include "iterators.h"
 #include "node_definitions.h"
 
 namespace Datastructures{
 
 template<typename T> class dbllnkdlst{
 public:
-  using data_t    = Datastructures::Nodes::owning_ptr_t<T>;
-  using own_ptr_t = Datastructures::Nodes::owning_ptr_t<Datastructures::Nodes::double_linked_single_owned<T>>;
-  using wk_ptr_t  = Datastructures::Nodes::weak_ptr_t<Datastructures::Nodes::double_linked_single_owned<T>>;
+  using data_t    = Core::Container::owning_ptr_t<T>;
+  using wk_data_t = Core::Container::weak_ptr_t<T>;
+  using own_ptr_t = Core::Container::owning_ptr_t<Datastructures::Nodes::double_linked_single_owned<T>>;
+  using wk_ptr_t  = Core::Container::weak_ptr_t<Datastructures::Nodes::double_linked_single_owned<T>>;
 private:
   own_ptr_t base{nullptr};
   wk_ptr_t  top{nullptr};
@@ -96,6 +99,15 @@ public:
     return res;
   }
 
+  //-----
+
+  /*T& operator[](size_t idx){
+    return;
+  }
+  const T& operator[](size_t idx) const{
+    return;
+  }*/
+
   //----- Traversing List
 
   wk_ptr_t get_next(wk_ptr_t const& start) const{
@@ -119,6 +131,22 @@ public:
   }
 
 };
+
+//-----
+
+template<typename T> with_error_t<typename dbllnkdlst<T>::wk_data_t> at(dbllnkdlst<T> const& dll, size_t const idx){
+  bool err = true;
+  typename dbllnkdlst<T>::wk_data_t ptr = nullptr;
+  typename dbllnkdlst<T>::wk_ptr_t it = dll.get_next(nullptr);
+  size_t cnt = 0;
+  while(Core::Container::is_valid(it) && cnt<idx){
+    it = dll.get_next(it);
+    ++cnt;
+  }
+  err = !(cnt==idx);
+  if(!err) ptr = it->data.get();
+  return make_with_error<typename dbllnkdlst<T>::wk_data_t>(err,ptr);
+}
 
 //----- Count Elements
 
