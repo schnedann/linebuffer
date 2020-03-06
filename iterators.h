@@ -52,22 +52,39 @@
 #ifndef ITERATORS_H
 #define ITERATORS_H
 
+#include <memory>
+
 #include "compile_guards.h"
 
 namespace Core {
 
 namespace Container {
 
+//--------------------------------------------------
+// Convinient Pointers --> lean Iterators
+//--------------------------------------------------
+
 template<typename T> using  iterator_t = T*;
 template<typename T> using citerator_t = T const *;
 
-//-----
+//--------------------------------------------------
+// have owning and pointing Pointers
+//--------------------------------------------------
+
+template<typename T> using owning_ptr_t = std::unique_ptr<T>;
+template<typename T> using weak_ptr_t   = iterator_t<T>;
+
+//--------------------------------------------------
+// convert to a const Iterator
+//--------------------------------------------------
 
 template<typename T> citerator_t<T> constify(iterator_t<T> it){
   return reinterpret_cast<citerator_t<T>>(it);
 }
 
-//-----
+//--------------------------------------------------
+// test Iterator not null
+//--------------------------------------------------
 
 template<typename T> bool is_valid(citerator_t<T> cit){
   return (nullptr != cit);
@@ -76,7 +93,9 @@ template<typename T> bool is_valid(iterator_t<T> it){
   return is_valid<T>(constify<T>(it));
 }
 
-//-----
+//--------------------------------------------------
+// Get / Set via Iterator
+//--------------------------------------------------
 
 template<typename T, typename I> bool set_at(iterator_t<T> it, I offset, T const& data){
   Compile::Guards::IsUnsigned<I>();
@@ -103,7 +122,9 @@ template<typename T, typename I> T get_at(iterator_t<T> it, I offset){
   return get_at<T,I>(constify<T>(it),offset);
 }
 
-//-----
+//--------------------------------------------------
+// Move an Iterator
+//--------------------------------------------------
 
 template<typename T, typename I> citerator_t<T> advance(citerator_t<T> cit, I offset){
   Compile::Guards::IsUnsigned<I>();
