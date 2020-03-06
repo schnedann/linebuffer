@@ -1,6 +1,8 @@
 #ifndef DBLLNKDLST_H
 #define DBLLNKDLST_H
 
+#include <functional>
+
 #include "dtypes.h"
 #include "iterators.h"
 #include "node_definitions.h"
@@ -164,6 +166,19 @@ template<typename T> size_t count(typename dbllnkdlst<T>::wk_ptr_t const& first,
 
 template<typename T> size_t count(dbllnkdlst<T> const& dll){
   return count<T>(dll.get_next(nullptr),dll.get_prev(nullptr));
+}
+
+//-----
+
+template<typename T> size_t find_match(dbllnkdlst<T> const& dll, std::function<bool(T const&)> fct){
+  bool found = false;
+
+  if(fct){
+    for(auto ptr = dll.get_next(nullptr); !found && (ptr!=nullptr); ptr = dll.get_next(ptr)){
+      found = fct(*(ptr->data.get()));
+    }
+  }
+  return found;
 }
 
 //-----

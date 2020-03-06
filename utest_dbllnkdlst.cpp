@@ -112,10 +112,23 @@ TEST_CASE("Datastructures::dbllnkdlst"){
       REQUIRE(!has_error(Datastructures::at<u16>(dll,ii)));
       //REQUIRE(ii == *get_data(Datastructures::at<u16>(dll,ii)));
     }
+  }
 
+  SECTION("7"){
+    Datastructures::dbllnkdlst<u16> dll;
 
-
-
+    constexpr u16 const elements = 10000;
+    constexpr u16 const offset   = 2;
+    for(u16 ii=0; ii<offset; ++ii){
+      dll.push_front(ii);
+    }
+    for(u16 ii=offset; ii<elements; ++ii){
+      dll.push_front(ii);
+      auto found = Datastructures::find_match<u16>(dll,[&ii](u16 const& _d)->bool{
+        return ((ii-1)==_d);
+      });
+      REQUIRE( found );
+    }
   }
 
 }
