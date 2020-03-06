@@ -1,0 +1,4 @@
+#ifndef NODE_DEFINITIONS_H
+#define NODE_DEFINITIONS_H
+
+#endif // NODE_DEFINITIONS_H
