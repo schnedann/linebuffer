@@ -64,4 +64,21 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     REQUIRE(0 == dll.count());
   }
 
+  SECTION("5"){
+    Datastructures::dbllnkdlst<u16> dll;
+
+    constexpr u16 const elements = 10000;
+    for(u16 ii=0; ii<elements; ++ii){
+      dll.push_back(ii);
+    }
+
+    u16 ref = 0;
+    auto ptr = dll.get_next(nullptr);
+    while(Core::Container::is_valid(ptr)){
+      REQUIRE(ref == *(ptr->data.get()));
+      ++ref;
+      ptr = dll.get_next(ptr);
+    }
+  }
+
 }

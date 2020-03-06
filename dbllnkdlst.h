@@ -7,7 +7,6 @@ namespace Datastructures{
 
 template<typename T> class dbllnkdlst{
 public:
-
   using data_t    = Datastructures::Nodes::owning_ptr_t<T>;
   using own_ptr_t = Datastructures::Nodes::owning_ptr_t<Datastructures::Nodes::double_linked_single_owned<T>>;
   using wk_ptr_t  = Datastructures::Nodes::weak_ptr_t<Datastructures::Nodes::double_linked_single_owned<T>>;
@@ -17,6 +16,8 @@ private:
 public:
    dbllnkdlst()=default;
   ~dbllnkdlst()=default;
+
+  //----- Push to List
 
   void push_front(T const& _d){
     if(!base){
@@ -61,6 +62,8 @@ public:
     return;
   }
 
+  //----- Pop from List
+
   data_t pop_front(){
     data_t res{nullptr};
     if(base){
@@ -93,6 +96,30 @@ public:
     return res;
   }
 
+  //----- Traversing List
+
+  wk_ptr_t get_next(wk_ptr_t const& start){
+    wk_ptr_t ptr{nullptr};
+    if(Core::Container::is_valid(start)){
+      ptr = start->next.get();
+    }else{
+      ptr = base.get();
+    }
+    return ptr;
+  }
+
+  wk_ptr_t get_prev(wk_ptr_t const& start){
+    wk_ptr_t ptr{nullptr};
+    if(Core::Container::is_valid(start)){
+      ptr = start->prev;
+    }else{
+      ptr = top;
+    }
+    return ptr;
+  }
+
+  //----- Count Elements
+
   size_t count(wk_ptr_t const& first, wk_ptr_t const& last){
     size_t cnt = 0;
     bool OK  = Core::Container::is_valid(first);
@@ -109,7 +136,11 @@ public:
     return count(base.get(),top);
   }
 
+  //-----
+
 };
+
+
 
 } //namespace
 
