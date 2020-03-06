@@ -183,6 +183,19 @@ template<typename T> with_error_t<size_t> find_match(dbllnkdlst<T> const& dll, s
   return make_with_error<size_t>(!found,idx);
 }
 
+template<typename T> with_error_t<size_t> rfind_match(dbllnkdlst<T> const& dll, std::function<bool(T const&)> fct){
+  bool found = false;
+  size_t idx = count(dll);
+  if(fct && (idx>0)){
+    for(auto ptr = dll.get_prev(nullptr); ptr!=nullptr; ptr = dll.get_prev(ptr)){
+      found = fct(*(ptr->data.get()));
+      --idx;
+      if(found) break;
+    }
+  }
+  return make_with_error<size_t>(!found,idx);
+}
+
 //-----
 
 } //namespace

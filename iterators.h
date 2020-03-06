@@ -56,9 +56,9 @@
 
 #include "compile_guards.h"
 
-namespace Core {
+namespace Core{
 
-namespace Container {
+namespace Container{
 
 //--------------------------------------------------
 // Convinient Pointers --> lean Iterators

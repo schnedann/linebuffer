@@ -133,4 +133,23 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     }
   }
 
+  SECTION("8"){
+    Datastructures::dbllnkdlst<u16> dll;
+
+    constexpr u16 const elements = 10000;
+    constexpr u16 const offset   = 2;
+    for(u16 ii=0; ii<offset; ++ii){
+      dll.push_back(ii);
+    }
+    for(u16 ii=offset; ii<elements; ++ii){
+      dll.push_back(ii);
+      auto found = Datastructures::rfind_match<u16>(dll,[&ii](u16 const& _d)->bool{
+        return ((ii-1)==_d);
+      });
+      CAPTURE(ii);
+      REQUIRE( !found.first );
+      REQUIRE( (ii-1) == found.second );
+    }
+  }
+
 }
