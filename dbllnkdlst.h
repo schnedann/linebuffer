@@ -7,6 +7,8 @@ namespace Datastructures{
 
 template<typename T> class dbllnkdlst{
 public:
+
+  using data_t    = Datastructures::Nodes::owning_ptr_t<T>;
   using own_ptr_t = Datastructures::Nodes::owning_ptr_t<Datastructures::Nodes::double_linked_single_owned<T>>;
   using wk_ptr_t  = Datastructures::Nodes::weak_ptr_t<Datastructures::Nodes::double_linked_single_owned<T>>;
 private:
@@ -57,6 +59,38 @@ public:
     top->data = std::make_unique<T>();
     *(top->data.get()) = _d;
     return;
+  }
+
+  data_t pop_front(){
+    data_t res{nullptr};
+    if(base){
+      res = std::move(base->data);
+      bool more = base->next.operator bool();
+      if(more){
+        base->next->prev = base->prev;
+        base = std::move(base->next);
+      }else{
+        base = nullptr;
+        top = nullptr;
+      }
+    }
+    return res;
+  }
+
+  data_t pop_back(){
+    data_t res{nullptr};
+    if(base){
+      res = std::move(top->data);
+      bool more = base->next.operator bool();
+      if(more){
+        top = top->prev;
+        top->next.reset();
+      }else{
+        base = nullptr;
+        top = nullptr;
+      }
+    }
+    return res;
   }
 
   size_t count(wk_ptr_t const& first, wk_ptr_t const& last){
