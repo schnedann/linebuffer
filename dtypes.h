@@ -55,6 +55,7 @@
 #ifdef __cplusplus
   #include <cstdint>
   #include <cstddef>
+  #include <utility>
 
 //--------------------------------------------------
 // normal Types
@@ -83,6 +84,21 @@ using  sf8 =  int_fast8_t ;
 using sf16 =  int_fast16_t;
 using sf32 =  int_fast32_t;
 using sf64 =  int_fast64_t;
+
+//--------------------------------------------------
+// Multi-return-Types
+//--------------------------------------------------
+
+template<typename T> using with_error_t = std::pair<bool,T>;
+template<typename T> bool has_error(with_error_t<T> const& rt){
+  return rt.first;
+}
+template<typename T> T& get_data(with_error_t<T>& rt){
+  return rt.second;
+}
+template<typename T> with_error_t<T> make_with_error(bool const err, T const& data){
+  return with_error_t<T>(err,data);
+}
 
 #else
   #include <stdint.h>
