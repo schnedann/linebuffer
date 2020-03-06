@@ -170,15 +170,17 @@ template<typename T> size_t count(dbllnkdlst<T> const& dll){
 
 //-----
 
-template<typename T> size_t find_match(dbllnkdlst<T> const& dll, std::function<bool(T const&)> fct){
+template<typename T> with_error_t<size_t> find_match(dbllnkdlst<T> const& dll, std::function<bool(T const&)> fct){
   bool found = false;
-
+  size_t idx = 0;
   if(fct){
-    for(auto ptr = dll.get_next(nullptr); !found && (ptr!=nullptr); ptr = dll.get_next(ptr)){
+    for(auto ptr = dll.get_next(nullptr); ptr!=nullptr; ptr = dll.get_next(ptr)){
       found = fct(*(ptr->data.get()));
+      if(found) break;
+      ++idx;
     }
   }
-  return found;
+  return make_with_error<size_t>(!found,idx);
 }
 
 //-----
