@@ -16,10 +16,10 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     constexpr u16 const elements = 10000;
     for(u16 ii=0; ii<elements; ++ii){
       CAPTURE(ii);
-      REQUIRE(ii == dll.count());
+      REQUIRE(ii == Datastructures::count(dll));
       dll.push_front(ii);
     }
-    REQUIRE(elements == dll.count());
+    REQUIRE(elements == Datastructures::count(dll));
   }
 
   SECTION("2"){
@@ -28,10 +28,10 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     constexpr u16 const elements = 10000;
     for(u16 ii=0; ii<elements; ++ii){
       CAPTURE(ii);
-      REQUIRE(ii == dll.count());
+      REQUIRE(ii == Datastructures::count(dll));
       dll.push_back(ii);
     }
-    REQUIRE(elements == dll.count());
+    REQUIRE(elements == Datastructures::count(dll));
   }
 
   SECTION("3"){
@@ -46,7 +46,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
       auto tmp = dll.pop_back();
       REQUIRE(ii == *tmp);
     }
-    REQUIRE(0 == dll.count());
+    REQUIRE(0 == Datastructures::count(dll));
   }
 
   SECTION("4"){
@@ -61,7 +61,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
       auto tmp = dll.pop_front();
       REQUIRE(ii == *tmp);
     }
-    REQUIRE(0 == dll.count());
+    REQUIRE(0 == Datastructures::count(dll));
   }
 
   SECTION("5"){

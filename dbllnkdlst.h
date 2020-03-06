@@ -98,7 +98,7 @@ public:
 
   //----- Traversing List
 
-  wk_ptr_t get_next(wk_ptr_t const& start){
+  wk_ptr_t get_next(wk_ptr_t const& start) const{
     wk_ptr_t ptr{nullptr};
     if(Core::Container::is_valid(start)){
       ptr = start->next.get();
@@ -108,7 +108,7 @@ public:
     return ptr;
   }
 
-  wk_ptr_t get_prev(wk_ptr_t const& start){
+  wk_ptr_t get_prev(wk_ptr_t const& start) const{
     wk_ptr_t ptr{nullptr};
     if(Core::Container::is_valid(start)){
       ptr = start->prev;
@@ -118,29 +118,27 @@ public:
     return ptr;
   }
 
-  //----- Count Elements
-
-  size_t count(wk_ptr_t const& first, wk_ptr_t const& last){
-    size_t cnt = 0;
-    bool OK  = Core::Container::is_valid(first);
-         OK &= Core::Container::is_valid(last);
-    if(OK){
-      for(wk_ptr_t ptr=first; ptr!=last->next.get(); ptr=ptr->next.get()){
-        ++cnt;
-      }
-    }
-    return cnt;
-  }
-
-  size_t count(){
-    return count(base.get(),top);
-  }
-
-  //-----
-
 };
 
+//----- Count Elements
 
+template<typename T> size_t count(typename dbllnkdlst<T>::wk_ptr_t const& first, typename dbllnkdlst<T>::wk_ptr_t const& last){
+  size_t cnt = 0;
+  bool OK  = Core::Container::is_valid(first);
+       OK &= Core::Container::is_valid(last);
+  if(OK){
+    for(typename dbllnkdlst<T>::wk_ptr_t ptr=first; ptr!=last->next.get(); ptr=ptr->next.get()){
+      ++cnt;
+    }
+  }
+  return cnt;
+}
+
+template<typename T> size_t count(dbllnkdlst<T> const& dll){
+  return count<T>(dll.get_next(nullptr),dll.get_prev(nullptr));
+}
+
+//-----
 
 } //namespace
 
