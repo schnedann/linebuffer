@@ -81,4 +81,21 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     }
   }
 
+  SECTION("6"){
+    Datastructures::dbllnkdlst<u16> dll;
+
+    constexpr u16 const elements = 10000;
+    for(u16 ii=0; ii<elements; ++ii){
+      dll.push_front(ii);
+    }
+
+    u16 ref = 0;
+    auto ptr = dll.get_prev(nullptr);
+    while(Core::Container::is_valid(ptr)){
+      REQUIRE(ref == *(ptr->data.get()));
+      ++ref;
+      ptr = dll.get_prev(ptr);
+    }
+  }
+
 }
