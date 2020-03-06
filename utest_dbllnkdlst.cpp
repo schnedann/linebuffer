@@ -44,6 +44,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
 
     for(u16 ii=0; ii<elements; ++ii){
       auto tmp = dll.pop_back();
+      //CAPTURE(ii);
       REQUIRE(ii == *tmp);
     }
     REQUIRE(0 == Datastructures::count(dll));
@@ -59,6 +60,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
 
     for(u16 ii=0; ii<elements; ++ii){
       auto tmp = dll.pop_front();
+      //CAPTURE(ii);
       REQUIRE(ii == *tmp);
     }
     REQUIRE(0 == Datastructures::count(dll));
@@ -75,6 +77,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     u16 ref = 0;
     auto ptr = dll.get_next(nullptr);
     while(Core::Container::is_valid(ptr)){
+      CAPTURE(ptr);
       REQUIRE(ref == *(ptr->data.get()));
       ++ref;
       ptr = dll.get_next(ptr);
@@ -92,10 +95,27 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     u16 ref = 0;
     auto ptr = dll.get_prev(nullptr);
     while(Core::Container::is_valid(ptr)){
+      CAPTURE(ptr);
       REQUIRE(ref == *(ptr->data.get()));
       ++ref;
       ptr = dll.get_prev(ptr);
     }
+  }
+
+  SECTION("6"){
+    Datastructures::dbllnkdlst<u16> dll;
+
+    constexpr u16 const elements = 10000;
+    for(u16 ii=0; ii<elements; ++ii){
+      dll.push_front(ii);
+      CAPTURE(ii);
+      REQUIRE(!has_error(Datastructures::at<u16>(dll,ii)));
+      //REQUIRE(ii == *get_data(Datastructures::at<u16>(dll,ii)));
+    }
+
+
+
+
   }
 
 }
