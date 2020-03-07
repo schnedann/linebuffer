@@ -171,4 +171,20 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     }
   }
 
+  SECTION("10 -Datastructures::for_each_node<>()"){
+    Datastructures::dbllnkdlst<u16> dll;
+
+    constexpr u16 const elements = 10000;
+    for(u16 ii=0; ii<elements; ++ii){
+      dll.push_back(ii);
+    }
+
+    u64 res=0;
+    Datastructures::for_each_node<u16>(dll,[&res](u16 const& _d){
+      res += _d;
+    });
+
+    REQUIRE( 49995000 == res );
+  }
+
 }
