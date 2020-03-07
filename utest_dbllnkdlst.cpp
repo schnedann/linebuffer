@@ -10,7 +10,7 @@ using namespace std;
 
 TEST_CASE("Datastructures::dbllnkdlst"){
 
-  SECTION("1"){
+  SECTION("1 - Datastructures::dbllnkdlst<u16>.push_front"){
     Datastructures::dbllnkdlst<u16> dll;
 
     constexpr u16 const elements = 10000;
@@ -22,7 +22,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     REQUIRE(elements == Datastructures::count(dll));
   }
 
-  SECTION("2"){
+  SECTION("2 - Datastructures::dbllnkdlst<u16>.push_back"){
     Datastructures::dbllnkdlst<u16> dll;
 
     constexpr u16 const elements = 10000;
@@ -34,7 +34,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     REQUIRE(elements == Datastructures::count(dll));
   }
 
-  SECTION("3"){
+  SECTION("3 - Datastructures::dbllnkdlst<u16>.push_front,pop_back"){
     Datastructures::dbllnkdlst<u16> dll;
 
     constexpr u16 const elements = 10000;
@@ -50,7 +50,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     REQUIRE(0 == Datastructures::count(dll));
   }
 
-  SECTION("4"){
+  SECTION("4 - Datastructures::dbllnkdlst<u16>.push_back,pop_front"){
     Datastructures::dbllnkdlst<u16> dll;
 
     constexpr u16 const elements = 10000;
@@ -66,7 +66,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     REQUIRE(0 == Datastructures::count(dll));
   }
 
-  SECTION("5"){
+  SECTION("5 - Datastructures::dbllnkdlst<u16>.get_next"){
     Datastructures::dbllnkdlst<u16> dll;
 
     constexpr u16 const elements = 10000;
@@ -84,7 +84,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     }
   }
 
-  SECTION("6"){
+  SECTION("6 - Datastructures::dbllnkdlst<u16>.get_prev"){
     Datastructures::dbllnkdlst<u16> dll;
 
     constexpr u16 const elements = 10000;
@@ -102,7 +102,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     }
   }
 
-  SECTION("6"){
+  SECTION("7 - Datastructures::at<>()"){
     Datastructures::dbllnkdlst<u16> dll;
 
     constexpr u16 const elements = 10000;
@@ -114,7 +114,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     }
   }
 
-  SECTION("7"){
+  SECTION("8 - Datastructures::dbllnkdlst<u16>.find_match"){
     Datastructures::dbllnkdlst<u16> dll;
 
     constexpr u16 const elements = 10000;
@@ -133,7 +133,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     }
   }
 
-  SECTION("8"){
+  SECTION("9 - Datastructures::dbllnkdlst<u16>.rfind_match"){
     Datastructures::dbllnkdlst<u16> dll;
 
     constexpr u16 const elements = 10000;
@@ -152,7 +152,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     }
   }
 
-  SECTION("9"){
+  SECTION("10 - Datastructures::get_node<>()"){
     Datastructures::dbllnkdlst<u16> dll;
 
     constexpr u16 const elements = 10000;
