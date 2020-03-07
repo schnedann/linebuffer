@@ -152,4 +152,23 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     }
   }
 
+  SECTION("9"){
+    Datastructures::dbllnkdlst<u16> dll;
+
+    constexpr u16 const elements = 10000;
+    for(u16 ii=0; ii<elements; ++ii){
+      dll.push_back(ii);
+    }
+
+    size_t idx=0;
+    for(auto ptr1 = dll.get_next(nullptr); ptr1!=dll.get_prev(nullptr); ptr1=dll.get_next(ptr1)){
+      auto ptr2 = Datastructures::get_node<u16>(dll,idx);
+      CAPTURE(idx);
+      REQUIRE( !has_error<Datastructures::dbllnkdlst<u16>::wk_ptr_t>(ptr2) );
+      REQUIRE( ptr1 == get_data<Datastructures::dbllnkdlst<u16>::wk_ptr_t>(ptr2) );
+
+      ++idx;
+    }
+  }
+
 }

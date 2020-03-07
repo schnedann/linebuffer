@@ -136,6 +136,23 @@ public:
 
 //-----
 
+template<typename T> with_error_t<typename dbllnkdlst<T>::wk_ptr_t> get_node(dbllnkdlst<T> const& dll, size_t const idx){
+  bool err = true;
+  typename dbllnkdlst<T>::wk_ptr_t ptr = nullptr;
+  typename dbllnkdlst<T>::wk_ptr_t it = dll.get_next(nullptr);
+
+  size_t cnt = 0;
+  while(Core::Container::is_valid(it) && cnt<idx){
+    it = dll.get_next(it);
+    ++cnt;
+  }
+  err = !(cnt==idx);
+  if(!err) ptr = it;
+  return make_with_error<typename dbllnkdlst<T>::wk_ptr_t>(err,ptr);
+}
+
+//-----
+
 template<typename T> with_error_t<typename dbllnkdlst<T>::wk_data_t> at(dbllnkdlst<T> const& dll, size_t const idx){
   bool err = true;
   typename dbllnkdlst<T>::wk_data_t ptr = nullptr;
