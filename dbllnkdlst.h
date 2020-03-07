@@ -215,21 +215,10 @@ template<typename T> with_error_t<size_t> rfind_match(dbllnkdlst<T> const& dll, 
 
 //-----
 
-/*
-template<typename T, typename RT> RT for_each_node(dbllnkdlst<T> const& dll, std::function<RT(T const&, RT const&)> fct, RT const& init){
-  RT res = init;
+template<typename T> void for_each_node(dbllnkdlst<T> const& dll, std::function<void(typename Datastructures::dbllnkdlst<T>::wk_data_t dptr)> fct){
   if(fct){
     for(auto ptr = dll.get_next(nullptr); ptr!=nullptr; ptr = dll.get_next(ptr)){
-      res = fct(*(ptr->data.get()),res);
-    }
-  }
-  return res;
-}*/
-
-template<typename T> void for_each_node(dbllnkdlst<T> const& dll, std::function<void(T const&)> fct){
-  if(fct){
-    for(auto ptr = dll.get_next(nullptr); ptr!=nullptr; ptr = dll.get_next(ptr)){
-      fct(*(ptr->data.get()));
+      fct(ptr->data.get());
     }
   }
   return;

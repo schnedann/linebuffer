@@ -180,8 +180,8 @@ TEST_CASE("Datastructures::dbllnkdlst"){
     }
 
     u64 res=0;
-    Datastructures::for_each_node<u16>(dll,[&res](u16 const& _d){
-      res += _d;
+    Datastructures::for_each_node<u16>(dll,[&res](Datastructures::dbllnkdlst<u16>::wk_data_t dptr){
+      res += *dptr;
     });
 
     REQUIRE( 49995000 == res );
