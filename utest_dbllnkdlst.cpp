@@ -179,12 +179,25 @@ TEST_CASE("Datastructures::dbllnkdlst"){
       dll.push_back(ii);
     }
 
-    u64 res=0;
-    Datastructures::for_each_node<u16>(dll,[&res](Datastructures::dbllnkdlst<u16>::wk_data_t dptr){
-      res += *dptr;
-    });
+    { //sum
+      u64 res=0;
+      Datastructures::for_each_node<u16>(dll,[&res](Datastructures::dbllnkdlst<u16>::wk_data_t dptr){
+        res += *dptr;
+      });
+      REQUIRE( 49995000 == res );
+    }
 
-    REQUIRE( 49995000 == res );
+    { //increase each element by 1 and sum again
+      Datastructures::for_each_node<u16>(dll,[](Datastructures::dbllnkdlst<u16>::wk_data_t dptr){
+        *dptr += 1;
+      });
+
+      u64 res=0;
+      Datastructures::for_each_node<u16>(dll,[&res](Datastructures::dbllnkdlst<u16>::wk_data_t dptr){
+        res += *dptr;
+      });
+      REQUIRE( 50005000 == res );
+    }
   }
 
 }
