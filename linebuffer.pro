@@ -18,6 +18,7 @@ SOURCES += \
         linebuffer.cpp \
         main.cpp \
         utest_dbllnkdlst.cpp \
+        utest_fields.cpp \
         utest_linebuffer.cpp
 
 HEADERS += \
@@ -25,6 +26,7 @@ HEADERS += \
   dbllnkdlst.h \
   dtypes.h \
   external/Catch2/single_include/catch2/catch.hpp \
+  fields.h \
   iterators.h \
   linebuffer.h \
   node_definitions.h
