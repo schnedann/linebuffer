@@ -6,6 +6,7 @@
 #include "dtypes.h"
 #include "iterators.h"
 #include "node_definitions.h"
+#include "compile_guards.h"
 
 namespace Datastructures{
 
@@ -136,7 +137,14 @@ public:
 
 //-----
 
+/**
+ * @brief Datastructures::get_node -Get Node-ptr from Double Linked List by Index
+ * @param dll - Reference to Double Linked List
+ * @param idx - Index
+ * @return First: True on Error Second: Pointer to Node, only valid if First == false and pointer not Null
+ */
 template<typename T> with_error_t<typename dbllnkdlst<T>::wk_ptr_t> get_node(dbllnkdlst<T> const& dll, size_t const idx){
+  Compile::Guards::IsUnsigned<size_t>();
   bool err = true;
   typename dbllnkdlst<T>::wk_ptr_t ptr = nullptr;
   typename dbllnkdlst<T>::wk_ptr_t it = dll.get_next(nullptr);
@@ -153,7 +161,14 @@ template<typename T> with_error_t<typename dbllnkdlst<T>::wk_ptr_t> get_node(dbl
 
 //-----
 
+/**
+ * @brief Datastructures::at - Get Data-ptr from Double Linked List by Index
+ * @param dll - Reference of Double Linked List
+ * @param idx - Index
+ * @return First: True on Error Second: Pointer to Data, only valid if First == false and pointer not Null
+ */
 template<typename T> with_error_t<typename dbllnkdlst<T>::wk_data_t> at(dbllnkdlst<T> const& dll, size_t const idx){
+  Compile::Guards::IsUnsigned<size_t>();
   bool err = true;
   typename dbllnkdlst<T>::wk_data_t ptr = nullptr;
   typename dbllnkdlst<T>::wk_ptr_t it = dll.get_next(nullptr);
@@ -169,6 +184,12 @@ template<typename T> with_error_t<typename dbllnkdlst<T>::wk_data_t> at(dbllnkdl
 
 //----- Count Elements
 
+/**
+ * @brief Datastructures::count - Count Nodes from first pointer to last pointer
+ * @param first - First counted Node
+ * @param last  - Last counted Node
+ * @return Number of Nodes --> 0 = Error, 1 if First==Last
+ */
 template<typename T> size_t count(typename dbllnkdlst<T>::wk_ptr_t const& first, typename dbllnkdlst<T>::wk_ptr_t const& last){
   size_t cnt = 0;
   bool OK  = Core::Container::is_valid(first);
@@ -187,6 +208,12 @@ template<typename T> size_t count(dbllnkdlst<T> const& dll){
 
 //-----
 
+/**
+ * @brief Datastructures::find_match - Traverse all Nodes in Double Linked List and apply check function fct
+ * @param dll - Reference to Double Linked List
+ * @param fct - function to check a node for a match
+ * @return First: true on Error, Second: the Index of the matching Node (only valid if First == false)
+ */
 template<typename T> with_error_t<size_t> find_match(dbllnkdlst<T> const& dll, std::function<bool(T const&)> fct){
   bool found = false;
   size_t idx = 0;
@@ -200,6 +227,12 @@ template<typename T> with_error_t<size_t> find_match(dbllnkdlst<T> const& dll, s
   return make_with_error<size_t>(!found,idx);
 }
 
+/**
+ * @brief Datastructures::rfind_match - Traverse all Nodes of Double Linked List in reverse order and apply check function fct
+ * @param dll - Reference to Double Linked List
+ * @param fct - function to check a node for a match
+ * @return First: true on Error, Second: the Index of the matching Node (only valid if First == false)
+ */
 template<typename T> with_error_t<size_t> rfind_match(dbllnkdlst<T> const& dll, std::function<bool(T const&)> fct){
   bool found = false;
   size_t idx = count(dll);
@@ -215,6 +248,11 @@ template<typename T> with_error_t<size_t> rfind_match(dbllnkdlst<T> const& dll, 
 
 //-----
 
+/**
+ * @brief Datastructures::for_each_node - Traverse all Nodes of Double Linked List and apply data manipulating function fct
+ * @param dll - Reference to Double Linked List
+ * @param fct - data manipulation function
+ */
 template<typename T> void for_each_node(dbllnkdlst<T> const& dll, std::function<void(typename Datastructures::dbllnkdlst<T>::wk_data_t dptr)> fct){
   if(fct){
     for(auto ptr = dll.get_next(nullptr); ptr!=nullptr; ptr = dll.get_next(ptr)){

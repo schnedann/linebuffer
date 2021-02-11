@@ -1,7 +1,7 @@
 /******************************************************************************/
 /** Compact Datatype Definitions                                             **/
 /** collected and / or implemented by                                        **/
-/** Danny Schneider, 2017-2020                                               **/
+/** Danny Schneider, 2017-2021                                               **/
 /******************************************************************************/
 
 /*
@@ -56,9 +56,9 @@
 
 #include "compile_guards.h"
 
-namespace Core{
+namespace Core {
 
-namespace Container{
+namespace Container {
 
 //--------------------------------------------------
 // Convinient Pointers --> lean Iterators
@@ -75,10 +75,21 @@ template<typename T> using owning_ptr_t = std::unique_ptr<T>;
 template<typename T> using weak_ptr_t   = iterator_t<T>;
 
 //--------------------------------------------------
+// Cast Iterator from Type T to new type NT
+//--------------------------------------------------
+
+template<typename T, typename NT> iterator_t<NT> itcast(iterator_t<T> it){
+  return reinterpret_cast<iterator_t<NT>>(it);
+}
+template<typename T, typename NT> citerator_t<NT> itcast(citerator_t<T> it){
+  return reinterpret_cast<citerator_t<NT>>(it);
+}
+
+//--------------------------------------------------
 // convert to a const Iterator
 //--------------------------------------------------
 
-template<typename T> citerator_t<T> constify(iterator_t<T> it){
+template<typename T> citerator_t<T> constify(iterator_t<T> const it){
   return reinterpret_cast<citerator_t<T>>(it);
 }
 
@@ -97,17 +108,25 @@ template<typename T> bool is_valid(iterator_t<T> it){
 // Get / Set via Iterator
 //--------------------------------------------------
 
+/**
+ * @brief set_at() - Set Data at Iterator-Offset
+ * @return true on Error
+ */
 template<typename T, typename I> bool set_at(iterator_t<T> it, I offset, T const& data){
   Compile::Guards::IsUnsigned<I>();
-  bool res = is_valid<T>(it);
-  if(res){
+  bool OK = is_valid<T>(it);
+  if(OK){
     it[offset] = data;
   }
-  return res;
+  return !OK;
 }
 
 //-----
 
+/**
+ * @brief get_at() - Get Data from Iterator-Offset
+ * @return Data
+ */
 template<typename T, typename I> T get_at(citerator_t<T> cit, I offset){
   Compile::Guards::IsUnsigned<I>();
   T res{};

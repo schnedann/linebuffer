@@ -2,11 +2,19 @@
 
 #include "linebuffer.h"
 
+/**
+ * @brief linebuffer::add
+ * @param str - new Input String
+ */
 void linebuffer::add(const std::string& str){
   dll.push_back(str);
   return;
 }
 
+/**
+ * @brief linebuffer::get_all_lines
+ * @return
+ */
 with_error_t<std::string> linebuffer::get_all_lines(){
   std::stringstream ss;
   bool err = true;
@@ -22,16 +30,25 @@ with_error_t<std::string> linebuffer::get_all_lines(){
 
   //If no err, delimiter was found
   if(!has_error(newest_delim)){
-    for(auto ptr = dll.get_next(nullptr); ptr!=nullptr; ptr = dll.get_next(ptr)){
+    auto last_node_ptr = Datastructures::get_node<std::string>(dll,newest_delim.second);
+    if(!has_error(last_node_ptr)){
+      //From oldest = first Node to the Node which contains the "newest" delimiter
+      for(auto ptr = dll.get_next(nullptr); ptr!=last_node_ptr.second->next.get(); ptr = dll.get_next(ptr)){
 
+      }
     }
   }
 
   return make_with_error<std::string>(err,ss.str());
 }
 
+/**
+ * @brief linebuffer::size
+ * @return accumulated size of all nodes in linebuffer
+ */
 size_t linebuffer::size(){
   size_t res = 0;
+  //for all Nodes accumulate size of Strings
   Datastructures::for_each_node<std::string>(dll,[&res](Datastructures::dbllnkdlst<std::string>::wk_data_t dptr){
     res += dptr->size();
   });
