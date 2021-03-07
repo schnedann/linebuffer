@@ -5,7 +5,7 @@
 /******************************************************************************/
 
 /*
- * Copyright (c) 2020, Danny Schneider
+ * Copyright (c) 2021, Danny Schneider
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
