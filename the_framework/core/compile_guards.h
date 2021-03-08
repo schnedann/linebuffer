@@ -40,15 +40,21 @@ namespace Compile{
 namespace Guards{
 
 template<typename T> constexpr void IsSigned(){
-  static_assert (std::is_signed<T>(), "Error, Unsigned Integer expected");
+  static_assert (std::is_signed<T>(), "Error, signed Type expected");
 }
 
 template<typename T> constexpr void IsUnsigned(){
   static_assert (std::is_unsigned<T>(), "Error, Signed Integer expected");
+  static_assert (!std::is_enum<T>(), "Error, must not be of enum type expected");
 }
 
 template<typename T> constexpr void IsInteger(){
   static_assert (std::is_integral<T>(), "Error, Integer expected");
+  static_assert (!std::is_enum<T>(), "Error, must not be of enum type expected");
+}
+
+template<typename T> constexpr void IsFloatType(){
+  static_assert (std::is_floating_point<T>(), "Error, Floating Point expected");
 }
 
 template<typename T> constexpr void isFundamental(){

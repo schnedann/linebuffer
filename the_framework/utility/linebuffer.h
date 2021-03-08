@@ -6,8 +6,7 @@
 #include "dtypes.h"
 #include "dbllnkdlst.h"
 
-class linebuffer
-{
+class linebuffer{
 private:
   Datastructures::dbllnkdlst<std::string> dll;
 
