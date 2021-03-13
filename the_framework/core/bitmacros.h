@@ -127,6 +127,23 @@ namespace Boolean{
 //--------------------------------------------------
 
 /**
+ * number of bits of given Type T
+ */
+template<typename T> constexpr size_t GETBITSOFTYPE() noexcept{
+  return (sizeof(T)<<3);
+}
+
+/**
+ * satturate "bits" at value of number of bits of given Type T
+ */
+template<typename T> constexpr size_t GETMAXBITS(size_t bits) noexcept{
+  Compile::Guards::IsInteger<T>();
+  return (GETBITSOFTYPE<T>()<bits)?(GETBITSOFTYPE<T>()):(bits);
+}
+
+//--------------------------------------------------
+
+/**
  * Test Integer if it is Even (LSB==0)
  */
 template<typename T> constexpr bool IS_EVEN(T const _x) noexcept{
@@ -180,17 +197,12 @@ template<typename T> constexpr bool IS_ONEHOT(T const _x) noexcept{
 template<typename T> constexpr T set_all_lower_bits(T const _x) noexcept{
   Compile::Guards::IsUnsigned<T>();
   T res = _x;
-#if dUSE_OPTIMIZED>0
-  constexpr u8 const bitsoftype = sizeof(T)<<3;
-  constexpr u8 const stages = Meta::Math::FLOOR_LOG2<bitsoftype>::value;
-#else
-  constexpr u8 const bitsoftype = sizeof(T)<<3;
-  T shift = 1;
+  constexpr u8 const bitsoftype = GETBITSOFTYPE<T>();
+  u8 shift = 1;
   while(shift<bitsoftype){
     res |= res >> shift;
     shift <<= 1;
   }
-#endif
   return res;
 }
 
@@ -248,24 +260,8 @@ template<typename T> constexpr T clr_rightmost_1bit(T const _x) noexcept{
 //--------------------------------------------------
 
 /**
- * number of bits of given Type T
- */
-template<typename T> constexpr size_t GETBITSOFTYPE() noexcept{
-  return (sizeof(T)<<3);
-}
-
-/**
- * satturate "bits" at value of number of bits of given Type T
- */
-template<typename T> constexpr size_t GETMAXBITS(size_t bits) noexcept{
-  Compile::Guards::IsInteger<T>();
-  return (GETBITSOFTYPE<T>()<bits)?(GETBITSOFTYPE<T>()):(bits);
-}
-
-//--------------------------------------------------
-
-/**
  * Get Mask for single Bit 0..N-1
+ * * !!!WARNING!!! GETMASKBIT<uAB>(AB) will not fit in type uAB
  *  0 - 1 -    1
  *  1 - 2 -   10
  *  2 - 4 -  100
@@ -282,10 +278,10 @@ template<typename T> constexpr T GETMASKBIT(size_t bits) noexcept{
  * a "space" of 16 different values
  *
  * !!!WARNING!!! BITSPACE<uAB>(AB) will not fit in type uAB
- * 0 -    1
- * 1 -   10
- * 2 -  100
- * 3 - 1000
+ * 0 -    1 = 1
+ * 1 -   10 = 2
+ * 2 -  100 = 4
+ * 3 - 1000 = 8
  */
 template<typename T> constexpr T BITSPACE(u8 bits) noexcept{
   Compile::Guards::IsInteger<T>();
@@ -327,7 +323,7 @@ template<typename T> constexpr T GETFULLMASK(T const bits) noexcept{
  */
 template<typename T> constexpr T GETFULLMASK_v2(T const _x) noexcept{
   Compile::Guards::IsUnsigned<T>();
-  return right_propagate_rightmost_1bit<T>(GETMASKBIT<T>(_x-1));
+  return (_x>0)?(right_propagate_rightmost_1bit<T>(GETMASKBIT<T>(_x-1))):(0);
 }
 
 /**

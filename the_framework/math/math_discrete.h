@@ -104,7 +104,7 @@ template<typename T> constexpr bool even(T const _x){
  */
 template<typename T> constexpr auto multiply_low_part(T const _x, T const _y) noexcept ->T{
   Compile::Guards::IsInteger<T>();
-  u8 const hbits = sizeof(T)<<2;
+  constexpr u8 const hbits = sizeof(T)<<2;
   T const a = _x>>hbits;
   T const b = _x&((u64(1)<<hbits)-1);
   T const c = _y>>hbits;
@@ -122,8 +122,7 @@ template<typename T> constexpr auto multiply_low_part(T const _x, T const _y) no
  */
 template<typename T> constexpr auto multiply_high_part(T const _x, T const _y) noexcept ->T{
   Compile::Guards::IsInteger<T>();
-  //u8 const  bits = sizeof(T)<<3;
-  u8 const hbits = sizeof(T)<<2;
+  constexpr u8 const hbits = sizeof(T)<<2;
   T const a = _x>>hbits;
   T const b = _x&((u64(1)<<hbits)-1);
   T const c = _y>>hbits;

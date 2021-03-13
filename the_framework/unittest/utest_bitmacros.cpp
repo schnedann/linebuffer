@@ -42,35 +42,37 @@ using namespace std;
 
 
 
-//--- Code
+/****************************************
+ * Code
+ ****************************************/
 
 TEST_CASE("Math::Boolean","[boolean]"){
+
   SECTION("1.1 - IS_EVEN not IS_ODD"){
-    auto ref = u64(GENERATE(take(1000, filter([](u64 _x) { return _x % 2 == 0; }, random(0, Math::Boolean::__MAX<s32>())))));
+    auto const ref = u32(GENERATE(take(1000, filter([](u32 _x) {return (0==(_x%2));}, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>())))));
     CAPTURE( ref );
-    REQUIRE(  Math::Boolean::IS_EVEN<u64>(ref) );
-    REQUIRE( !Math::Boolean::IS_ODD<u64>(ref) );
+    REQUIRE(  Math::Boolean::IS_EVEN<u32>(ref) );
+    REQUIRE( !Math::Boolean::IS_ODD<u32>(ref) );
   }
   SECTION("1.2 - IS_ODD not IS_EVEN"){
-    auto ref = u64(GENERATE(take(1000, filter([](u64 _x) { return _x % 2 == 1; }, random(0, Math::Boolean::__MAX<s32>())))));
+    auto const ref = u32(GENERATE(take(1000, filter([](u32 _x) {return (0!=(_x%2));}, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>())))));
     CAPTURE( ref );
-    REQUIRE( !Math::Boolean::IS_EVEN<u64>(ref) );
-    REQUIRE(  Math::Boolean::IS_ODD<u64>(ref) );
+    REQUIRE( !Math::Boolean::IS_EVEN<u32>(ref) );
+    REQUIRE(  Math::Boolean::IS_ODD<u32>(ref) );
   }
 
   SECTION("2 - IS_ONEHOT"){
-    for(u8 ii=0; ii<32; ++ii){
-      auto oh = Math::Boolean::GETMASKBIT<u32>(ii);
-      CAPTURE( ii );
-      CAPTURE( oh );
-      REQUIRE(  Math::Boolean::IS_ONEHOT<u32>(oh)   );
-      if(oh>1) REQUIRE( !Math::Boolean::IS_ONEHOT<u32>(oh+1) );
-      if(oh>3) REQUIRE( !Math::Boolean::IS_ONEHOT<u32>(oh-1) );
+    auto const ref = u32(GENERATE(take(10000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
+    bool is_OH = (ref == Math::Boolean::next_power_of_2<u32>(ref));
+    if(is_OH){
+      REQUIRE(Math::Boolean::IS_ONEHOT<u32>(ref));
+    }else{
+      REQUIRE(!Math::Boolean::IS_ONEHOT<u32>(ref));
     }
   }
 
   SECTION("3 - GET_LOWESTBIT"){
-    auto ii = u32(GENERATE(take(1000, filter([](u64 _x) { return _x % 2 == 0; }, random(0, Math::Boolean::__MAX<s32>())))));
+    auto const ii = u32(GENERATE(take(2500, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
     u32 reference;
     for(u8 ij=0; ij<32; ++ij){
       auto bit = Math::Boolean::GETMASKBIT<u32>(ij); //Bit at position ij
@@ -104,16 +106,17 @@ TEST_CASE("Math::Boolean","[boolean]"){
 
   SECTION("5b - GETFULLMASK 2/3"){
     REQUIRE( 0 == Math::Boolean::GETFULLMASK<u32>(0) );
-    u32 reference = 1;
+    REQUIRE( 0 == Math::Boolean::GETFULLMASK_v2<u32>(0) );
+    /*u32 reference = 1;
     for(u8 ii=1; ii<33; ++ii){
       CAPTURE( ii );
       REQUIRE( reference == Math::Boolean::GETFULLMASK<u32>(ii) );
 
       reference = (reference<<1)|1;
-    }
+    }*/
   }
 
-  SECTION("5c - GETFULLMASK 3/3"){
+  /*SECTION("5c - GETFULLMASK 3/3"){
     u32 reference = 1;
     for(u8 ii=1; ii<33; ++ii){
       CAPTURE( ii );
@@ -121,7 +124,7 @@ TEST_CASE("Math::Boolean","[boolean]"){
       //REQUIRE( reference == Math::Boolean::OFS_MAX<u32>(ii) );
       reference = (reference<<1)|1;
     }
-  }
+  }*/
 
   SECTION("6a - REPLFIELD / GETVALUE"){
     u64 r1 = 0x0123456789ABCDEFull;
@@ -154,24 +157,34 @@ TEST_CASE("Math::Boolean","[boolean]"){
   }
 
   SECTION("7 - ZQ / INTABS - 2/2"){
-    s8 dut = -128;
-    u8 ref =  128;
-    auto ref3 = Math::Boolean::INTABS_V3<s8>(dut);
-    auto ref2 = Math::Boolean::INTABS_V2<s8>(dut);
-    auto  res = Math::Boolean::INTABS<s8>(dut);
+    auto const tmp = u32(GENERATE(take(2500, random(0, Math::Boolean::__MAX<s32>()))));
+    auto ref =  tmp;
+    auto dut = 0-tmp;
+
+    CAPTURE(tmp);
+    CAPTURE(ref);
+    CAPTURE(dut);
+
+    auto ref3 = Math::Boolean::INTABS_V3<s32>(dut);
+    auto ref2 = Math::Boolean::INTABS_V2<s32>(dut);
+    auto  res = Math::Boolean::INTABS<s32>(dut);
+
     REQUIRE(  ref == res );
     REQUIRE( ref2 == res );
     REQUIRE( ref3 == res );
   }
 
   SECTION("8 - multiply_low_part / multiply_high_part"){
-    for(u16 ii=0; ii<256; ++ii){
-      for(u16 ij=0; ij<256; ++ij){
-        u16 ref = ii*ij;
-        REQUIRE( u8(ref)    == Math::Discrete::multiply_low_part<u8>(u8(ii),u8(ij)) );
-        REQUIRE( u8(ref>>8) == Math::Discrete::multiply_high_part<u8>(u8(ii),u8(ij)) );
-      }
-    }
+    auto const ii = u32(GENERATE(take(100, random(0, s32(Math::Boolean::__MAX<u16>())))));
+    auto const ij = u32(GENERATE(take(100, random(0, s32(Math::Boolean::__MAX<u16>())))));
+    CAPTURE(ii);
+    CAPTURE(ij);
+
+    u32 ref = ii*ij;
+    CAPTURE(ref);
+
+    REQUIRE( u16(ref)     == Math::Discrete::multiply_low_part<u16>(u16(ii),u16(ij)) );
+    REQUIRE( u16(ref>>16) == Math::Discrete::multiply_high_part<u16>(u16(ii),u16(ij)) );
   }
 
   SECTION("9 - midsquare_64"){
@@ -183,18 +196,29 @@ TEST_CASE("Math::Boolean","[boolean]"){
   }
 
   SECTION("10 - GETMAXBITS"){
-    REQUIRE( 7==Math::Boolean::GETMAXBITS<u8>(7) );
+    for(u16 ii=0; ii<256; ++ii){
+      u8 ref8 = (ii>8)?(8):(ii);
+      u8 ref16 = (ii>16)?(16):(ii);
+      u8 ref32 = (ii>32)?(32):(ii);
+      u8 ref64 = (ii>64)?(64):(ii);
+
+      REQUIRE( ref8 ==Math::Boolean::GETMAXBITS<u8>(ii) );
+      REQUIRE( ref16==Math::Boolean::GETMAXBITS<u16>(ii) );
+      REQUIRE( ref32==Math::Boolean::GETMAXBITS<u32>(ii) );
+      REQUIRE( ref64==Math::Boolean::GETMAXBITS<u64>(ii) );
+    }
+    /*REQUIRE( 7==Math::Boolean::GETMAXBITS<u8>(7) );
     REQUIRE( 8==Math::Boolean::GETMAXBITS<u8>(8) );
     REQUIRE( 8==Math::Boolean::GETMAXBITS<u8>(9) );
 
     REQUIRE( 15==Math::Boolean::GETMAXBITS<u16>(15) );
     REQUIRE( 16==Math::Boolean::GETMAXBITS<u16>(16) );
-    REQUIRE( 16==Math::Boolean::GETMAXBITS<u16>(17) );
+    REQUIRE( 16==Math::Boolean::GETMAXBITS<u16>(17) );*/
   }
 
   SECTION("11 - BITSPACE"){
-    u64 ref = 2;
-    for(u8 ii=1; ii<32; ++ii){
+    u64 ref = 1;
+    for(u8 ii=0; ii<32; ++ii){
       REQUIRE( ref==Math::Boolean::BITSPACE<u64>(ii) );
       ref <<= 1;
     }
@@ -202,8 +226,8 @@ TEST_CASE("Math::Boolean","[boolean]"){
 
   SECTION("12 - MASK_MSB"){
     u64 ref = 1;
-    for(u8 ii=0; ii<32; ++ii){
-      REQUIRE( ref==Math::Boolean::BITSPACE<u64>(ii) );
+    for(u8 ii=1; ii<64; ++ii){
+      REQUIRE( ref==Math::Boolean::MASK_MSB<u64>(ii) );
       ref <<= 1;
     }
   }
