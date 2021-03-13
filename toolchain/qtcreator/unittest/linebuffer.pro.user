@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.14.1, 2021-03-07T22:34:41. -->
+<!-- Written by QtCreator 4.14.1, 2021-03-13T00:15:16. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -65,12 +65,34 @@
     <value type="bool" key="AutoTest.Framework.QtTest">true</value>
    </valuemap>
    <valuemap type="QVariantMap" key="AutoTest.CheckStates">
-    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/src/unittest/utest_dbllnkdlst.cpp:/home/danny/ramdisk/linebuffer/src/unittest/utest_dbllnkdlst.cpp">Checked</value>
-    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/src/unittest/utest_dbllnkdlst.cpp:Datastructures::dbllnkdlst">Checked</value>
-    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/src/unittest/utest_fields.cpp:/home/danny/ramdisk/linebuffer/src/unittest/utest_fields.cpp">Checked</value>
-    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/src/unittest/utest_fields.cpp:fields">Checked</value>
-    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/src/unittest/utest_linebuffer.cpp:/home/danny/ramdisk/linebuffer/src/unittest/utest_linebuffer.cpp">Checked</value>
-    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/src/unittest/utest_linebuffer.cpp:linebuffer">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_bitmacros.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_bitmacros.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_bitmacros.cpp:bitmacros">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_bitreverse.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_bitreverse.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_bitreverse.cpp:Bitreverse">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_compiler.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_compiler.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_compiler.cpp:Compiler Datatypes">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_compiler.cpp:Compiler Math">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_compiler.cpp:GCC Version">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_compiler.cpp:endianness-detect">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_dbllnkdlst.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_dbllnkdlst.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_dbllnkdlst.cpp:Datastructures::dbllnkdlst">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_fields.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_fields.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_fields.cpp:fields">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_helpers.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_helpers.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_helpers.cpp:Helper: Flowpoint">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_helpers.cpp:Helper: Stringhelper">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_i18n.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_i18n.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_i18n.cpp:I18N">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_linear_equation.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_linear_equation.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_linear_equation.cpp:Linear Equation">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_linebuffer.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_linebuffer.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_linebuffer.cpp:linebuffer">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_log_base2.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_log_base2.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_log_base2.cpp:Log2 using stdlib as reference">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_math_discrete.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_math_discrete.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_math_discrete.cpp:Math-Discrete">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_meta.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_meta.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_meta.cpp:Meta">Checked</value>
    </valuemap>
    <value type="int" key="AutoTest.RunAfterBuild">0</value>
    <value type="bool" key="AutoTest.UseGlobal">true</value>
@@ -294,7 +316,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">linebuffer2</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/danny/ramdisk/linebuffer/toolchain/qtcreator/unittest/linebuffer.pro</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/danny/ramdisk/linebuffer/toolchain/qtcreator/unittest/linebuffer.pro</value>
-    <value type="QString" key="RunConfiguration.Arguments">-d yes --rng-seed 'time' --abortx 3</value>
+    <value type="QString" key="RunConfiguration.Arguments">-d yes --rng-seed 'time' --abortx 3 -f &quot;../../the_framework/unittest/testlist.txt&quot;</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>

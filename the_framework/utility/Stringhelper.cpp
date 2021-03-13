@@ -38,7 +38,7 @@ using namespace std;
  * @param count
  * @return
  */
-string utility::strings::Smply(string const& str, u32 const& count){
+string utility::strings::Smply(string const& str, u32 const count){
   stringstream ss;
   for(u32 ii=0;ii<count;++ii){
     ss << str;
@@ -51,7 +51,7 @@ string utility::strings::Smply(string const& str, u32 const& count){
  * @param depth
  * @return
  */
-string utility::strings::depth2indent(u32 const& depth){
+string utility::strings::depth2indent(u32 const depth){
   stringstream ss;
   for(u32 ii=0;ii<depth;++ii){
     ss << " ";
@@ -103,7 +103,7 @@ string utility::strings::replace(string const& str1, string const& str2, string 
  * @param length
  * @return
  */
-string utility::strings::Stringhelper::prnbin(u64 const& data,u8 const& length){
+string utility::strings::prnbin(u64 const data, u8 const length){
   stringstream ss;
   if(length>0){
     auto mask = Math::Boolean::GETMASKBIT<u64>(length-1);
@@ -122,7 +122,7 @@ string utility::strings::Stringhelper::prnbin(u64 const& data,u8 const& length){
  * @param len
  * @return
  */
-auto utility::strings::extfill(std::string const& str, char const& ch, u32 const& len)->std::string{
+std::string utility::strings::extfill(std::string const& str, char const ch, u32 const len){
   stringstream ss;
   ss << str;
   if(len>str.size()){
@@ -137,7 +137,7 @@ auto utility::strings::extfill(std::string const& str, char const& ch, u32 const
 /**
  *
  */
-auto utility::strings::toupper(std::string const& str)->std::string{
+std::string utility::strings::toupper(std::string const& str){
   string xstr = str;
   std::transform(xstr.begin(), xstr.end(), xstr.begin(), ::toupper);
   return xstr;
@@ -146,7 +146,7 @@ auto utility::strings::toupper(std::string const& str)->std::string{
 /**
  *
  */
-auto utility::strings::tolower(std::string const& str)->std::string{
+std::string utility::strings::tolower(std::string const& str){
   string xstr = str;
   std::transform(xstr.begin(), xstr.end(), xstr.begin(), ::tolower);
   return xstr;

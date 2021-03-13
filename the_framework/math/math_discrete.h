@@ -72,11 +72,11 @@ namespace Math{
 
 namespace Discrete{
 
-template<typename T> T ofs_mean(T const _x, T const _y){
+template<typename T> constexpr T ofs_mean(T const _x, T const _y){
   return dMEAN2(_x,_y);
 }
 
-template<typename T> T median_of_three(T const _x, T const _y, T const _z){
+template<typename T> constexpr T median_of_three(T const _x, T const _y, T const _z){
   return dMEDIAN3(_x,_y,_z);
 }
 
@@ -393,9 +393,6 @@ u64 nlpo2(u64 const data, u8 const bits);
 u64 bitreverse(u64 const data, u8 const bits);
 
 //-----
-u16 intAbs16(s16 const v);
-u32 intAbs32(s32 const v);
-u64 intAbs64(s64 const v);
 u8 hamming_weight(u16 const val);
 //-----
 s16 sdivceil(s16 const a, s16 const b);

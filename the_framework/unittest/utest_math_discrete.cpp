@@ -8,8 +8,9 @@
 
 #include "catch.hpp"
 
-#include "../core/dtypes.h"
-#include "../math/math_discrete.h"
+#include "dtypes.h"
+#include "math_discrete.h"
+#include "Stringhelper.h"
 
 /****************************************
  * Defines
@@ -43,30 +44,31 @@ using namespace std;
 
 //--- Code
 
-TEST_CASE("Math-Discrete","[math discrete]"){
+TEST_CASE("Math::Discrete","[math discrete]"){
 
-  SECTION("log2 1/3"){
-    {
-      array<u8,50> res{};
-      for(u64 ii=0; ii<res.size(); ++ii){
-        res[ii] = u8(Math::Discrete::log2<u64>(ii));
-      }
-      u64 ii=1;
-      for(u64 ij=0; ij<res.size(); ++ij){
-        cout << "[" << ij << "|" << u16(res[ij]) << "]";
-        if(ii==10){
-          cout << "\n";
-          ii=0;
-        }else{
-          cout << ",";
-        }
-        ++ii;
-      }
-      cout << "\n";
-    }
+  SECTION("Math::Discrete::median_of_three"){
+    REQUIRE( 2 == Math::Discrete::median_of_three(1,2,3));
+    REQUIRE( 2 == Math::Discrete::median_of_three(2,3,1));
+    REQUIRE( 2 == Math::Discrete::median_of_three(3,1,2));
+
+    REQUIRE( 2 == Math::Discrete::median_of_three(1,3,2));
+    REQUIRE( 2 == Math::Discrete::median_of_three(3,2,1));
+    REQUIRE( 2 == Math::Discrete::median_of_three(2,1,3));
+
+    REQUIRE( 2 == Math::Discrete::median_of_three(2,1,3));
+    REQUIRE( 2 == Math::Discrete::median_of_three(1,3,2));
+    REQUIRE( 2 == Math::Discrete::median_of_three(3,2,1));
   }
 
-  SECTION("log2 2/3"){
+  SECTION("Math::Discrete::log2 1/3"){
+    array<u8,50> res{};
+    for(u64 ii=0; ii<res.size(); ++ii){
+      res[ii] = u8(Math::Discrete::log2<u64>(ii));
+    }
+    utility::strings::print_array<u8>(res.data(),res.size());
+  }
+
+  SECTION("Math::Discrete::log2 2/3"){
     {
       //Compare log2 from stdlib with own implementation
 
@@ -86,7 +88,7 @@ TEST_CASE("Math-Discrete","[math discrete]"){
     }
   }
 
-  SECTION("log2 3/3"){
+  SECTION("Math::Discrete::log2 3/3"){
 //TODO
     /*{
       for(u64 ii=1; ii>0; ii=ii*2+1){
@@ -100,9 +102,9 @@ TEST_CASE("Math-Discrete","[math discrete]"){
     }*/
   }
 
-  SECTION("multiply_low_part"){
-    u16 const a = 123;
-    u16 const b = 456;
+  SECTION("Math::Discrete::multiply_low_part"){
+    auto const a = u16(GENERATE(take(75, random(0, 65535))));
+    auto const b = u16(GENERATE(take(75, random(0, 65535))));
     u32 const c = u32(a)*u32(b);
     CAPTURE(a);
     CAPTURE(b);
@@ -110,9 +112,9 @@ TEST_CASE("Math-Discrete","[math discrete]"){
     REQUIRE( u16(c) == Math::Discrete::multiply_low_part<u16>(a,b) );
   }
 
-  SECTION("multiply_high_part"){
-    u16 const a = 123;
-    u16 const b = 456;
+  SECTION("Math::Discrete::multiply_high_part"){
+    auto const a = u16(GENERATE(take(75, random(0, 65535))));
+    auto const b = u16(GENERATE(take(75, random(0, 65535))));
     u32 const c = u32(a)*u32(b);
     CAPTURE(a);
     CAPTURE(b);
@@ -120,7 +122,16 @@ TEST_CASE("Math-Discrete","[math discrete]"){
     REQUIRE( u16(c>>16) == Math::Discrete::multiply_high_part<u16>(a,b) );
   }
 
-  SECTION(""){
+  SECTION("Math::Discrete::odd"){
 
   }
+
+  SECTION("Math::Discrete::even"){
+
+  }
+
+  SECTION("Math::Discrete::leadingzeros"){
+
+  }
+
 }

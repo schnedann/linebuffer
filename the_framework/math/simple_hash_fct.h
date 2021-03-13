@@ -1,7 +1,7 @@
 /******************************************************************************/
 /** Simple Hash Functions / Hash-Function building Blocks                    **/
 /** collected and / or implemented by                                        **/
-/** Danny Schneider, 2017-2020                                               **/
+/** Danny Schneider, 2017-2021                                               **/
 /******************************************************************************/
 
 /*
@@ -35,6 +35,7 @@
 #include "dtypes.h"
 #include "compile_guards.h"
 #include "bitmacros.h"
+#include "math_discrete.h"
 
 namespace Math{
 
@@ -43,6 +44,34 @@ namespace Hashing{
 //----------------------------------------
 //----- HASHING
 //----------------------------------------
+
+template<typename T> auto modhash(T x, T y)noexcept -> T {
+  return x%y;
+}
+
+template<typename T> auto binhash(T x, u8 bits)noexcept -> T {
+  T const mask =  Math::Boolean::GETFULLMASK<T>(bits);
+  return Math::Boolean::MASKBITS<T>(x,mask);
+}
+
+/*
+ * Square a Number and take bits out of the middle,
+ * these Bits are affected by all bit positions of
+ * the original Number
+ */
+#define dMID_SQUARE(_x,_y) ((((_x)*(_x))>>(_y>>4))&dOFS_MAX(_y))
+
+/**
+ * @brief - Overflow Save Midsquare-hash
+ */
+template<typename T> auto midsquare(T x)noexcept -> T {
+  u8 halfbits = Math::Boolean::GETBITSOFTYPE<T>()>>1;
+  T high = Math::Discrete::multiply_high_part<T>(x,x);
+  T low  = Math::Discrete::multiply_low_part<T>(x,x);
+  low = Math::Boolean::ARITHSHR<T>(low,halfbits);
+  low = Math::Boolean::SETVALUE<T>(low,Math::Boolean::GETVALUE<T>(high,0,halfbits),halfbits,halfbits);
+  return low;
+}
 
 /*
  * Square a Number and take bits out of the middle,
@@ -62,8 +91,8 @@ template<typename T> auto doublehash(T const& _x, T const& _y, T const& iter, T 
   return (_x+T((u64(iter)*u64(iter))*_y)%_M);
 }
 
-}
+} //namespace
 
-}
+} //namespace
 
 #endif // SIMPLE_HASH_FCT_H

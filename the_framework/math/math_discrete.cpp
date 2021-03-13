@@ -67,30 +67,7 @@ u64 bitreverse(u64 const data, u8 const bits){
 
 //-----
 
-/**
- * Absolute Value of an Integer
- * Code is Architecture independent
- */
-u16 intAbs16(s16 v){
-  u16 r;                   // the result goes here
-  s16 const mask = v >> 15; //Sign as Mask
-  r = (v + mask) ^ mask;      //Calc Absolute
-  return r;
-}
 
-u32 intAbs32(s32 v){
-  u32 r;                    // the result goes here
-  s32 const mask = v >> 31; //Sign as Mask
-  r = (v + mask) ^ mask;      //Calc Absolute
-  return r;
-}
-
-u64 intAbs64(s64 v){
-  u64 r;                    // the result goes here
-  s64 const mask = v >> 63; //Sign as Mask
-  r = (v + mask) ^ mask;    //Calc Absolute
-  return r;
-}
 
 //-----
 

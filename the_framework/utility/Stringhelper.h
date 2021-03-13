@@ -32,6 +32,8 @@
 
 #include "dtypes.h"
 #include "compile_guards.h"
+#include "iterators.h"
+#include "meta.h"
 
 namespace utility{
 
@@ -43,13 +45,14 @@ constexpr bool const asHEX = true;
 /**
  * Convert Number to String - decimal or hexadecimal
  */
-template<class T> std::string unum2str(T const& num, bool const& dechex){
+template<class T> std::string unum2str(T const& num, bool const dechex){
   Compile::Guards::IsUnsigned<T>();
+  using insert_type_t = typename Meta::Types::replace8bitint<T>::type;
   std::stringstream ss;
   if(dechex==asDEC){
-    ss << num;
+    ss << insert_type_t(num);
   }else{
-    ss << "0x" << std::hex << num;
+    ss << "0x" << std::hex << insert_type_t(num);
   }
   return ss.str();
 }
@@ -57,7 +60,7 @@ template<class T> std::string unum2str(T const& num, bool const& dechex){
 /**
  * Convert String to Number - decimal or hexadecimal
  */
-template<class T> T str2unum(std::string const& str, bool const& dechex){
+template<class T> T str2unum(std::string const& str, bool const dechex){
   Compile::Guards::IsUnsigned<T>();
   T num;
   std::stringstream ss;
@@ -79,20 +82,10 @@ template<class T> T str2unum(std::string const& str, bool const& dechex){
 /**
  * Convert a Variable to a String...
  */
-template<typename T> std::string to_string(std::string name, T x){
+template<typename T> std::string to_string(std::string name, T const& _x){
   std::stringstream ss;
-  ss << name << ": ";
-  bool is_8bit_integer = std::is_integral<T>::value && (sizeof(T)==1);
-  if(is_8bit_integer){
-    bool is_u = std::is_unsigned<T>::value;
-    if(is_u){
-      ss << u16(x);
-    }else{
-      ss << s16(x);
-    }
-  }else{
-    ss << x;
-  }
+  using insert_type_t = typename Meta::Types::replace8bitint<T>::type;
+  ss << name << ": " << insert_type_t(_x);
   return ss.str();
 }
 
@@ -103,24 +96,14 @@ template<typename T> std::string to_string(std::string name, T x){
 /**
  * Convert a Variable to a String - convert Integers as HexString...
  */
-template<typename T> std::string to_hstring(std::string name, T x){
+template<typename T> std::string to_hstring(std::string name, T const& _x){
   std::stringstream ss;
-  ss << name << ": ";
-  bool is_int = std::is_integral<T>::value;
-  bool is_8bit_integer = is_int && (sizeof(T)==1);
+  using insert_type_t = typename Meta::Types::replace8bitint<T>::type;
+  constexpr bool const is_int = std::is_integral<T>::value;
   if(is_int){
-    if(is_8bit_integer){
-      bool is_u = std::is_unsigned<T>::value;
-      if(is_u){
-        ss << "0x" << std::hex << u16(x);
-      }else{
-        ss << "0x" << std::hex << s16(x);
-      }
-    }else{
-      ss << "0x" << std::hex << x;
-    }
+    ss << name << ": " << std::hex << insert_type_t(_x);
   }else{
-    ss << x;
+    ss << name << ": " << _x;
   }
   return ss.str();
 }
@@ -129,54 +112,52 @@ template<typename T> std::string to_hstring(std::string name, T x){
 
 //-----
 
-class Stringhelper
-{
-public:
-  static std::string prnbin(u64 const& data,u8 const& length);
-};
+std::string prnbin(u64 const data, u8 const length);
 
 /****************************************
  * Generate Sting of multiple copies of itself
  ****************************************/
-std::string Smply(std::string const&, u32 const&);
-
-/****************************************
- * change Commas to WhiteSpace
- ****************************************/
-std::string comma2WS(std::string const&);
+std::string Smply(std::string const& str, u32 const count);
 
 /****************************************
  * indent String with WhiteSpace x Times
  ****************************************/
-std::string depth2indent(u32 const&);
+std::string depth2indent(u32 const depth);
+
+/****************************************
+ * change Commas to WhiteSpace
+ ****************************************/
+std::string comma2WS(std::string const& str);
 
 /****************************************
  * Replace all ocourences of String 2 in String 1
  ****************************************/
-std::string replace(std::string const& ,std::string const& ,std::string const&);
+std::string replace(std::string const& str1, std::string const& str2, std::string const& str3);
 
 //---
 
 /**
  * @brief X_2hexstr - Convert unsigned Number _x to HexString
  */
-template<class T> std::string X_2hexstr(T const& _x){
+template<typename  T> std::string X_2hexstr(T const& _x){
   Compile::Guards::IsUnsigned<T>();
-  return static_cast<std::ostringstream*>( &(std::ostringstream() << std::hex << "0x" << _x) )->str();
+  using insert_type_t = typename Meta::Types::replace8bitint<T>::type;
+  return static_cast<std::ostringstream*>( &(std::ostringstream() << std::hex << "0x" << insert_type_t(_x)) )->str();
 }
 
 /**
  * @brief X_2str - Convert Number _x to String in Field with Width w and fillchar f
  */
-template<class T> std::string X_2str(T const& _x, int const& w, char const& f){
+template<typename T> std::string X_2str(T const& _x, int const w=0, char const f=' '){
   Compile::Guards::isArithmetic<T>();
-  return static_cast<std::ostringstream*>( &(std::ostringstream() << std::setw(w) << std::setfill(f) << _x) )->str();
+  using insert_type_t = typename Meta::Types::replace8bitint<T>::type;
+  return static_cast<std::ostringstream*>( &(std::ostringstream() << std::setw(w) << std::setfill(f) << insert_type_t(_x)) )->str();
 }
 
 /**
  * @brief str2_X - Convert String to type T
  */
-template<class T> T str2_X(std::string& str){
+template<typename T> T str2_X(std::string& str){
   T res;
   std::istringstream(str)>>res;
   return res;
@@ -187,10 +168,9 @@ template<class T> T str2_X(std::string& str){
 /**
  * @brief unum2bin - Convert unsigned Integer 2 binary as String
  */
-template<typename T> std::string unum2bin(T const& x, u8 const& bits){
+template<typename T> std::string unum2bin(T const& x, u8 const bits){
   Compile::Guards::IsUnsigned<T>();
   std::string res;
-  //u8 const rbits = ()?():();
   res.resize(bits);
   u32 v = x;
   for(u8 ii=0; ii<bits; ++ii){
@@ -215,10 +195,10 @@ template<typename T> std::string unum2bin(T const& x, u8 const& bits){
   return ss.str();
   }*/
 
-static std::string extfill(std::string const&, char const&, u32 const&);
+std::string extfill(std::string const& str, char const ch, u32 const len);
 
-static std::string toupper(std::string const&);
-static std::string tolower(std::string const&);
+std::string toupper(std::string const& str);
+std::string tolower(std::string const& str);
 
 //---
 
@@ -232,8 +212,30 @@ template<typename T> std::string print_array_Line(T data[], size_t size){
     ss << data[ii] << "|";
   }
   ss << "\n";
-
   return ss.str();
+}
+
+
+
+template<typename T> std::string print_array(Core::Container::citerator_t<T> ptr, size_t size, size_t elem_per_line=10){
+  std::stringstream ss;
+  u64 ii=1;
+  for(u64 ij=0; ij<size; ++ij){
+    ss << "[" << ij << "|" << X_2str<T>(ptr[ij]) << "]";
+    if(ii==elem_per_line){
+      ss << "\n";
+      ii=0;
+    }else{
+      ss << ",";
+    }
+    ++ii;
+  }
+  ss << "\n";
+  return ss.str();
+}
+
+template<typename T, size_t N> std::string print_array(T data[N]){
+  return print_array(&data, N);
 }
 
 } //namespace

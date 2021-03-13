@@ -112,7 +112,7 @@ template<typename T> bool is_valid(iterator_t<T> it){
  * @brief set_at() - Set Data at Iterator-Offset
  * @return true on Error
  */
-template<typename T, typename I> bool set_at(iterator_t<T> it, I offset, T const& data){
+template<typename T, typename I> bool set_at(iterator_t<T> it, I const offset, T const& data){
   Compile::Guards::IsUnsigned<I>();
   bool OK = is_valid<T>(it);
   if(OK){
@@ -127,7 +127,7 @@ template<typename T, typename I> bool set_at(iterator_t<T> it, I offset, T const
  * @brief get_at() - Get Data from Iterator-Offset
  * @return Data
  */
-template<typename T, typename I> T get_at(citerator_t<T> cit, I offset){
+template<typename T, typename I> T get_at(citerator_t<T> cit, I const offset){
   Compile::Guards::IsUnsigned<I>();
   T res{};
   if(is_valid<T>(cit)){
@@ -136,7 +136,7 @@ template<typename T, typename I> T get_at(citerator_t<T> cit, I offset){
   return res;
 }
 
-template<typename T, typename I> T get_at(iterator_t<T> it, I offset){
+template<typename T, typename I> T get_at(iterator_t<T> it, I const offset){
   Compile::Guards::IsUnsigned<I>();
   return get_at<T,I>(constify<T>(it),offset);
 }
@@ -145,12 +145,12 @@ template<typename T, typename I> T get_at(iterator_t<T> it, I offset){
 // Move an Iterator
 //--------------------------------------------------
 
-template<typename T, typename I> citerator_t<T> advance(citerator_t<T> cit, I offset){
+template<typename T, typename I> citerator_t<T> advance(citerator_t<T> cit, I const offset){
   Compile::Guards::IsUnsigned<I>();
   return &cit[offset];
 }
 
-template<typename T, typename I> iterator_t<T> advance(iterator_t<T> it, I offset){
+template<typename T, typename I> iterator_t<T> advance(iterator_t<T> it, I const offset){
   Compile::Guards::IsUnsigned<I>();
   return &it[offset];
 }

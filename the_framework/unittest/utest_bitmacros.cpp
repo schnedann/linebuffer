@@ -44,7 +44,7 @@ using namespace std;
 
 //--- Code
 
-TEST_CASE("bitmacros","[boolean]"){
+TEST_CASE("Math::Boolean","[boolean]"){
   SECTION("1.1 - IS_EVEN not IS_ODD"){
     auto ref = u64(GENERATE(take(1000, filter([](u64 _x) { return _x % 2 == 0; }, random(0, Math::Boolean::__MAX<s32>())))));
     CAPTURE( ref );
@@ -156,8 +156,12 @@ TEST_CASE("bitmacros","[boolean]"){
   SECTION("7 - ZQ / INTABS - 2/2"){
     s8 dut = -128;
     u8 ref =  128;
-    auto res = Math::Boolean::INTABS<s8>(dut);
-    REQUIRE( ref == res );
+    auto ref3 = Math::Boolean::INTABS_V3<s8>(dut);
+    auto ref2 = Math::Boolean::INTABS_V2<s8>(dut);
+    auto  res = Math::Boolean::INTABS<s8>(dut);
+    REQUIRE(  ref == res );
+    REQUIRE( ref2 == res );
+    REQUIRE( ref3 == res );
   }
 
   SECTION("8 - multiply_low_part / multiply_high_part"){

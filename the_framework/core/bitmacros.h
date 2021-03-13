@@ -2,7 +2,7 @@
 /** ----- Bit M A C R O S -----     Integer Bitmanipulation Macros           **/
 /** if not stated otherwise:                                                 **/
 /** Assume Unsigned Integer Numbers and Two'sCompliment Arithmethic          **/
-/** collected and / or implemented by                                        **/
+/** developed , collected and / or implemented by                            **/
 /** Danny Schneider, 2017-2021                                               **/
 /**                                                                          **/
 /** Sources & Ideas for Algorithms used here:                                **/
@@ -44,7 +44,9 @@
 
 #include <type_traits>
 #include "dtypes.h"
+#include "global_config.h"
 #include "compile_guards.h"
+#include "meta.h"
 
 //--------------------------------------------------
 
@@ -127,44 +129,45 @@ namespace Boolean{
 /**
  * Test Integer if it is Even (LSB==0)
  */
-template<typename T> constexpr auto IS_EVEN(T const _x) noexcept ->bool{
+template<typename T> constexpr bool IS_EVEN(T const _x) noexcept{
   Compile::Guards::IsInteger<T>();
-  return ((_x&1)==0);
+  return ((_x&T(1))==0);
 }
 /**
  * Test Integer if it is Odd (LSB==1)
  */
-template<typename T> constexpr auto IS_ODD(T const _x) noexcept ->bool{
+template<typename T> constexpr bool IS_ODD(T const _x) noexcept{
   Compile::Guards::IsInteger<T>();
-  return ((_x&1)>0);
+  return ((_x&T(1))>0);
 }
 
 //--------------------------------------------------
 
 /**
- * return lowest bit set in integer
+ * @brief GET_LOWESTBIT - Get Lowest Bit Set in an Integer (result is One Hot)
+ *                        Fastest posibility to encode / calculate Priorities!!!
+ * @return lowest bit set in integer (only the lowest bit set in result)
  */
-template<typename T> constexpr auto GET_LOWESTBIT(T const _x) noexcept ->T{
+template<typename T> constexpr T GET_LOWESTBIT(T const _x) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return ((_x^(_x-1))&_x);
 }
-
-/*
- * Get Lowest Bit Set in an Integer (result is One Hot)
- * Fastest posibility to encode / calculate Priorities!!!
- */
-// #define dLOW_ONE(_x) ((_x)&((~(_x))+1))
-template<typename T> constexpr auto GET_LOW_ONE(T _x) noexcept ->T{
+template<typename T> constexpr T GET_LOWESTBIT_V2(T const _x) noexcept{
+  Compile::Guards::IsUnsigned<T>();
+  return ((~(_x-1))&_x);
+}
+template<typename T> constexpr T GET_LOWESTBIT_V3(T const _x) noexcept{
+  Compile::Guards::IsUnsigned<T>();
   return (_x)&((~(_x))+1);
 }
 
-//-----
+//----- Test for OneHot
 
 /**
  * Is Integer a Power of 2 (is Integer One Hot encoded?)
  * returns true if non negative integer is power of two
  */
-template<typename T> constexpr auto IS_ONEHOT(T const _x) noexcept ->bool{
+template<typename T> constexpr bool IS_ONEHOT(T const _x) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return (_x>0)?((_x&(_x-1))==0):(false);
 }
@@ -172,9 +175,39 @@ template<typename T> constexpr auto IS_ONEHOT(T const _x) noexcept ->bool{
 //--------------------------------------------------
 
 /**
+ * starting with the highest bit set, set all lower bits in an Integer
+ */
+template<typename T> constexpr T set_all_lower_bits(T const _x) noexcept{
+  Compile::Guards::IsUnsigned<T>();
+  T res = _x;
+#if dUSE_OPTIMIZED>0
+  constexpr u8 const bitsoftype = sizeof(T)<<3;
+  constexpr u8 const stages = Meta::Math::FLOOR_LOG2<bitsoftype>::value;
+#else
+  constexpr u8 const bitsoftype = sizeof(T)<<3;
+  T shift = 1;
+  while(shift<bitsoftype){
+    res |= res >> shift;
+    shift <<= 1;
+  }
+#endif
+  return res;
+}
+
+/**
+ * For any _x get the next larger, one hot coded number (the next larger 2^x)
+ */
+template<typename T> constexpr T next_power_of_2(T const _x) noexcept{
+  Compile::Guards::IsUnsigned<T>();
+  T res = _x-1;
+  res = set_all_lower_bits<T>(res);
+  return 1+res;
+}
+
+/**
  *
  */
-template<typename T> constexpr T right_propagate_rightmost_1bit(T const _x){
+template<typename T> constexpr T right_propagate_rightmost_1bit(T const _x) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return (_x | (_x-1));
 }
@@ -182,7 +215,7 @@ template<typename T> constexpr T right_propagate_rightmost_1bit(T const _x){
 /**
  *
  */
-template<typename T> constexpr T isolate_rightmost_0bit(T const _x){
+template<typename T> constexpr T isolate_rightmost_0bit(T const _x) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return (~_x & (_x+1));
 }
@@ -190,9 +223,26 @@ template<typename T> constexpr T isolate_rightmost_0bit(T const _x){
 /**
  *
  */
-template<typename T> constexpr T set_rightmost_0bit(T const _x){
+template<typename T> constexpr T set_rightmost_0bit(T const _x) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return (_x | (_x+1));
+}
+
+/**
+ *
+ */
+template<typename T> constexpr T get_rightmost_1bit(T const _x) noexcept{
+  Compile::Guards::IsUnsigned<T>();
+  T const _y = (_x-1);
+  return ((_x|_y)^_y);
+}
+
+/**
+ *
+ */
+template<typename T> constexpr T clr_rightmost_1bit(T const _x) noexcept{
+  Compile::Guards::IsUnsigned<T>();
+  return (_x & (_x-1));
 }
 
 //--------------------------------------------------
@@ -200,14 +250,15 @@ template<typename T> constexpr T set_rightmost_0bit(T const _x){
 /**
  * number of bits of given Type T
  */
-template<typename T> constexpr auto GETBITSOFTYPE() noexcept ->size_t{
-  return sizeof(T)<<3;
+template<typename T> constexpr size_t GETBITSOFTYPE() noexcept{
+  return (sizeof(T)<<3);
 }
 
 /**
  * satturate "bits" at value of number of bits of given Type T
  */
-template<typename T> constexpr auto GETMAXBITS(size_t bits) noexcept ->T{
+template<typename T> constexpr size_t GETMAXBITS(size_t bits) noexcept{
+  Compile::Guards::IsInteger<T>();
   return (GETBITSOFTYPE<T>()<bits)?(GETBITSOFTYPE<T>()):(bits);
 }
 
@@ -215,13 +266,13 @@ template<typename T> constexpr auto GETMAXBITS(size_t bits) noexcept ->T{
 
 /**
  * Get Mask for single Bit 0..N-1
- *  0 - 1
- *  1 - 2
- *  2 - 4
- *  3 - 8
+ *  0 - 1 -    1
+ *  1 - 2 -   10
+ *  2 - 4 -  100
+ *  3 - 8 - 1000
  */
-template<typename T> constexpr auto GETMASKBIT(size_t bits) noexcept ->T{
-  Compile::Guards::IsUnsigned<T>();
+template<typename T> constexpr T GETMASKBIT(size_t bits) noexcept{
+  Compile::Guards::IsInteger<T>();
   return T(1)<<(GETMAXBITS<T>(bits));
 }
 
@@ -236,7 +287,8 @@ template<typename T> constexpr auto GETMASKBIT(size_t bits) noexcept ->T{
  * 2 -  100
  * 3 - 1000
  */
-template<typename T> constexpr auto BITSPACE(u8 bits) noexcept ->T{
+template<typename T> constexpr T BITSPACE(u8 bits) noexcept{
+  Compile::Guards::IsInteger<T>();
   return GETMASKBIT<T>(bits);
 }
 
@@ -248,41 +300,42 @@ template<typename T> constexpr auto BITSPACE(u8 bits) noexcept ->T{
  * 2 -   10
  * 3 -  100
  */
-template<typename T> T MASK_MSB(u8 bits){
+template<typename T> constexpr T MASK_MSB(u8 bits) noexcept{
+  Compile::Guards::IsInteger<T>();
   return (bits>0)?(BITSPACE<T>(bits-1)):(0);
 }
 
 /**
- * Overflow Save set all Bits for space of x Bits 0..N
+ * Overflow Safe set all Bits for space of x Bits 0..N
  * 0 -   0
  * 1 -   1
  * 2 -  11
  * 3 - 111
  */
-template<typename T> constexpr auto GETFULLMASK(T const bits) noexcept ->T{
+template<typename T> constexpr T GETFULLMASK(T const bits) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return (bits<2)?(bits):((((GETMASKBIT<T>(bits-1)-1)<<1)|1));
   //return (bits>1)?(((BITSPACE<T>(bits-1)-1)<<1)|1):(bits);
 }
 
 /**
- * Overflow Save set all Bits for space of x Bits 1..N
+ * Overflow Safe set all Bits for space of x Bits 1..N
  * 0 -   0
  * 1 -   1
  * 2 -  11
  * 3 - 111
  */
-template<typename T> constexpr auto GETFULLMASK_v2(T const _x) noexcept ->T{
+template<typename T> constexpr T GETFULLMASK_v2(T const _x) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return right_propagate_rightmost_1bit<T>(GETMASKBIT<T>(_x-1));
 }
 
 /**
- * Overflow Save Mask with all Bits Set
+ * Overflow Safe Mask with all Bits Set
  * on a X Bit CPU X Bit Masks without Integer Overflow
  * Parameter: Bits of Mask
  */
-/*template<typename T> [[deprecated]] T OFS_MAX(u8 bits){
+/*template<typename T> [[deprecated]] T OFS_MAX(u8 const bits) noexcept{
   return (bits>0)?(((BITSPACE<T>(bits-1)-1)<<1)|1):(0);
 }*/
 
@@ -291,7 +344,7 @@ template<typename T> constexpr auto GETFULLMASK_v2(T const _x) noexcept ->T{
 /**
  * Apply Mask
  */
-template<typename T> constexpr auto MASKBITS(T const _x,T const&_y)->T{
+template<typename T> constexpr T MASKBITS(T const _x, T const _y) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return ((_x)&(_y));
 }
@@ -302,8 +355,9 @@ template<typename T> constexpr auto MASKBITS(T const _x,T const&_y)->T{
 // http://www.fefe.de/intof.html (modified/extended)
 //----------------------------------------
 
-//Overflow Save Calculation of max. Unsigned Integer with x-Bits
-template<typename T> constexpr auto MAXUINT(u8 bits)->T{
+//Overflow Safe Calculation of max. Unsigned Integer with x-Bits
+template<typename T> constexpr T MAXUINT(u8 const bits) noexcept{
+  Compile::Guards::IsUnsigned<T>();
 //#define MAXUINT(_X) ((((1U<<((_x)-1))-1)<<1)+1)
   return (((T(1)<<(bits-1))-1)<<1)|1;
 }
@@ -315,57 +369,68 @@ template<typename T> constexpr auto MAXUINT(u8 bits)->T{
 /**
  * @brief - (highest positive Value /2) + 1 --> the MSB is set
  */
-template<typename T> constexpr auto __HALF_MAX_UNSIGNED()->T{
+template<typename T> constexpr T __HALF_MAX_UNSIGNED() noexcept{
   Compile::Guards::IsUnsigned<T>();
 //#define __HALF_MAX_UNSIGNED(type) (static_cast<type>(1)<<((sizeof(type)<<3)-1))
-  return T(1)<<((sizeof(T)<<3)-1);
+  return (T(1)<<((GETBITSOFTYPE<T>())-1));
 }
 
 /**
  * @brief - (highest positive Value /2) + 1 --> the Bit next to the sign is set
  */
-template<typename T> constexpr auto __HALF_MAX_SIGNED()->T{
+template<typename T> constexpr T __HALF_MAX_SIGNED() noexcept{
   Compile::Guards::IsSigned<T>();
 //#define __HALF_MAX_SIGNED(type)   (static_cast<type>(1)<<((sizeof(type)<<3)-2))
-  return T(1)<<((sizeof(T)<<3)-2);
+  return (T(1)<<((GETBITSOFTYPE<T>())-2));
 }
 
 /**
  * @brief - highest positive Value
  */
-template<typename T> constexpr auto __MAX_UNSIGNED()->T{
+template<typename T> constexpr T __MAX_UNSIGNED() noexcept{
+  Compile::Guards::IsUnsigned<T>();
 //#define __MAX_UNSIGNED(type)      ((__HALF_MAX_UNSIGNED(type)<<1)+__HALF_MAX_UNSIGNED(type))
-  return ((__HALF_MAX_UNSIGNED<T>()-1)<<1)+1; //__HALF_MAX_UNSIGNED<T>();
+//return ((__HALF_MAX_UNSIGNED<T>()-1)<<1)+1;
+  return MAXUINT<T>(GETBITSOFTYPE<T>());
 }
 
 /**
  * @brief
  */
-template<typename T> constexpr auto __MAX_SIGNED()->T{
+template<typename T> constexpr T __MAX_SIGNED() noexcept{
+  Compile::Guards::IsSigned<T>();
+  using UT = typename std::make_unsigned<T>::type;
 //#define __MAX_SIGNED(type)        (__HALF_MAX_SIGNED(type)-1+__HALF_MAX_SIGNED(type))
-  return __HALF_MAX_SIGNED<T>()-1+__HALF_MAX_SIGNED<T>();
+//return __HALF_MAX_SIGNED<T>()-1+__HALF_MAX_SIGNED<T>();
+  return static_cast<T>(MAXUINT<UT>((GETBITSOFTYPE<T>())-1));
 }
 
 /**
  * @brief
  */
-template<typename T> constexpr auto __MIN_SIGNED()->T{
+template<typename T> constexpr T __MIN_SIGNED() noexcept{
+  Compile::Guards::IsSigned<T>();
+  using UT = typename std::make_unsigned<T>::type;
 //#define __MIN_SIGNED(type)        (-1-__MAX_SIGNED(type))
-  return -1-__MAX_SIGNED<T>();
+//return -1-__MAX_SIGNED<T>();
+  return MASK_MSB<T>(static_cast<T>(GETBITSOFTYPE<UT>()));
 }
 
 /**
  * @brief
  */
-template<typename T> constexpr auto __MIN()->T{
+template<typename T> constexpr T __MIN() noexcept{
+  Compile::Guards::IsInteger<T>();
+  using ST = typename std::make_signed<T>::type;
 //#define __MIN(type) (static_cast<type>(-1) < ((1)?(__MIN_SIGNED(type)):(static_cast<type>(0))))
-  return T(-1) < ((1)?(__MIN_SIGNED<T>()):(T(0)));
+  return (T(-1)<((1))?(__MIN_SIGNED<ST>()):(T(0)));
 }
 
 /**
  * @brief
  */
-template<typename T> constexpr auto __MAX()->T{
+template<typename T> constexpr T __MAX() noexcept{
+  Compile::Guards::IsInteger<T>();
 //#define __MAX(type) (static_cast<type>(~__MIN(type)))
   return T(~__MIN<T>());
 }
@@ -375,7 +440,7 @@ template<typename T> constexpr auto __MAX()->T{
 /**
  * Bitwise And
  */
-template<typename T> constexpr auto AND(T const _x, T const _y) noexcept ->T{
+template<typename T> constexpr T AND(T const _x, T const _y) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return ((_x)&(_y));
 }
@@ -383,7 +448,7 @@ template<typename T> constexpr auto AND(T const _x, T const _y) noexcept ->T{
 /**
  *Bitwise Or
  */
-template<typename T> constexpr auto OR(T const _x, T const _y) noexcept ->T{
+template<typename T> constexpr T OR(T const _x, T const _y) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return ((_x)|(_y));
 }
@@ -391,7 +456,7 @@ template<typename T> constexpr auto OR(T const _x, T const _y) noexcept ->T{
 /**
  *Bitwise Xor
  */
-template<typename T> constexpr auto XOR(T const _x, T const _y) noexcept ->T{
+template<typename T> constexpr T XOR(T const _x, T const _y) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return ((_x)^(_y));
 }
@@ -401,7 +466,7 @@ template<typename T> constexpr auto XOR(T const _x, T const _y) noexcept ->T{
 /**
  * in _x set set bits from _y
  */
-template<typename T> constexpr auto SETBITS(T const _x, T const _y) noexcept ->T{
+template<typename T> constexpr T SETBITS(T const _x, T const _y) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return (OR<T>((_x),(_y)));
 }
@@ -409,7 +474,7 @@ template<typename T> constexpr auto SETBITS(T const _x, T const _y) noexcept ->T
 /**
  * in_x clear set bits from _y
  */
-template<typename T> constexpr auto CLRBITS(T const _x, T const _y) noexcept ->T{
+template<typename T> constexpr T CLRBITS(T const _x, T const _y) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return (AND<T>((_x),~(_y)));
 }
@@ -417,7 +482,7 @@ template<typename T> constexpr auto CLRBITS(T const _x, T const _y) noexcept ->T
 /**
  * bits set in _x and _y will be cleared, bits cleared in _x and _y will be set
  */
-template<typename T> constexpr auto TOGGLEBITS(T const _x, T const _y) noexcept ->T{
+template<typename T> constexpr T TOGGLEBITS(T const _x, T const _y) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return (XOR<T>((_x),(_y)));
 }
@@ -425,7 +490,7 @@ template<typename T> constexpr auto TOGGLEBITS(T const _x, T const _y) noexcept 
 /**
  * test if _x and _y are binary equal
  */
-template<typename T> constexpr auto EQUAL(T const _x, T const _y) noexcept ->bool{
+template<typename T> constexpr bool EQUAL(T const _x, T const _y) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return (((_x)^(_y))==0);
 }
@@ -433,7 +498,7 @@ template<typename T> constexpr auto EQUAL(T const _x, T const _y) noexcept ->boo
 /**
  * test if all bits in _y are set in _x
  */
-template<typename T> constexpr auto TESTBITS(T const _x, T const _y) noexcept ->bool{
+template<typename T> constexpr bool TESTBITS(T const _x, T const _y) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return EQUAL<T>(AND<T>((_x),(_y)),_y);
 }
@@ -443,7 +508,7 @@ template<typename T> constexpr auto TESTBITS(T const _x, T const _y) noexcept ->
 /**
  * @brief - ARITHSHL
  */
-template<typename T> constexpr auto ARITHSHL(T const _x, u8 const& _y) noexcept ->T{
+template<typename T> constexpr T ARITHSHL(T const _x, u8 const _y) noexcept{
   Compile::Guards::IsInteger<T>();
   return ((_x)<<(_y));
 }
@@ -451,7 +516,7 @@ template<typename T> constexpr auto ARITHSHL(T const _x, u8 const& _y) noexcept 
 /**
  * @brief - ARITHSHR
  */
-template<typename T> constexpr auto ARITHSHR(T const _x, u8 const& _y) noexcept ->T{
+template<typename T> constexpr T ARITHSHR(T const _x, u8 const _y) noexcept{
   Compile::Guards::IsInteger<T>();
   return ((_x)>>(_y));
 }
@@ -459,7 +524,7 @@ template<typename T> constexpr auto ARITHSHR(T const _x, u8 const& _y) noexcept 
 /**
  * @brief - ROTL
  */
-template<typename T> constexpr auto ROTL(T const _x, u8 const& _y) noexcept ->T{
+template<typename T> constexpr T ROTL(T const _x, u8 const _y) noexcept{
   Compile::Guards::IsInteger<T>();
   constexpr auto const TBits = u8(Math::Boolean::GETBITSOFTYPE<T>());
   return (((_x)<<(_y))|((_x)>>(TBits-_y)));
@@ -468,7 +533,7 @@ template<typename T> constexpr auto ROTL(T const _x, u8 const& _y) noexcept ->T{
 /**
  * @brief - ROTR
  */
-template<typename T> constexpr auto ROTR(T const _x, u8 const& _y) noexcept ->T{
+template<typename T> constexpr T ROTR(T const _x, u8 const _y) noexcept{
   Compile::Guards::IsInteger<T>();
   constexpr auto const TBits = u8(Math::Boolean::GETBITSOFTYPE<T>());
   return (((_x)>>(_y))|((_x)<<(TBits-_y)));
@@ -479,7 +544,7 @@ template<typename T> constexpr auto ROTR(T const _x, u8 const& _y) noexcept ->T{
 /**
  * from _x extract field from position _lsb with length _len
  */
-template<typename T> constexpr auto GETVALUE(T const _x, T const _lsb, T const _len) noexcept ->T{
+template<typename T> constexpr T GETVALUE(T const _x, T const _lsb, T const _len) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return (((_x)>>(_lsb))&GETFULLMASK<T>(_len));
 }
@@ -487,7 +552,7 @@ template<typename T> constexpr auto GETVALUE(T const _x, T const _lsb, T const _
 /**
  * Replace Field - Replace a field in x with same field from y
  */
-template<typename T> constexpr auto REPLFIELD(T const _x, T const _y, T const _lsb, T const _len) noexcept ->T{
+template<typename T> constexpr T REPLFIELD(T const _x, T const _y, T const _lsb, T const _len) noexcept{
   Compile::Guards::IsUnsigned<T>();
   T const mask = ~(GETFULLMASK<T>(_len)<<_lsb);
   return (_y)|(_x&mask);
@@ -496,7 +561,7 @@ template<typename T> constexpr auto REPLFIELD(T const _x, T const _y, T const _l
 /**
  * in _x replace field from position _lsb with length _len with data from _y
  */
-template<typename T> constexpr auto SETVALUE(T& _x, T const _y, T const _lsb, T const _len) noexcept ->T{
+template<typename T> constexpr auto SETVALUE(T& _x, T const _y, T const _lsb, T const _len) noexcept{
   Compile::Guards::IsUnsigned<T>();
   T shift_y = ARITHSHL<T>(_y,_lsb);
   return _x=REPLFIELD<T>(_x,shift_y,_lsb,_len);
@@ -507,7 +572,7 @@ template<typename T> constexpr auto SETVALUE(T& _x, T const _y, T const _lsb, T 
 /**
  *
  */
-template<typename T> constexpr auto RANGELIMIT(T const _x, T const _y) noexcept ->T{
+template<typename T> constexpr auto RANGELIMIT(T const _x, T const _y) noexcept{
   Compile::Guards::IsUnsigned<T>();
   return ((_x)%(_y));
 }
@@ -517,41 +582,69 @@ template<typename T> constexpr auto RANGELIMIT(T const _x, T const _y) noexcept 
 /**
  * Zweierkomplement - Two's Complement
  */
-template<typename T> constexpr auto ZQ(T const _x) noexcept ->T{
+template<typename T> constexpr T ZQ(T const _x) noexcept{
   Compile::Guards::IsInteger<T>();
   return ((~(_x))+1);
 }
 
+template<typename T> using unsigned_t = typename std::make_unsigned<T>::type;
+
 /**
- * if number is negative, get the same number with positiv sign
+ * if integer number is negative, get the same number with positiv sign
  */
-template<typename T> auto INTABS(T const _x) -> typename std::make_unsigned<T>::type{
+template<typename T> constexpr auto INTABS(T const _x) noexcept -> unsigned_t<T>{
   Compile::Guards::IsInteger<T>();
-  return static_cast<typename std::make_unsigned<T>::type>((_x<0)?(ZQ<T>(_x)):(_x));
+  return static_cast<unsigned_t<T>>((_x<0)?(ZQ<T>(_x)):(_x));
+}
+
+/**
+ * Absolute Value of an Integer
+ * Code is Architecture dependent
+ */
+template<typename T> constexpr auto INTABS_V2(T const _x) noexcept -> unsigned_t<T>{
+  Compile::Guards::IsInteger<T>();
+  unsigned_t<T> res = static_cast<unsigned_t<T>>(_x); // the result goes here
+  if(_x<0){
+    constexpr u8 shift_by = Math::Boolean::GETBITSOFTYPE<T>()-1;
+    T const mask = _x >> shift_by; //Sign as Mask
+    res = static_cast<unsigned_t<T>>((_x + mask) ^ mask);    //Calc Absolute
+  }
+  return res;
+}
+
+template<typename T> constexpr auto INTABS_V3(T const _x) noexcept -> unsigned_t<T>{
+  Compile::Guards::IsInteger<T>();
+  constexpr auto const shift_by = GETBITSOFTYPE<T>() -1;
+  T const mask = ARITHSHR<T>(_x,shift_by); //Use Signbit as mask
+  return ((_x + mask)^mask);               //Calculate Absolute
 }
 
 //--------------------------------------------------
 
 //Alternate Versions
 
+#if dUSE_ALTVERSIONS>0
+
 /**
  * Get Lowest Bit Set in an Integer (One Hot)
  * Fast posibility to encode / calculate Priorities!!!
  */
-/*template<typename T> auto lowest_one_set(T const _x) noexcept ->T{
+template<typename T> constexpr T lowest_one_set(T const _x) noexcept{
   return ((_x)&((~(_x))+1));
-}*/
+}
 
 //--------------------------------------------------
 
 /**
  * Is Integer a Power of 2 (is Integer One Hot encoded?)
  */
-/*template<typename T> auto is_power_of_2(T const _x) noexcept ->bool{
+template<typename T> constexpr bool is_power_of_2(T const _x) noexcept{
   return ((((_x)&((_x)-1))==0)?(true):(false));
-}*/
+}
 
 //--------------------------------------------------
+
+#endif
 
 //--------------------------------------------------
 
