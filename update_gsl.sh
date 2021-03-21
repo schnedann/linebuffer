@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "$(tput setaf 6)Update Catch2 Unittest Framework$(tput sgr 0)"
+echo "$(tput setaf 6)Update Guideline Support Library$(tput sgr 0)"
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # GIT Version
@@ -28,20 +28,20 @@ cd $EXT_DIR
 pwd
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Fetch Catch2 from Github
+# Fetch GSL from Github
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-SRC_DIR="./Catch2"
+SRC_DIR="./GSL"
 
 if [ ! -d $SRC_DIR ]
 then
   echo "$(tput setaf 2)Cloning...$(tput sgr 0)"  
-  git clone https://github.com/catchorg/Catch2.git --branch v2.x;  
+  git clone https://github.com/microsoft/GSL.git --branch main;  
 else
   echo "$(tput setaf 2)Fetching...$(tput sgr 0)"    
   cd $SRC_DIR;
   pwd;  
-  git fetch https://github.com/catchorg/Catch2.git --tags --progress v2.x;
+  git fetch https://github.com/microsoft/GSL.git --tags --progress main;
   cd ..;
 fi
 
@@ -49,8 +49,8 @@ fi
 
 echo "$(tput setaf 2)Switch to Revision$(tput sgr 0)"
 cd $SRC_DIR;
-git switch --progress v2.x
-git checkout --detach tags/v2.13.4;
+git switch --progress main
+git checkout --detach tags/v3.1.0;
 git branch -a
 git status;
 cd ..;
