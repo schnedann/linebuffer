@@ -36,6 +36,7 @@ SOURCES += \
   $$PWD/../../../the_framework/unittest/utest_log_base2.cpp \
   $$PWD/../../../the_framework/unittest/utest_math_discrete.cpp \
   $$PWD/../../../the_framework/unittest/utest_meta.cpp \
+  $$PWD/../../../the_framework/unittest/utest_minmax.cpp \
   $$PWD/../../../the_framework/utility/Stringhelper.cpp \
   $$PWD/../../../the_framework/utility/linebuffer.cpp \
   $$PWD/../../../the_framework/utility/utility_fkt.cpp

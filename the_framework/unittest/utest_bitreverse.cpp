@@ -24,6 +24,7 @@
  */
 
 #include <random>
+#include <array>
 
 #include "catch.hpp"
 #include "bitreverse.h"
@@ -33,123 +34,89 @@
 TEST_CASE("Bitreverse"){
 
   SECTION("simple_method")  {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<u32> dis(0, Math::Boolean::__MAX_UNSIGNED<u32>());
-
-    for(u32 ii=0; ii<50000; ++ii){
-      auto orig    = dis(gen); //get a random value
-      auto bitrev  = Algorithms::Bitreverse::simple_method<u32>(orig);
-      auto revorig = Algorithms::Bitreverse::simple_method<u32>(bitrev);
-      CAPTURE(utility::strings::prnbin(orig,32));
-      CAPTURE(utility::strings::prnbin(bitrev,32));
-      CAPTURE(utility::strings::prnbin(revorig,32));
-      REQUIRE( orig == revorig );
-    }
+    auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
+    auto bitrev  = Algorithms::Bitreverse::simple_method<u32>(orig);
+    auto revorig = Algorithms::Bitreverse::simple_method<u32>(bitrev);
+    CAPTURE(utility::strings::prnbin(orig,32));
+    CAPTURE(utility::strings::prnbin(bitrev,32));
+    CAPTURE(utility::strings::prnbin(revorig,32));
+    REQUIRE( orig == revorig );
   }
 
   SECTION("nibbleLut_method")  {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<u32> dis(0, Math::Boolean::__MAX_UNSIGNED<u32>());
-
-    for(u32 ii=0; ii<50000; ++ii){
-      auto orig    = dis(gen); //get a random value
-      auto bitrev  = Algorithms::Bitreverse::nibbleLut_method<u32>(orig);
-      auto revorig = Algorithms::Bitreverse::nibbleLut_method<u32>(bitrev);
-      CAPTURE(utility::strings::prnbin(orig,32));
-      CAPTURE(utility::strings::prnbin(bitrev,32));
-      CAPTURE(utility::strings::prnbin(revorig,32));
-      REQUIRE( orig == revorig );
-    }
+    auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
+    auto bitrev  = Algorithms::Bitreverse::nibbleLut_method<u32>(orig);
+    auto revorig = Algorithms::Bitreverse::nibbleLut_method<u32>(bitrev);
+    CAPTURE(utility::strings::prnbin(orig,32));
+    CAPTURE(utility::strings::prnbin(bitrev,32));
+    CAPTURE(utility::strings::prnbin(revorig,32));
+    REQUIRE( orig == revorig );
   }
 
   SECTION("nibbleLut_methodV2")  {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<u32> dis(0, Math::Boolean::__MAX_UNSIGNED<u32>());
-
-    for(u32 ii=0; ii<50000; ++ii){
-      auto orig    = dis(gen); //get a random value
-      auto bitrev  = Algorithms::Bitreverse::nibbleLut_methodV2<u32>(orig);
-      auto revorig = Algorithms::Bitreverse::nibbleLut_methodV2<u32>(bitrev);
-      CAPTURE(utility::strings::prnbin(orig,32));
-      CAPTURE(utility::strings::prnbin(bitrev,32));
-      CAPTURE(utility::strings::prnbin(revorig,32));
-      REQUIRE( orig == revorig );
-    }
+    auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
+    auto bitrev  = Algorithms::Bitreverse::nibbleLut_methodV2<u32>(orig);
+    auto revorig = Algorithms::Bitreverse::nibbleLut_methodV2<u32>(bitrev);
+    CAPTURE(utility::strings::prnbin(orig,32));
+    CAPTURE(utility::strings::prnbin(bitrev,32));
+    CAPTURE(utility::strings::prnbin(revorig,32));
+    REQUIRE( orig == revorig );
   }
 
   SECTION("maskshift_method")  {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<u32> dis(0, Math::Boolean::__MAX_UNSIGNED<u32>());
-
-    for(u32 ii=0; ii<50000; ++ii){
-      auto orig    = dis(gen); //get a random value
-      auto bitrev  = Algorithms::Bitreverse::maskshift_method<u32>(orig,32);
-      auto revorig = Algorithms::Bitreverse::maskshift_method<u32>(bitrev,32);
-      CAPTURE(utility::strings::prnbin(orig,32));
-      CAPTURE(utility::strings::prnbin(bitrev,32));
-      CAPTURE(utility::strings::prnbin(revorig,32));
-      REQUIRE( orig == revorig );
-    }
+    auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
+    auto bitrev  = Algorithms::Bitreverse::maskshift_method<u32>(orig,32);
+    auto revorig = Algorithms::Bitreverse::maskshift_method<u32>(bitrev,32);
+    CAPTURE(utility::strings::prnbin(orig,32));
+    CAPTURE(utility::strings::prnbin(bitrev,32));
+    CAPTURE(utility::strings::prnbin(revorig,32));
+    REQUIRE( orig == revorig );
   }
 
   SECTION("maskshift_methodV2")  {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<u32> dis(0, Math::Boolean::__MAX_UNSIGNED<u32>());
-
-    for(u32 ii=0; ii<50000; ++ii){
-      auto orig    = dis(gen); //get a random value
-      auto bitrev  = Algorithms::Bitreverse::maskshift_methodV2<u32>(orig,32);
-      auto revorig = Algorithms::Bitreverse::maskshift_methodV2<u32>(bitrev,32);
-      CAPTURE(utility::strings::prnbin(orig,32));
-      CAPTURE(utility::strings::prnbin(bitrev,32));
-      CAPTURE(utility::strings::prnbin(revorig,32));
-      REQUIRE( orig == revorig );
-    }
+    auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
+    auto bitrev  = Algorithms::Bitreverse::maskshift_methodV2<u32>(orig,32);
+    auto revorig = Algorithms::Bitreverse::maskshift_methodV2<u32>(bitrev,32);
+    CAPTURE(utility::strings::prnbin(orig,32));
+    CAPTURE(utility::strings::prnbin(bitrev,32));
+    CAPTURE(utility::strings::prnbin(revorig,32));
+    REQUIRE( orig == revorig );
   }
 
   SECTION("Mixed up")  {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<u32> dis(0, Math::Boolean::__MAX_UNSIGNED<u32>());
+    auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
 
-    for(u32 ii=0; ii<50000; ++ii){
-      auto orig    = dis(gen); //get a random value
+    auto bitrev0 = Algorithms::Bitreverse::simple_method<u32>(orig);
+    auto bitrev1 = Algorithms::Bitreverse::nibbleLut_method<u32>(orig);
+    auto bitrev2 = Algorithms::Bitreverse::nibbleLut_methodV2<u32>(orig);
+    auto bitrev3 = Algorithms::Bitreverse::maskshift_method<u32>(orig,32);
+    auto bitrev4 = Algorithms::Bitreverse::maskshift_methodV2<u32>(orig,32);
 
-      auto bitrev0 = Algorithms::Bitreverse::simple_method<u32>(orig);
-      auto bitrev1 = Algorithms::Bitreverse::nibbleLut_method<u32>(orig);
-      auto bitrev2 = Algorithms::Bitreverse::nibbleLut_methodV2<u32>(orig);
-      auto bitrev3 = Algorithms::Bitreverse::maskshift_method<u32>(orig,32);
-      auto bitrev4 = Algorithms::Bitreverse::maskshift_methodV2<u32>(orig,32);
-      REQUIRE( bitrev0 == bitrev1 );
-      REQUIRE( bitrev1 == bitrev2 );
-      REQUIRE( bitrev2 == bitrev3 );
-      REQUIRE( bitrev3 == bitrev4 );
-      REQUIRE( bitrev4 == bitrev0 );
+    REQUIRE( bitrev0 == bitrev1 );
+    REQUIRE( bitrev1 == bitrev2 );
+    REQUIRE( bitrev2 == bitrev3 );
+    REQUIRE( bitrev3 == bitrev4 );
+    REQUIRE( bitrev4 == bitrev0 );
+  }
+
+  SECTION("numerical method - Debug"){
+    std::array<u8,16> ref={0,8,4,12,2,10,6,14,1,9,5,13,3,11,7,15};
+
+    for(u8 ii=0; ii<16; ++ii){
+      auto bitrev  = Algorithms::Bitreverse::numerical_method<u8,4>(ii);
+      CAPTURE(u16(ii));
+      REQUIRE(ref[ii]==bitrev);
     }
   }
 
   SECTION("numerical method"){
-    for(u16 ii=0; ii<256; ++ii) {
-      Algorithms::Bitreverse::numerical_method(u8(ii));
-    }
-  }
-
-  SECTION("Nibble LUT"){
-    for(u16 ii=0; ii<256; ++ii) {
-      u8 test = Algorithms::Bitreverse::nibbleLut_method(u8(ii));
-      u8 ref  = Algorithms::Bitreverse::maskshift_method<u8>(u8(ii),8);
-
-      CAPTURE( ii );
-      CAPTURE(utility::strings::prnbin(ii,8));
-      CAPTURE(utility::strings::prnbin(test,8));
-      CAPTURE(utility::strings::prnbin(ref,8));
-
-      REQUIRE( u16(test) == u16(ref));
-    }
+    auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
+    constexpr auto const tbits = Math::Boolean::GETBITSOFTYPE<u32>();
+    auto bitrev  = Algorithms::Bitreverse::numerical_method<u32,tbits>(orig);
+    auto revorig = Algorithms::Bitreverse::numerical_method<u32,tbits>(bitrev);
+    CAPTURE(utility::strings::prnbin(orig,32));
+    CAPTURE(utility::strings::prnbin(bitrev,32));
+    CAPTURE(utility::strings::prnbin(revorig,32));
+    REQUIRE( orig == revorig );
   }
 }

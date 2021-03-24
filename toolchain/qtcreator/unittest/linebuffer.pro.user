@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.14.1, 2021-03-13T12:01:48. -->
+<!-- Written by QtCreator 4.14.1, 2021-03-22T12:54:57. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -93,6 +93,8 @@
     <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_math_discrete.cpp:Math::Discrete">Checked</value>
     <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_meta.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_meta.cpp">Checked</value>
     <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_meta.cpp:Meta">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_minmax.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_minmax.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_minmax.cpp:Algorithms::minmax">Checked</value>
    </valuemap>
    <value type="int" key="AutoTest.RunAfterBuild">0</value>
    <value type="bool" key="AutoTest.UseGlobal">true</value>

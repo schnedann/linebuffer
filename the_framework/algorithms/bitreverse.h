@@ -12,12 +12,17 @@ namespace Algorithms {
 
 namespace Bitreverse {
 
+/**
+ * @brief simple_method - Bitreverse of an number
+ *        Copy Bit by Bit with simple masks
+ */
 template<typename T> T simple_method(T const _v) noexcept{
   Compile::Guards::IsUnsigned<T>();
-  constexpr static auto const msb_mask = Math::Boolean::MASK_MSB<T>(Math::Boolean::GETBITSOFTYPE<T>());
+  constexpr auto const tbits = Math::Boolean::GETBITSOFTYPE<T>();
+  constexpr static auto const msb_mask = Math::Boolean::MASK_MSB<T>(tbits);
   T _x = _v;
   T res = 0;
-  for(size_t ii=0; ii<Math::Boolean::GETBITSOFTYPE<T>(); ++ii){
+  for(size_t ii=0; ii<tbits; ++ii){
     if(Math::Boolean::TESTBITS<>(_x,msb_mask)){
       res = Math::Boolean::OR<>(res,Math::Boolean::GETMASKBIT<T>(ii));
     }
@@ -26,33 +31,30 @@ template<typename T> T simple_method(T const _v) noexcept{
   return res;
 }
 
-template<typename T> T numerical_method(T const _v) noexcept{
+/**
+ * for all Bit do x=(x_-1)*2+(LSB>0)?(1):(0) with x_inti=0;
+ */
+template<typename T, u8 BITS> T numerical_method(T const _v) noexcept{
   Compile::Guards::IsUnsigned<T>();
-  constexpr u8 const stages = Meta::Math::CEIL_LOG2<Math::Boolean::GETBITSOFTYPE<T>()>::value-1;
+  constexpr auto const tbits = Math::Boolean::GETBITSOFTYPE<T>();
+  static_assert(tbits>=BITS,"Parameter BITS exceeds size of type");
 
-  u8 num_of_groups = 1;
-  T in_group = _v;
+  auto const mask = T(1);
+  auto v_tmp = _v;
 
-  for( u8 ii=2; ii<stages; ++ii ){
-    num_of_groups <<= 1;
-    in_group >>= 1;
-
-    for(u8 group=0; group<num_of_groups; ++group){
-      bool evengroup = Math::Boolean::IS_EVEN<u8>(group);
-      u8 gadd = group;
-      if(evengroup){
-        gadd <<= 1;
-      }else {
-        gadd = ((gadd-1)<<1)+1;
-      }
-
-    }
+  T res = 0;
+  //sum up the bitreverse
+  for(u8 ii=0; ii<BITS; ++ii){
+    auto const next_bit = Math::Boolean::MASKBITS<T>(v_tmp,mask);
+    v_tmp = Math::Boolean::ARITHSHR<T>(v_tmp,1);
+    res = Math::Boolean::OR<T>(Math::Boolean::ARITHSHL<T>(res,1),next_bit);
   }
-  return T();
+  return res;
 }
 
 /**
  * @brief nibbleLut_method - Bitreverse of an number by nibblewise conversion
+ *                           Copy 4Bits at once
  */
 template<typename T> T nibbleLut_method(T const _v) noexcept{
   Compile::Guards::IsUnsigned<T>();
@@ -76,17 +78,22 @@ template<typename T> T nibbleLut_method(T const _v) noexcept{
   return res;
 }
 
+/**
+ * @brief nibbleLut_method - Bitreverse of an number by nibblewise conversion
+ *                           Copy 4Bits at once
+ */
 template<typename T> T nibbleLut_methodV2(T const _x){
   //                       0  1  2  3  4  5  6  7
   std::array<T,16> LUT = { 0, 8, 4,12, 2,10, 6,14,
                            1, 9, 5,13, 3,11, 7,15};
+  constexpr auto const tbits = Math::Boolean::GETBITSOFTYPE<T>();
   constexpr static size_t const nibblesize = 4;
   size_t pos = 0;
   T res = 0;
 
-  while(pos<Math::Boolean::GETBITSOFTYPE<T>()){
+  while(pos<tbits){
     T tmp = Math::Boolean::GETVALUE<T>(_x,pos,nibblesize);
-    size_t rpos = Math::Boolean::GETBITSOFTYPE<T>()-(4+pos);
+    size_t rpos = tbits-(4+pos);
     T revnib = LUT[tmp];
     res = Math::Boolean::OR<T>(res,Math::Boolean::ARITHSHL<T>(revnib,rpos));
     pos += nibblesize;
@@ -96,6 +103,7 @@ template<typename T> T nibbleLut_methodV2(T const _x){
 
 /**
  * @brief maskshift_method - Swap bits with two moving masks
+ *                           much like simple_method, but copy 2 bits at once
  */
 template<typename T> T maskshift_method(T const _v, u8 const bits) noexcept{
   Compile::Guards::IsUnsigned<T>();
@@ -114,12 +122,15 @@ template<typename T> T maskshift_method(T const _v, u8 const bits) noexcept{
   return res;
 }
 
+/**
+ * @brief maskshift_method - Swap bits with two moving masks
+ *                           much like simple_method, but copy 2 bits at once
+ */
 template<typename T> T maskshift_methodV2(T const _x, size_t const bits=0){
   Compile::Guards::IsUnsigned<T>();
   auto mask_lsb = T(1);
-  auto bits_used = ((0==bits) || (bits>Math::Boolean::GETBITSOFTYPE<T>()))?(
-                    Math::Boolean::GETBITSOFTYPE<T>()):(
-                    bits);
+  constexpr auto const tbits = Math::Boolean::GETBITSOFTYPE<T>();
+  auto bits_used = ((0==bits) || (bits>tbits))?(tbits):(bits);
   auto mask_msb = Math::Boolean::MASK_MSB<T>(bits_used);
   T res = 0;
   while(mask_msb>=mask_lsb){

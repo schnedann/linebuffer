@@ -1,5 +1,19 @@
 #!/bin/bash
 
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Get Git Version
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+CMDDEF="$(git --version)"
+RET="$CMDDEF"
+echo "$RET"|cut -b 13
+GVTMP=$((100*"$(echo "$RET"|cut -b 13)"+"$(echo "$RET"|cut -b 15-16)"))
+echo "Found installed Git Version: $GVTMP"
+
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# 
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 BDIR=build
 TARGET=unittest
 TARGET_OTHER=unittest_sanitize
