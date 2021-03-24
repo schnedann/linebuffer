@@ -27,6 +27,7 @@ SOURCES += \
   $$PWD/../../../the_framework/unittest/utest_bitmacros.cpp \
   $$PWD/../../../the_framework/unittest/utest_bitreverse.cpp \
   $$PWD/../../../the_framework/unittest/utest_compiler.cpp \
+  $$PWD/../../../the_framework/unittest/utest_countbitsset.cpp \
   $$PWD/../../../the_framework/unittest/utest_dbllnkdlst.cpp \
   $$PWD/../../../the_framework/unittest/utest_fields.cpp \
   $$PWD/../../../the_framework/unittest/utest_helpers.cpp \
