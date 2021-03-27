@@ -51,11 +51,11 @@ using namespace Math::Flowpoint;
 TEST_CASE( "Helper: Stringhelper", "[helper]" ){
   SECTION( "ConfigConstants" ){
 
-    REQUIRE( bool(utility::strings::asHEX) == true );
-    REQUIRE( bool(utility::strings::asDEC) == false );
+    REQUIRE( bool(utility::strings::conmode::asHEX) == true );
+    REQUIRE( bool(utility::strings::conmode::asDEC) == false );
   }
   SECTION( "String <--> Number, Hexadecimal" ){
-    auto mode = utility::strings::asHEX;
+    auto mode = utility::strings::conmode::asHEX;
     auto tmp = utility::strings::str2unum<u16>("0xDEAD",mode);
     REQUIRE( tmp == 0xDEADu );
 
@@ -67,7 +67,7 @@ TEST_CASE( "Helper: Stringhelper", "[helper]" ){
     REQUIRE( str.compare("1101111010101101") == 0 );
   }
   SECTION( "String <--> Number, Decimal" ){
-    auto mode = utility::strings::asDEC;
+    auto mode = utility::strings::conmode::asDEC;
     std::string str = utility::strings::unum2str<u16>(12345,mode);
     REQUIRE( str.compare("12345") == 0 );
 

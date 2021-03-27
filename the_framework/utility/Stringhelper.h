@@ -34,22 +34,26 @@
 #include "compile_guards.h"
 #include "iterators.h"
 #include "meta.h"
+#include "math_discrete.h"
 
 namespace utility{
 
 namespace strings{
 
-constexpr bool const asDEC = false;
-constexpr bool const asHEX = true;
+enum class conmode:bool{
+  asDEC = false,
+  asHEX = true
+};
+using conmode_t = enum conmode;
 
 /**
  * Convert Number to String - decimal or hexadecimal
  */
-template<class T> std::string unum2str(T const& num, bool const dechex){
+template<class T> std::string unum2str(T const& num, conmode_t const dechex){
   Compile::Guards::IsUnsigned<T>();
   using insert_type_t = typename Meta::Types::replace8bitint<T>::type;
   std::stringstream ss;
-  if(dechex==asDEC){
+  if(dechex==conmode::asDEC){
     ss << insert_type_t(num);
   }else{
     ss << "0x" << std::hex << insert_type_t(num);
@@ -60,12 +64,12 @@ template<class T> std::string unum2str(T const& num, bool const dechex){
 /**
  * Convert String to Number - decimal or hexadecimal
  */
-template<class T> T str2unum(std::string const& str, bool const dechex){
+template<class T> T str2unum(std::string const& str, conmode_t const dechex){
   Compile::Guards::IsUnsigned<T>();
   T num;
   std::stringstream ss;
 
-  if(dechex==asHEX){
+  if(dechex==conmode::asHEX){
     size_t pos = str.find("0x",0);
     std::string croped = str.substr(pos,(str.length()-pos));
      ss << croped;
@@ -80,7 +84,8 @@ template<class T> T str2unum(std::string const& str, bool const dechex){
 //-----
 
 /**
- * Convert a Variable to a String...
+ * @brief to_string - Convert a Variable of any Type to String as long as an known conversion exists
+ * @note signed and unsigned 8Bit Integers are handled as 16Bit values to prevent char output
  */
 template<typename T> std::string to_string(std::string name, T const& _x){
   std::stringstream ss;
@@ -89,25 +94,33 @@ template<typename T> std::string to_string(std::string name, T const& _x){
   return ss.str();
 }
 
+/**
+ * @brief PRNVAR - Macro to Convert any variable to an String, including output of the variable name
+ */
 #define PRNVAR(_X) (utility::strings::to_string<decltype(_X)>((#_X),(_X)))
 
 //-----
 
 /**
- * Convert a Variable to a String - convert Integers as HexString...
+ * @brief to_hstring - Convert a Variable of any Type to String as long as an known conversion exists
+ * @note signed and unsigned 8Bit Integers are handled as 16Bit values to prevent char output,
+ *       also any integer is converted in Hexadecimal notation
  */
 template<typename T> std::string to_hstring(std::string name, T const& _x){
   std::stringstream ss;
   using insert_type_t = typename Meta::Types::replace8bitint<T>::type;
   constexpr bool const is_int = std::is_integral<T>::value;
   if(is_int){
-    ss << name << ": " << std::hex << insert_type_t(_x);
+    ss << name << ": 0x" << std::hex << insert_type_t(_x);
   }else{
     ss << name << ": " << _x;
   }
   return ss.str();
 }
 
+/**
+ * @brief PRNHEXVAR - Macro to Convert any variable to an (hex)String, including output of the variable name
+ */
 #define PRNHEXVAR(_X) (utility::strings::to_hstring<decltype(_X)>((#_X),(_X)))
 
 //-----
@@ -237,6 +250,25 @@ template<typename T> std::string print_array(Core::Container::citerator_t<T> ptr
 template<typename T, size_t N> std::string print_array(T data[N]){
   return print_array(&data, N);
 }
+
+//-----
+
+/**
+ * Convert a Numer to a binary String with Zeros and Ones
+ */
+template<typename T> std::string prnbin(T data, u8 length = Math::Boolean::GETBITSOFTYPE<T>()){
+  std::stringstream ss;
+  if(length>0){
+    auto mask = Math::Boolean::GETMASKBIT<u64>(length-1);
+    while(mask>0){
+      ss << (((data & mask) > 0)?("1"):("0"));
+      mask >>= 1;
+    }
+  }
+  return ss.str();
+}
+
+//-----
 
 } //namespace
 

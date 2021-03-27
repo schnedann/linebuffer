@@ -122,6 +122,16 @@ TEST_CASE("Math::Discrete","[math discrete]"){
     REQUIRE( u16(c>>16) == Math::Discrete::multiply_high_part<u16>(a,b) );
   }
 
+  SECTION("14 - multiply_low_part / multiply_high_part"){
+    for(u16 ii=0; ii<256; ++ii){
+      for(u16 ij=0; ij<256; ++ij){
+        u16 ref = ii*ij;
+        REQUIRE( u8(ref)    == Math::Discrete::multiply_low_part<u8>(u8(ii),u8(ij)) );
+        REQUIRE( u8(ref>>8) == Math::Discrete::multiply_high_part<u8>(u8(ii),u8(ij)) );
+      }
+    }
+  }
+  
   SECTION("Math::Discrete::odd"){
 
   }

@@ -1,7 +1,10 @@
 /******************************************************************************/
-/** Discrete Integer Mathematics         **/
-/** collected and / or implemented by       **/
-/** Danny Schneider, 2017-2020        **/
+/** Discrete Integer Mathematics                                             **/
+/** collected and / or implemented by                                        **/
+/** Danny Schneider, 2017-2020                                               **/
+/**  http://graphics.stanford.edu/~seander/bithacks.html                     **/
+/**  http://gurmeet.net/puzzles/fast-bit-counting-routines/                  **/
+/**  http://aggregate.org/MAGIC/                                             **/
 /******************************************************************************/
 
 /*
@@ -72,27 +75,39 @@ namespace Math{
 
 namespace Discrete{
 
+/**
+ * calculate the mean of two values
+ */
 template<typename T> constexpr T ofs_mean(T const _x, T const _y){
   return dMEAN2(_x,_y);
 }
 
+/**
+ * calculate the median of three values
+ */
 template<typename T> constexpr T median_of_three(T const _x, T const _y, T const _z){
   return dMEDIAN3(_x,_y,_z);
 }
 
-//-----
+//--------------------------------------------------
 
-template<typename T> constexpr bool odd(T const _x){
+/**
+ * test if a number is odd
+ */
+template<typename T> constexpr bool is_odd(T const _x){
   Compile::Guards::IsInteger<T>();
   return ((_x&1)>0);
 }
 
-template<typename T> constexpr bool even(T const _x){
+/**
+ * test if a number is even
+ */
+  template<typename T> constexpr bool is_even(T const _x){
   Compile::Guards::IsInteger<T>();
   return ((_x&1)==0);
 }
 
-//-----
+//--------------------------------------------------
 
 /**
  * @brief multiply_low_part - Multiplication only uses half of Type T
@@ -130,7 +145,7 @@ template<typename T> constexpr auto multiply_high_part(T const _x, T const _y) n
   return ((((b*d)>>hbits)+(a*d)+(b*c))>>hbits)+(a*c);
 }
 
-//-----
+//--------------------------------------------------
 
 /*
  x =              0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
@@ -178,7 +193,7 @@ template<typename T> constexpr T log2(T const _x){
   return res;
 }
 
-
+//--------------------------------------------------
 
 /**
  * @brief countbitsset - Highly Optimized bit counting
@@ -201,6 +216,8 @@ template<typename T> constexpr u8 countbitsset(T const v){
   return u8(x & T(0x000000000000001Ful));
 }
 
+//--------------------------------------------------
+
 /**
  * Integer leading Zeros Count
  */
@@ -215,6 +232,8 @@ template<typename T> constexpr u8 leadingzeros(T const _x){
   if(tbits>32) v |= (v >> 32);
   return(tbits - countbitsset<T>(v));
 }
+
+//--------------------------------------------------
 
 /**
  * @brief is_power_of_2
@@ -246,6 +265,8 @@ template<typename T> T nextpow2(T const _x){
   ++lx;
   return lx;
 }
+
+//--------------------------------------------------
 
 /**
  * @brief intpower
@@ -471,7 +492,93 @@ template<typename T> T lcm(T a, T b){
   return res;
 }
 
-//-----
+//--------------------------------------------------
+
+/**
+ * index of highest Bit
+ * 0x10000 --> Result is 17
+ * For C-Style Counting: Result-1
+ */
+#if dHiBitIndex == 1
+u8 hibitindex(u32 _v){
+  unsigned char res = 1;
+  if(_v > 0xFFFF){
+    res += 16;
+    maSHR(_v,16);
+  }
+  if(_v > 0xFF){
+    res += 8;
+     maSHR(_v,8);
+  }
+  if(_v > 0xF){
+    res += 4;
+     maSHR(_v,4);
+  }
+  if(_v > 0x3){
+    res += 2;
+     maSHR(_v,2);
+  }
+  if(_v > 0x1){
+    res += 1;
+  }
+  return res;
+}
+#endif
+
+#if dHiBitIndex == 2
+u8 hibitindex(u32 _v){
+  u8 res = 1;
+  if (_v==0){return 0;}
+  if(mAND(_v,0xFFFF0000u)>0){res+=16;}
+  if(mAND(_v,0xFF00FF00u)>0){res+= 8;}
+  if(mAND(_v,0xF0F0F0F0u)>0){res+= 4;}
+  if(mAND(_v,0xccccccccu)>0){res+= 2;}
+  if(mAND(_v,0xaaaaaaaau)>0){res+= 1;}
+  return res;
+}
+#endif
+
+#if dHiBitIndex == 3
+u8 hibitindex(u32 _v){
+  u8 res = 31;
+  if (_v==0){return 0;}
+  if (mAND(_v,0xFFFF0000u)==0){res-=16;}
+  if (mAND(_v,0xFF00FF00u)==0){res-= 8;}
+  if (mAND(_v,0xF0F0F0F0u)==0){res-= 4;}
+  if (mAND(_v,0xCCCCCCCCu)==0){res-= 2;}
+  if (mAND(_v,0xAAAAAAAAu)==0){res-= 1;}
+  return res;
+}
+#endif
+
+//--------------------------------------------------
+
+/**
+ * value of highest Bit
+ */
+#if dHiBitValue == 1
+u32 hibitvalue(u32 n){
+  n |= mSHR(n, 1);
+  n |= mSHR(n, 2);
+  n |= mSHR(n, 4);
+  n |= mSHR(n, 8);
+  n |= mSHR(n,16);
+  return n - (n >> 1);
+}
+#endif
+
+#if dHiBitValue == 2
+u32 hibitvalue(u32 n){
+  n |= mSHR(n, 1);
+  n |= mSHR(n, 2);
+  n |= mSHR(n, 4);
+  n |= mSHR(n, 8);
+  n |= mSHR(n,16);
+  return(n & ~(n >> 1));
+}
+#endif
+
+//--------------------------------------------------
 
 } //namespace
 
