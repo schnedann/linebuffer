@@ -4,6 +4,8 @@ Compiler Math
 Compiler Datatypes
 endianness-detect
 GCC Version
+Count-Bits_Set - Brute Force Test
+Count-Bits_Set - Quick Test
 Datastructures::dbllnkdlst
 fields
 Helper: Stringhelper
@@ -15,5 +17,3 @@ Log2 using stdlib as reference
 Math::Discrete
 Meta
 Algorithms::minmax
-Count-Bits_Set - Quick Test
-Count-Bits_Set - Brute Force Test

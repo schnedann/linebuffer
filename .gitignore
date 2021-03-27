@@ -75,3 +75,5 @@ build/*
 *.dll
 *.exe
 
+
+external/
