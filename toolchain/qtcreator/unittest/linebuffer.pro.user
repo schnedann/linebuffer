@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.14.1, 2021-03-22T12:54:57. -->
+<!-- Written by QtCreator 4.14.2, 2021-03-28T01:07:22. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -74,6 +74,9 @@
     <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_compiler.cpp:Compiler Math">Checked</value>
     <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_compiler.cpp:GCC Version">Checked</value>
     <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_compiler.cpp:endianness-detect">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_countbitsset.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_countbitsset.cpp">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_countbitsset.cpp:Count-Bits_Set - Brute Force Test">Checked</value>
+    <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_countbitsset.cpp:Count-Bits_Set - Quick Test">Checked</value>
     <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_dbllnkdlst.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_dbllnkdlst.cpp">Checked</value>
     <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_dbllnkdlst.cpp:Datastructures::dbllnkdlst">Checked</value>
     <value type="Qt::CheckState" key="/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_fields.cpp:/home/danny/ramdisk/linebuffer/the_framework/unittest/utest_fields.cpp">Checked</value>

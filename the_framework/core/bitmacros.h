@@ -296,7 +296,7 @@ template<typename T> constexpr T BITSPACE(u8 bits) noexcept{
  * 2 -   10
  * 3 -  100
  */
-template<typename T> constexpr T MASK_MSB(u8 bits) noexcept{
+template<typename T> constexpr T MASK_MSB(u8 bits=GETBITSOFTYPE<T>()) noexcept{
   Compile::Guards::IsInteger<T>();
   return (bits>0)?(BITSPACE<T>(bits-1)):(0);
 }

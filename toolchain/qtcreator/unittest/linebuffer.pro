@@ -40,7 +40,9 @@ SOURCES += \
   $$PWD/../../../the_framework/unittest/utest_minmax.cpp \
   $$PWD/../../../the_framework/utility/Stringhelper.cpp \
   $$PWD/../../../the_framework/utility/linebuffer.cpp \
-  $$PWD/../../../the_framework/utility/utility_fkt.cpp
+  $$PWD/../../../the_framework/utility/utility_fkt.cpp \
+  ../../../the_framework/math/minilog2.cpp \
+  ../../../the_framework/unittest/utest_minilog2.cpp
 
 HEADERS += \
   $$PWD/../../../the_framework/algorithms/bitreverse.h \
@@ -76,7 +78,8 @@ HEADERS += \
   $$PWD/../../../the_framework/utility/debug_hlp.h \
   $$PWD/../../../the_framework/utility/linebuffer.h \
   $$PWD/../../../the_framework/utility/utility_fkt.h \
-  $$PWD/../../../external/Catch2/single_include/catch2/catch.hpp
+  $$PWD/../../../external/Catch2/single_include/catch2/catch.hpp \
+  ../../../the_framework/math/minilog2.h
 
 INCLUDEPATH += \
   $$PWD/../../../the_framework/algorithms \
