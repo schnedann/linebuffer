@@ -109,7 +109,7 @@ template<typename T> T maskshift_method(T const _v, u8 const bits=Math::Boolean:
   T rmask = 1;
 
   //until Masks meet in the middle of the number
-  while(lmask > rmask){
+  while(lmask >= rmask){
     res |= (_v&lmask)?(rmask):(0);
     res |= (_v&rmask)?(lmask):(0);
     lmask >>= 1;
@@ -128,7 +128,7 @@ template<typename T> T maskshift_methodV2(T const _x, u8 const bits=Math::Boolea
   auto mask_lsb = T(1);
   auto mask_msb = Math::Boolean::MASK_MSB<T>(bits);
   T res = 0;
-  while(mask_msb>=mask_lsb){
+  while(mask_msb >= mask_lsb){
     if(Math::Boolean::TESTBITS<T>(_x,mask_lsb)){
       res = Math::Boolean::OR<T>(res,mask_msb);
     }
