@@ -120,20 +120,35 @@ TEST_CASE("Bitreverse"){
   //--- Compare results of all methods at same input
 
   SECTION("Mixed up")  {
-    auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
+    //constexpr static auto const tbits = Math::Boolean::GETBITSOFTYPE<u32>();
+    auto const bits = u8(GENERATE(take(10, random(4, 32))));
+    auto const mask = Math::Boolean::GETFULLMASK<u32>(bits);
+    auto const orig = Math::Boolean::MASKBITS<u32>(u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>())))),mask);
 
-    auto bitrev0 = Algorithms::Bitreverse::simple_method<u32>(orig);
+    auto bitrev0 = Algorithms::Bitreverse::simple_method<u32>(orig,bits);
     auto bitrev1 = Algorithms::Bitreverse::nibbleLut_method<u32>(orig);
     auto bitrev2 = Algorithms::Bitreverse::nibbleLut_methodV2<u32>(orig);
-    auto bitrev3 = Algorithms::Bitreverse::maskshift_method<u32>(orig);
-    auto bitrev4 = Algorithms::Bitreverse::maskshift_methodV2<u32>(orig);
-    auto bitrev5 = Algorithms::Bitreverse::numerical_method<u32>(orig);
+    auto bitrev3 = Algorithms::Bitreverse::maskshift_method<u32>(orig,bits);
+    auto bitrev4 = Algorithms::Bitreverse::maskshift_methodV2<u32>(orig,bits);
+    auto bitrev5 = Algorithms::Bitreverse::numerical_method<u32>(orig,bits);
 
-    REQUIRE( bitrev0 == bitrev1 );
-    REQUIRE( bitrev1 == bitrev2 );
-    REQUIRE( bitrev2 == bitrev3 );
-    REQUIRE( bitrev3 == bitrev4 );
-    REQUIRE( bitrev4 == bitrev5 );
-    REQUIRE( bitrev5 == bitrev0 );
+
+    CAPTURE(u16(bits));
+    CAPTURE(utility::strings::prnbin(mask,32));
+    CAPTURE(utility::strings::prnbin(orig,32));
+
+    if(0==(bits%4)){
+      REQUIRE( bitrev0 == bitrev1 );
+      REQUIRE( bitrev1 == bitrev2 );
+      REQUIRE( bitrev2 == bitrev3 );
+      REQUIRE( bitrev3 == bitrev4 );
+      REQUIRE( bitrev4 == bitrev5 );
+      REQUIRE( bitrev5 == bitrev0 );
+    }else{
+      REQUIRE( bitrev0 == bitrev3 );
+      REQUIRE( bitrev3 == bitrev4 );
+      REQUIRE( bitrev4 == bitrev5 );
+      REQUIRE( bitrev5 == bitrev0 );
+    }
   }
 }

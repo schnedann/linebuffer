@@ -382,7 +382,7 @@ TEST_CASE("Math::Boolean","[boolean]"){
 
 //--------------------------------------------------
 
-  SECTION("19 - GETBITSOFTYPE"){
+  SECTION("19 - GETBITSOFTYPE / GETNIBBLESOFTYPE / NIBBLES2BITS"){
     REQUIRE(  8 == Math::Boolean::GETBITSOFTYPE<s8>());
     REQUIRE( 16 == Math::Boolean::GETBITSOFTYPE<s16>());
     REQUIRE( 32 == Math::Boolean::GETBITSOFTYPE<s32>());
@@ -395,6 +395,28 @@ TEST_CASE("Math::Boolean","[boolean]"){
 
     REQUIRE( 32 == Math::Boolean::GETBITSOFTYPE<float>());
     REQUIRE( 64 == Math::Boolean::GETBITSOFTYPE<double>());
+
+    //---
+
+    REQUIRE( Math::Boolean::NIBBLES2BITS<u8>()  == Math::Boolean::GETBITSOFTYPE<u8>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<s8>()  == Math::Boolean::GETBITSOFTYPE<s8>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<u16>() == Math::Boolean::GETBITSOFTYPE<u16>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<s16>() == Math::Boolean::GETBITSOFTYPE<s16>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<u32>() == Math::Boolean::GETBITSOFTYPE<u32>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<s32>() == Math::Boolean::GETBITSOFTYPE<s32>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<u64>() == Math::Boolean::GETBITSOFTYPE<u64>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<s64>() == Math::Boolean::GETBITSOFTYPE<s64>() );
+
+    //---
+
+    REQUIRE( Math::Boolean::NIBBLES2BITS<u8>(Math::Boolean::GETNIBBLESOFTYPE<u8>())   == Math::Boolean::GETBITSOFTYPE<u8>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<s8>(Math::Boolean::GETNIBBLESOFTYPE<s8>())   == Math::Boolean::GETBITSOFTYPE<s8>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<u16>(Math::Boolean::GETNIBBLESOFTYPE<u16>()) == Math::Boolean::GETBITSOFTYPE<u16>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<s16>(Math::Boolean::GETNIBBLESOFTYPE<s16>()) == Math::Boolean::GETBITSOFTYPE<s16>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<u32>(Math::Boolean::GETNIBBLESOFTYPE<u32>()) == Math::Boolean::GETBITSOFTYPE<u32>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<s32>(Math::Boolean::GETNIBBLESOFTYPE<s32>()) == Math::Boolean::GETBITSOFTYPE<s32>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<u64>(Math::Boolean::GETNIBBLESOFTYPE<u64>()) == Math::Boolean::GETBITSOFTYPE<u64>() );
+    REQUIRE( Math::Boolean::NIBBLES2BITS<s64>(Math::Boolean::GETNIBBLESOFTYPE<s64>()) == Math::Boolean::GETBITSOFTYPE<s64>() );
   }
 
 //--------------------------------------------------
@@ -409,6 +431,18 @@ TEST_CASE("Math::Boolean","[boolean]"){
   }
 
 //--------------------------------------------------
+
+  SECTION("xx - NIBBLES2BITS"){
+    REQUIRE( 0 == Math::Boolean::BITS2NIBBLES<void>(0) );
+    size_t ref = 1;
+    for(u16 ii=1; ii<64; ++ii){
+      CAPTURE(ii);
+      REQUIRE( ref == Math::Boolean::BITS2NIBBLES<void>(ii) );
+      if(0==(ii%4)){
+        ++ref;
+      }
+    }
+  }
 
 //--------------------------------------------------
 

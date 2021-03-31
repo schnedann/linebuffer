@@ -134,11 +134,34 @@ template<typename T> constexpr size_t GETBITSOFTYPE() noexcept{
 }
 
 /**
+ * number of nibbles of given Type T
+ */
+template<typename T> constexpr size_t GETNIBBLESOFTYPE() noexcept{
+  return (sizeof(T)<<1);
+}
+
+/**
  * satturate "bits" at value of number of bits of given Type T
  */
-template<typename T> constexpr size_t GETMAXBITS(size_t bits) noexcept{
+template<typename T> constexpr size_t GETMAXBITS(size_t const bits=GETBITSOFTYPE<T>()) noexcept{
   Compile::Guards::IsInteger<T>();
   return (GETBITSOFTYPE<T>()<bits)?(GETBITSOFTYPE<T>()):(bits);
+}
+
+//--------------------------------------------------
+
+/**
+ * @brief Convert number of nibbles to number of bits
+ */
+template<typename T> constexpr size_t NIBBLES2BITS(size_t const nibbles=sizeof(T)<<1) noexcept{
+  return (nibbles<<2);
+}
+
+/**
+ * @brief Convert number of bits to number of nibbles to fit all bits in (ceil-behavouir)
+ */
+template<typename T> constexpr size_t BITS2NIBBLES(size_t const bits=GETBITSOFTYPE<T>()) noexcept{
+  return (bits>>2)+(((bits&size_t(3))>0)?(1):(0));
 }
 
 //--------------------------------------------------
