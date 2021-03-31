@@ -16,13 +16,12 @@ namespace Bitreverse {
  * @brief simple_method - Bitreverse of an number
  *        Copy Bit by Bit with simple masks
  */
-template<typename T> T simple_method(T const _v) noexcept{
+template<typename T> T simple_method(T const _v, u8 const bits=Math::Boolean::GETBITSOFTYPE<T>()) noexcept{
   Compile::Guards::IsUnsigned<T>();
-  constexpr auto const tbits = Math::Boolean::GETBITSOFTYPE<T>();
-  constexpr static auto const msb_mask = Math::Boolean::MASK_MSB<T>(tbits);
+  auto const msb_mask = Math::Boolean::MASK_MSB<T>(bits);
   T _x = _v;
   T res = 0;
-  for(size_t ii=0; ii<tbits; ++ii){
+  for(size_t ii=0; ii<bits; ++ii){
     if(Math::Boolean::TESTBITS<>(_x,msb_mask)){
       res = Math::Boolean::OR<>(res,Math::Boolean::GETMASKBIT<T>(ii));
     }
@@ -34,17 +33,15 @@ template<typename T> T simple_method(T const _v) noexcept{
 /**
  * for all Bit do x=(x_-1)*2+(LSB>0)?(1):(0) with x_inti=0;
  */
-template<typename T, u8 BITS> T numerical_method(T const _v) noexcept{
+template<typename T> T numerical_method(T const _v, u8 const bits=Math::Boolean::GETBITSOFTYPE<T>()) noexcept{
   Compile::Guards::IsUnsigned<T>();
-  constexpr auto const tbits = Math::Boolean::GETBITSOFTYPE<T>();
-  static_assert(tbits>=BITS,"Parameter BITS exceeds size of type");
 
   auto const mask = T(1);
   auto v_tmp = _v;
 
   T res = 0;
   //sum up the bitreverse
-  for(u8 ii=0; ii<BITS; ++ii){
+  for(u8 ii=0; ii<bits; ++ii){
     auto const next_bit = Math::Boolean::MASKBITS<T>(v_tmp,mask);
     v_tmp = Math::Boolean::ARITHSHR<T>(v_tmp,1);
     res = Math::Boolean::OR<T>(Math::Boolean::ARITHSHL<T>(res,1),next_bit);
@@ -105,7 +102,7 @@ template<typename T> T nibbleLut_methodV2(T const _x){
  * @brief maskshift_method - Swap bits with two moving masks
  *                           much like simple_method, but copy 2 bits at once
  */
-template<typename T> T maskshift_method(T const _v, u8 const bits) noexcept{
+template<typename T> T maskshift_method(T const _v, u8 const bits=Math::Boolean::GETBITSOFTYPE<T>()) noexcept{
   Compile::Guards::IsUnsigned<T>();
   T res = 0;
   T lmask = Math::Boolean::MASK_MSB<T>(bits);
@@ -126,12 +123,10 @@ template<typename T> T maskshift_method(T const _v, u8 const bits) noexcept{
  * @brief maskshift_method - Swap bits with two moving masks
  *                           much like simple_method, but copy 2 bits at once
  */
-template<typename T> T maskshift_methodV2(T const _x, size_t const bits=0){
+template<typename T> T maskshift_methodV2(T const _x, u8 const bits=Math::Boolean::GETBITSOFTYPE<T>()){
   Compile::Guards::IsUnsigned<T>();
   auto mask_lsb = T(1);
-  constexpr auto const tbits = Math::Boolean::GETBITSOFTYPE<T>();
-  auto bits_used = ((0==bits) || (bits>tbits))?(tbits):(bits);
-  auto mask_msb = Math::Boolean::MASK_MSB<T>(bits_used);
+  auto mask_msb = Math::Boolean::MASK_MSB<T>(bits);
   T res = 0;
   while(mask_msb>=mask_lsb){
     if(Math::Boolean::TESTBITS<T>(_x,mask_lsb)){

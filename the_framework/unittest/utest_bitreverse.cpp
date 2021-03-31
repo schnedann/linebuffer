@@ -102,8 +102,10 @@ TEST_CASE("Bitreverse"){
   SECTION("numerical method - Debug"){
     std::array<u8,16> ref={0,8,4,12,2,10,6,14,1,9,5,13,3,11,7,15};
 
+    constexpr static u8 const bits = 4;
+
     for(u8 ii=0; ii<16; ++ii){
-      auto bitrev  = Algorithms::Bitreverse::numerical_method<u8,4>(ii);
+      auto bitrev  = Algorithms::Bitreverse::numerical_method<u8>(ii,bits);
       CAPTURE(u16(ii));
       REQUIRE(ref[ii]==bitrev);
     }
@@ -111,9 +113,9 @@ TEST_CASE("Bitreverse"){
 
   SECTION("numerical method"){
     auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
-    constexpr auto const tbits = Math::Boolean::GETBITSOFTYPE<u32>();
-    auto bitrev  = Algorithms::Bitreverse::numerical_method<u32,tbits>(orig);
-    auto revorig = Algorithms::Bitreverse::numerical_method<u32,tbits>(bitrev);
+    constexpr static auto const tbits = Math::Boolean::GETBITSOFTYPE<u32>();
+    auto bitrev  = Algorithms::Bitreverse::numerical_method<u32>(orig,tbits);
+    auto revorig = Algorithms::Bitreverse::numerical_method<u32>(bitrev,tbits);
     CAPTURE(utility::strings::prnbin(orig,32));
     CAPTURE(utility::strings::prnbin(bitrev,32));
     CAPTURE(utility::strings::prnbin(revorig,32));
