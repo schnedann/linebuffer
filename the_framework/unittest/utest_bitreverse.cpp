@@ -41,10 +41,10 @@ TEST_CASE("Bitreverse"){
     auto bitrev  = Algorithms::Bitreverse::simple_method<u32>(orig,bits);
     auto revorig = Algorithms::Bitreverse::simple_method<u32>(bitrev,bits);
     CAPTURE(bits);
-    CAPTURE(utility::strings::prnbin(mask,tbits));
-    CAPTURE(utility::strings::prnbin(orig,tbits));
-    CAPTURE(utility::strings::prnbin(bitrev,tbits));
-    CAPTURE(utility::strings::prnbin(revorig,tbits));
+    CAPTURE(PRNBINVAR(mask,tbits));
+    CAPTURE(PRNBINVAR(orig,tbits));
+    CAPTURE(PRNBINVAR(bitrev,tbits));
+    CAPTURE(PRNBINVAR(revorig,tbits));
     REQUIRE( orig == revorig );
   }
 
@@ -56,10 +56,10 @@ TEST_CASE("Bitreverse"){
     auto bitrev  = Algorithms::Bitreverse::maskshift_method<u32>(orig,bits);
     auto revorig = Algorithms::Bitreverse::maskshift_method<u32>(bitrev,bits);
     CAPTURE(bits);
-    CAPTURE(utility::strings::prnbin(mask,tbits));
-    CAPTURE(utility::strings::prnbin(orig,tbits));
-    CAPTURE(utility::strings::prnbin(bitrev,tbits));
-    CAPTURE(utility::strings::prnbin(revorig,tbits));
+    CAPTURE(PRNBINVAR(mask,tbits));
+    CAPTURE(PRNBINVAR(orig,tbits));
+    CAPTURE(PRNBINVAR(bitrev,tbits));
+    CAPTURE(PRNBINVAR(revorig,tbits));
     REQUIRE( orig == revorig );
   }
 
@@ -67,9 +67,9 @@ TEST_CASE("Bitreverse"){
     auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
     auto bitrev  = Algorithms::Bitreverse::maskshift_methodV2<u32>(orig,32);
     auto revorig = Algorithms::Bitreverse::maskshift_methodV2<u32>(bitrev,32);
-    CAPTURE(utility::strings::prnbin(orig,32));
-    CAPTURE(utility::strings::prnbin(bitrev,32));
-    CAPTURE(utility::strings::prnbin(revorig,32));
+    CAPTURE(PRNBINVAR(orig,32));
+    CAPTURE(PRNBINVAR(bitrev,32));
+    CAPTURE(PRNBINVAR(revorig,32));
     REQUIRE( orig == revorig );
   }
 
@@ -89,9 +89,9 @@ TEST_CASE("Bitreverse"){
     constexpr static auto const tbits = Math::Boolean::GETBITSOFTYPE<u32>();
     auto bitrev  = Algorithms::Bitreverse::numerical_method<u32>(orig,tbits);
     auto revorig = Algorithms::Bitreverse::numerical_method<u32>(bitrev,tbits);
-    CAPTURE(utility::strings::prnbin(orig,32));
-    CAPTURE(utility::strings::prnbin(bitrev,32));
-    CAPTURE(utility::strings::prnbin(revorig,32));
+    CAPTURE(PRNBINVAR(orig,32));
+    CAPTURE(PRNBINVAR(bitrev,32));
+    CAPTURE(PRNBINVAR(revorig,32));
     REQUIRE( orig == revorig );
   }
 
@@ -101,9 +101,9 @@ TEST_CASE("Bitreverse"){
     auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
     auto bitrev  = Algorithms::Bitreverse::nibbleLut_method<u32>(orig);
     auto revorig = Algorithms::Bitreverse::nibbleLut_method<u32>(bitrev);
-    CAPTURE(utility::strings::prnbin(orig,32));
-    CAPTURE(utility::strings::prnbin(bitrev,32));
-    CAPTURE(utility::strings::prnbin(revorig,32));
+    CAPTURE(PRNBINVAR(orig,32));
+    CAPTURE(PRNBINVAR(bitrev,32));
+    CAPTURE(PRNBINVAR(revorig,32));
     REQUIRE( orig == revorig );
   }
 
@@ -111,9 +111,9 @@ TEST_CASE("Bitreverse"){
     auto const orig = u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
     auto bitrev  = Algorithms::Bitreverse::nibbleLut_methodV2<u32>(orig);
     auto revorig = Algorithms::Bitreverse::nibbleLut_methodV2<u32>(bitrev);
-    CAPTURE(utility::strings::prnbin(orig,32));
-    CAPTURE(utility::strings::prnbin(bitrev,32));
-    CAPTURE(utility::strings::prnbin(revorig,32));
+    CAPTURE(PRNBINVAR(orig,32));
+    CAPTURE(PRNBINVAR(bitrev,32));
+    CAPTURE(PRNBINVAR(revorig,32));
     REQUIRE( orig == revorig );
   }
 
@@ -134,8 +134,8 @@ TEST_CASE("Bitreverse"){
 
 
     CAPTURE(u16(bits));
-    CAPTURE(utility::strings::prnbin(mask,32));
-    CAPTURE(utility::strings::prnbin(orig,32));
+    CAPTURE(PRNBINVAR(mask,32));
+    CAPTURE(PRNBINVAR(orig,32));
 
     if(0==(bits%4)){
       REQUIRE( bitrev0 == bitrev1 );

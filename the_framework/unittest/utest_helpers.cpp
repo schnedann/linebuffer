@@ -51,27 +51,27 @@ using namespace Math::Flowpoint;
 TEST_CASE( "Helper: Stringhelper", "[helper]" ){
   SECTION( "ConfigConstants" ){
 
-    REQUIRE( bool(utility::strings::conmode::asHEX) == true );
-    REQUIRE( bool(utility::strings::conmode::asDEC) == false );
+    REQUIRE( bool(Utility::Strings::conmode::asHEX) == true );
+    REQUIRE( bool(Utility::Strings::conmode::asDEC) == false );
   }
   SECTION( "String <--> Number, Hexadecimal" ){
-    auto mode = utility::strings::conmode::asHEX;
-    auto tmp = utility::strings::str2unum<u16>("0xDEAD",mode);
+    auto mode = Utility::Strings::conmode::asHEX;
+    auto tmp = Utility::Strings::str2unum<u16>("0xDEAD",mode);
     REQUIRE( tmp == 0xDEADu );
 
-    std::string str = utility::strings::unum2str<u16>(static_cast<u16>(tmp),mode);
+    std::string str = Utility::Strings::unum2str<u16>(static_cast<u16>(tmp),mode);
     REQUIRE( str.compare("0xdead") == 0 );
   }
   SECTION( "Print Binary Number" ){
-    std::string str = utility::strings::prnbin(57005,16);
+    std::string str = Utility::Strings::prnbin(57005,16);
     REQUIRE( str.compare("1101111010101101") == 0 );
   }
   SECTION( "String <--> Number, Decimal" ){
-    auto mode = utility::strings::conmode::asDEC;
-    std::string str = utility::strings::unum2str<u16>(12345,mode);
+    auto mode = Utility::Strings::conmode::asDEC;
+    std::string str = Utility::Strings::unum2str<u16>(12345,mode);
     REQUIRE( str.compare("12345") == 0 );
 
-    auto tmp = utility::strings::str2unum<u16>(str,mode);
+    auto tmp = Utility::Strings::str2unum<u16>(str,mode);
     REQUIRE( 12345 == tmp );
   }
 

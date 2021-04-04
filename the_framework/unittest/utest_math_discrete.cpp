@@ -65,7 +65,7 @@ TEST_CASE("Math::Discrete","[math discrete]"){
     for(u64 ii=0; ii<res.size(); ++ii){
       res[ii] = u8(Math::Discrete::log2<u64>(ii));
     }
-    utility::strings::print_array<u8>(res.data(),res.size());
+    Utility::Strings::print_array<u8>(res.data(),res.size());
   }
 
   SECTION("Math::Discrete::log2 2/3"){
@@ -131,7 +131,7 @@ TEST_CASE("Math::Discrete","[math discrete]"){
       }
     }
   }
-  
+
   SECTION("Math::Discrete::odd"){
 
   }

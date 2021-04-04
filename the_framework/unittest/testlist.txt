@@ -17,3 +17,4 @@ Log2 using stdlib as reference
 Math::Discrete
 Meta
 Algorithms::minmax
+Algorithms::Log2::minilog2

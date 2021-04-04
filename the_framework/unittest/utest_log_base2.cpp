@@ -42,7 +42,7 @@ TEST_CASE("Log2 using stdlib as reference"){
     CAPTURE(rnd);
     CAPTURE(res);
     CAPTURE(ref);
-    CAPTURE(utility::strings::prnbin(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
+    CAPTURE(PRNBINVAR(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
     REQUIRE( Math::Flowpoint::approximatelyEqual<long double>(ref,static_cast<long double>(res),static_cast<long double>(0.5)) );
   }
 
@@ -53,7 +53,7 @@ TEST_CASE("Log2 using stdlib as reference"){
     CAPTURE(rnd);
     CAPTURE(res);
     CAPTURE(ref);
-    CAPTURE(utility::strings::prnbin(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
+    CAPTURE(PRNBINVAR(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
     REQUIRE( u16(ref) == u16(res) );
   }
 
@@ -64,7 +64,7 @@ TEST_CASE("Log2 using stdlib as reference"){
     CAPTURE(rnd);
     CAPTURE(res);
     CAPTURE(ref);
-    CAPTURE(utility::strings::prnbin(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
+    CAPTURE(PRNBINVAR(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
     REQUIRE( u16(ref) == u16(res) );
   }
 
@@ -75,7 +75,7 @@ TEST_CASE("Log2 using stdlib as reference"){
     CAPTURE(rnd);
     CAPTURE(res);
     CAPTURE(ref);
-    CAPTURE(utility::strings::prnbin(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
+    CAPTURE(PRNBINVAR(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
     REQUIRE( Math::Flowpoint::approximatelyEqual<long double>(ref,static_cast<long double>(res),static_cast<long double>(0.5)) );
   }
 
@@ -86,7 +86,7 @@ TEST_CASE("Log2 using stdlib as reference"){
     CAPTURE(rnd);
     CAPTURE(res);
     CAPTURE(ref);
-    CAPTURE(utility::strings::prnbin(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
+    CAPTURE(PRNBINVAR(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
     REQUIRE( Math::Flowpoint::approximatelyEqual<long double>(ref,static_cast<long double>(res),static_cast<long double>(0.5)) );
   }
 
@@ -97,7 +97,7 @@ TEST_CASE("Log2 using stdlib as reference"){
     CAPTURE(rnd);
     CAPTURE(res);
     CAPTURE(ref);
-    CAPTURE(utility::strings::prnbin(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
+    CAPTURE(PRNBINVAR(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
     REQUIRE( Math::Flowpoint::approximatelyEqual<long double>(ref,static_cast<long double>(res),static_cast<long double>(0.5)) );
   }
 

@@ -29,16 +29,38 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <array>
 
 #include "dtypes.h"
 #include "compile_guards.h"
+#include "bitmacros.h"
 #include "iterators.h"
 #include "meta.h"
 #include "math_discrete.h"
 
-namespace utility{
+namespace Utility{
 
-namespace strings{
+namespace Strings{
+
+/**
+ * @brief Compose String from a list of Strings
+ */
+template<size_t N> std::string stradd(std::array<std::string,N> const list, bool const with_space=false){
+  std::stringstream ss;
+  for(auto str:list){
+    ss << str;
+    if(with_space) ss << " ";
+  }
+  ss << "\n";
+  return ss.str();
+}
+
+#define INDENT(_x)  (Utility::Strings::stradd<2>({"  ",_x}))
+#define ERROR(_x)   (Utility::Strings::stradd<2>({"Error  :  ",_x}))
+#define WARNING(_x) (Utility::Strings::stradd<2>({"Warning:  ",_x}))
+
+//-----
+
 
 enum class conmode:bool{
   asDEC = false,
@@ -97,7 +119,7 @@ template<typename T> std::string to_string(std::string name, T const& _x){
 /**
  * @brief PRNVAR - Macro to Convert any variable to an String, including output of the variable name
  */
-#define PRNVAR(_X) (utility::strings::to_string<decltype(_X)>((#_X),(_X)))
+#define PRNVAR(_X) (Utility::Strings::to_string<decltype(_X)>((#_X),(_X)))
 
 //-----
 
@@ -121,11 +143,33 @@ template<typename T> std::string to_hstring(std::string name, T const& _x){
 /**
  * @brief PRNHEXVAR - Macro to Convert any variable to an (hex)String, including output of the variable name
  */
-#define PRNHEXVAR(_X) (utility::strings::to_hstring<decltype(_X)>((#_X),(_X)))
+#define PRNHEXVAR(_X) (Utility::Strings::to_hstring<decltype(_X)>((#_X),(_X)))
 
 //-----
 
-std::string prnbin(u64 const data, u8 const length);
+/**
+ * @brief Utility::Strings::Stringhelper::prnbin - Unsigned Integer Number to Binary String
+ * Convert a Numer to a binary String with Zeros and Ones
+ * @param data
+ * @param length
+ * @return
+ */
+template<typename T> std::string prnbin(T const data, u8 const length = Math::Boolean::GETBITSOFTYPE<T>()){
+  Compile::Guards::IsInteger<T>();
+  std::stringstream ss;
+  if(length>0){
+    auto mask = Math::Boolean::GETMASKBIT<T>(length-1);
+    while(mask>0){
+      ss << (((data & mask) > 0)?("1"):("0"));
+      mask >>= 1;
+    }
+  }
+  return ss.str();
+}
+
+#define PRNBINVAR(_X,_b) (Utility::Strings::stradd<3>({#_X,": ",Utility::Strings::prnbin<decltype(_X)>((_X),(_b))}))
+
+//-----
 
 /****************************************
  * Generate Sting of multiple copies of itself
@@ -253,20 +297,7 @@ template<typename T, size_t N> std::string print_array(T data[N]){
 
 //-----
 
-/**
- * Convert a Numer to a binary String with Zeros and Ones
- */
-template<typename T> std::string prnbin(T data, u8 length = Math::Boolean::GETBITSOFTYPE<T>()){
-  std::stringstream ss;
-  if(length>0){
-    auto mask = Math::Boolean::GETMASKBIT<u64>(length-1);
-    while(mask>0){
-      ss << (((data & mask) > 0)?("1"):("0"));
-      mask >>= 1;
-    }
-  }
-  return ss.str();
-}
+
 
 //-----
 
