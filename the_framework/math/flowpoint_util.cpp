@@ -49,20 +49,20 @@ using namespace std;
  * @param maxUlps
  * @return
  */
-bool Math::Flowpoint::AlmostEqual2sComplement(float A, float B, s32 maxUlps){
+bool Math::Flowpoint::AlmostEqual2sComplement(float const A, float const B, s32 const maxUlps){
   bool res = false;
   constexpr auto const mask = Math::Boolean::MASK_MSB<s32>(Math::Boolean::GETBITSOFTYPE<s32>());
   // Make sure maxUlps is non-negative and small enough that the
   // default NAN won't compare as equal to anything.
   assert((maxUlps > 0) && (maxUlps < static_cast<s32>(Math::Boolean::GETFULLMASK<u32>(31))));
 
-  s32 aInt = *(reinterpret_cast<Core::Container::iterator_t<s32>>(&A));
+  s32 aInt = *(reinterpret_cast<Core::Container::citerator_t<s32>>(&A));
   // Make aInt lexicographically ordered as a twos-complement int
   if(aInt < 0){
     aInt = mask - aInt;
   }
   // Make bInt lexicographically ordered as a twos-complement int
-  s32 bInt = *(reinterpret_cast<Core::Container::iterator_t<s32>>(&B));
+  s32 bInt = *(reinterpret_cast<Core::Container::citerator_t<s32>>(&B));
   if(bInt < 0){
     bInt = mask - bInt;
   }
@@ -73,20 +73,20 @@ bool Math::Flowpoint::AlmostEqual2sComplement(float A, float B, s32 maxUlps){
   return res;
 }
 
-bool Math::Flowpoint::AlmostEqual2sComplement(double A, double B, s64 maxUlps){
+bool Math::Flowpoint::AlmostEqual2sComplement(double const A, double const B, s64 const maxUlps){
   bool res = false;
   constexpr auto const mask = Math::Boolean::MASK_MSB<s64>(Math::Boolean::GETBITSOFTYPE<s64>());
   // Make sure maxUlps is non-negative and small enough that the
   // default NAN won't compare as equal to anything.
   assert((maxUlps > 0) && (maxUlps < static_cast<s64>(Math::Boolean::GETFULLMASK<u64>(63))));
 
-  s64 aInt = *(reinterpret_cast<Core::Container::iterator_t<s64>>(&A));
+  s64 aInt = *(reinterpret_cast<Core::Container::citerator_t<s64>>(&A));
   // Make aInt lexicographically ordered as a twos-complement int
   if(aInt < 0){
     aInt = mask - aInt;
   }
   // Make bInt lexicographically ordered as a twos-complement int
-  s64 bInt = *(reinterpret_cast<Core::Container::iterator_t<s64>>(&B));
+  s64 bInt = *(reinterpret_cast<Core::Container::citerator_t<s64>>(&B));
   if(bInt < 0){
     bInt = mask - bInt;
   }

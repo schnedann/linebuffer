@@ -29,19 +29,69 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LOG_BASE2_H
-#define LOG_BASE2_H
+#ifndef LOG2_H
+#define LOG2_H
 
 #include "dtypes.h"
-#include "debug_hlp.h"
 #include "global_config.h"
+#include "debug_hlp.h"
 #include "compile_guards.h"
-#include "countbitsset.h"
+#include "bitmacros.h"
 #include "bitreverse.h"
 
-namespace Algorithms {
+namespace Math {
 
 namespace Log2 {
+
+//--------------------------------------------------
+
+/* Example Numbers - what are expected results?
+ x =              0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+floor(log2(x)) -Inf  0  1  1  2  2  2  2  3  3  3  3  3  3  3  3  4  4  4  4  4  4  4  4  4  4
+ ceil(log2(x)) -Inf  0  1  2  2  3  3  3  3  4  4  4  4  4  4  4  4  5  5  5  5  5  5  5  5  5
+*/
+
+/**
+ * @brief log2
+ *
+ * @param  x
+ * @return
+ */
+template<typename T> constexpr T log2(T const _x){
+  Compile::Guards::IsUnsigned<T>();
+
+  //get number of bits divided by 2 of type T
+  constexpr u8 const halfbits = sizeof(T)<<2;
+  T res = 0;
+
+  if(_x>0){
+    //Mask with all bits set in the upper half and zeros in the lower
+    T mask = Math::Boolean::ARITHSHL<T>(Math::Boolean::GETFULLMASK<T>(halfbits),halfbits);
+    //init shift by halfbits
+    u8 shift = halfbits;
+
+    while(shift>1){
+      if(_x&mask){
+        res += shift;
+      }
+      shift >>= 1;
+      mask ^= (mask >> shift);
+    };
+
+    if(_x&mask){
+      res += shift;
+    }
+    mask ^= (mask >> 1);
+    if(_x&mask){
+      res += shift;
+    }
+   //mask ^= (mask >> 1);
+    --res;
+  }
+  return res;
+}
+
+//--------------------------------------------------
 
 /* Example Numbers - what are expected results?
  x =              0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
@@ -362,9 +412,18 @@ template<typename T> u8 log2c(T const _x){
   return res;
 }
 
+//--------------------------------------------------
+
+s32 floorLog2_32(u32 const n);
+s16 floorLog2_16(u16 const n);
+
 //-----
 
+u8 log2u32(u32 const _x);
 
+//-----
+
+u8 minilog2(u8 const _x);
 
 //-----
 
@@ -372,4 +431,4 @@ template<typename T> u8 log2c(T const _x){
 
 } //namespace
 
-#endif // LOG_BASE2_H
+#endif // LOG2_H

@@ -20,7 +20,7 @@ with_error_t<std::string> linebuffer::get_all_lines(){
   bool err = true;
 
   //from newest node to oldest
-  size_t pos;
+  size_t pos = 0;
   auto newest_delim = Datastructures::rfind_match<std::string>(dll,[&pos,this](std::string const& str)->bool{
     //newest (last) delimiter is found at the back of the string
     pos = str.rfind(this->delimiter);

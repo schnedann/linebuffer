@@ -73,9 +73,9 @@ template<typename T> auto midsquare(T x)noexcept -> T {
   return low;
 }
 
-/*
- * Square a Number and take bits out of the middle,
- * these Bits are affected by all bit positions of
+/**
+ * @brief - Square a Number and take bits out of the middle,
+ * these Bits are affected by all bit positions of the input value _x
  * utilize 64Bit temporary (max type for T is 32Bit!!!)
  * the original Number
  * @param _x - number to square
@@ -86,6 +86,11 @@ template<typename T> auto midsquare_64(T const& _x, T const& _bits) noexcept ->T
   return static_cast<T>(((u64(_x)*u64(_x))>>(sizeof(T)<<1))&Math::Boolean::GETFULLMASK<u64>(_bits));
 }
 
+/**
+ * @brief - combine 2 good hash values _x and _y to a better hash
+ * Also we can produce different results with the iteration parameter iter,
+ * like resolving hash collisions in a hash-table
+ */
 template<typename T> auto doublehash(T const& _x, T const& _y, T const& iter, T const& _M) noexcept ->T{
   Compile::Guards::IsUnsigned<T>();
   return (_x+T((u64(iter)*u64(iter))*_y)%_M);

@@ -4,6 +4,6 @@ Math::OverflowSafe::ovf_save::ovf_save():overflow(false)
 {
 }
 
-auto Math::OverflowSafe::ovf_save::get_of()->bool{
+bool Math::OverflowSafe::ovf_save::get_of() const{
   return overflow;
 }

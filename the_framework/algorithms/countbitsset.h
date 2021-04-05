@@ -44,6 +44,8 @@
 #ifndef COUNTBITSSET_H
 #define COUNTBITSSET_H
 
+#include <array>
+
 #include "dtypes.h"
 #include "compile_guards.h"
 #include "bitmacros.h"
@@ -62,7 +64,7 @@ namespace CountBitsset {
  */
 template<typename T> u8 nibble_lut(T const _v) noexcept{
   Compile::Guards::IsUnsigned<T>();
-  static const u8 lut[16] = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4};
+  static std::array<u8,16> const lut = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4};
   u8 c = 0;
   for(u8 ii=0; ii<Math::Boolean::GETBITSOFTYPE<T>();ii+=4){
     c += lut[((_v>>ii) & 0xFu)];
@@ -80,7 +82,7 @@ template<typename T> u8 nibble_lut(T const _v) noexcept{
  */
 template<typename T> u8 nibble_lut2(T const _v) noexcept{
   Compile::Guards::IsUnsigned<T>();
-  static const u8 lut[16] = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4};
+  static std::array<u8,16> const lut = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4};
   u8 c = 0;
   union tobytes_t{
     T value;
@@ -107,7 +109,7 @@ template<typename T> u8 nibble_lut2(T const _v) noexcept{
  */
 template<typename T> u8 nibble_lut_ur2(T const _v) noexcept{
   Compile::Guards::IsUnsigned<T>();
-  static const u8 lut[16] = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4};
+  static std::array<u8,16> const lut = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4};
   constexpr static u8 const bytes = sizeof(T);
   u8 c = 0;
   union tobytes_t{
@@ -165,7 +167,7 @@ template<typename T> u8 nibble_lut_ur2(T const _v) noexcept{
  */
 template<typename T> u8 nibble_lut_ur(T const _v) noexcept{
   Compile::Guards::IsUnsigned<T>();
-  static const u8 lut[16] = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4};
+  static std::array<u8,16> const lut = {0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4};
   constexpr static u8 const bytes = sizeof(T);
   u8 c = 0;
   c += lut[( _v     & 0xFu)];

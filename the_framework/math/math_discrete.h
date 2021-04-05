@@ -147,51 +147,7 @@ template<typename T> constexpr auto multiply_high_part(T const _x, T const _y) n
 
 //--------------------------------------------------
 
-/*
- x =              0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
-floor(log2(x)) -Inf  0  1  1  2  2  2  2  3  3  3  3  3  3  3  3  4  4  4  4  4  4  4  4  4  4
- ceil(log2(x)) -Inf  0  1  2  2  3  3  3  3  4  4  4  4  4  4  4  4  5  5  5  5  5  5  5  5  5
-*/
 
-/**
- * @brief log2
- *
- * @param  x
- * @return
- */
-template<typename T> constexpr T log2(T const _x){
-  Compile::Guards::IsUnsigned<T>();
-
-  //get number of bits divided by 2 of type T
-  constexpr u8 const halfbits = sizeof(T)<<2;
-  T res = 0;
-
-  if(_x>0){
-    //Mask with all bits set in the upper half and zeros in the lower
-    T mask = Math::Boolean::ARITHSHL<T>(Math::Boolean::GETFULLMASK<T>(halfbits),halfbits);
-    //init shift by halfbits
-    u8 shift = halfbits;
-
-    while(shift>1){
-      if(_x&mask){
-        res += shift;
-      }
-      shift >>= 1;
-      mask ^= (mask >> shift);
-    };
-
-    if(_x&mask){
-      res += shift;
-    }
-    mask ^= (mask >> 1);
-    if(_x&mask){
-      res += shift;
-    }
-   //mask ^= (mask >> 1);
-    --res;
-  }
-  return res;
-}
 
 //--------------------------------------------------
 
@@ -398,8 +354,6 @@ template<class T> auto linear_interpol(T const x1, T const x2, T const y1, T con
 
 //-----
 
-u8 log2u32(u32 const _x);
-
 /*
  * Next largest Integer witch is a Power of 2
  * Example: 3,4 --> 4
@@ -417,9 +371,6 @@ u8 hamming_weight(u16 const val);
 //-----
 s16 sdivceil(s16 const a, s16 const b);
 u16 udivceil(u16 const a, u16 const b);
-//-----
-s32 floorLog2_32(u32 const n);
-s16 floorLog2_16(u16 const n);
 //-----
 float  Q_rsqrt( float const  number );
 double Q_rsqrt( double const number );

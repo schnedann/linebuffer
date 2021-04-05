@@ -1,5 +1,5 @@
 /******************************************************************************/
-/** Algorithms to calculate the Integer Log2                                 **/
+/**                                                                          **/
 /** developed , collected and / or implemented by                            **/
 /** Danny Schneider, 2017-2021                                               **/
 /******************************************************************************/
@@ -36,6 +36,7 @@
 #include <cmath>
 
 #include "dtypes.h"
+#include "compile_guards.h"
 
 namespace Math{
 
@@ -44,20 +45,24 @@ namespace Flowpoint{
 /*
 * The following definitions are from The art of computer programming by Knuth:
 */
-template<class T> bool approximatelyEqual(T const& a, T const& b, T const& epsilon){
-return abs(a - b) <= ( (abs(a) < abs(b) ? abs(b) : abs(a)) * epsilon);
+template<typename T> bool approximatelyEqual(T const& a, T const& b, T const& epsilon){
+  Compile::Guards::IsFloatType<T>();
+  return abs(a - b) <= ( (abs(a) < abs(b) ? abs(b) : abs(a)) * epsilon);
 }
 
-template<class T> bool essentiallyEqual(T const& a, T const& b, T const& epsilon){
-return abs(a - b) <= ( (abs(a) > abs(b) ? abs(b) : abs(a)) * epsilon);
+template<typename T> bool essentiallyEqual(T const& a, T const& b, T const& epsilon){
+  Compile::Guards::IsFloatType<T>();
+  return abs(a - b) <= ( (abs(a) > abs(b) ? abs(b) : abs(a)) * epsilon);
 }
 
-template<class T> bool definitelyGreaterThan(T const& a, T const& b, T const& epsilon){
-return (a - b) > ( (abs(a) < abs(b) ? abs(b) : abs(a)) * epsilon);
+template<typename T> bool definitelyGreaterThan(T const& a, T const& b, T const& epsilon){
+  Compile::Guards::IsFloatType<T>();
+  return (a - b) > ( (abs(a) < abs(b) ? abs(b) : abs(a)) * epsilon);
 }
 
-template<class T> bool definitelyLessThan(T const& a, T const& b, T const& epsilon){
-return (b - a) > ( (abs(a) < abs(b) ? abs(b) : abs(a)) * epsilon);
+template<typename T> bool definitelyLessThan(T const& a, T const& b, T const& epsilon){
+  Compile::Guards::IsFloatType<T>();
+  return (b - a) > ( (abs(a) < abs(b) ? abs(b) : abs(a)) * epsilon);
 }
 
 //-----
@@ -67,9 +72,10 @@ return (b - a) > ( (abs(a) < abs(b) ? abs(b) : abs(a)) * epsilon);
 * @param _x
 * @return
 */
-template<class T> auto eps(T const& _x)->T{
-T _y = std::nextafter(_x,std::numeric_limits<T>::max());
-return _y-_x;
+template<typename T> T eps(T const& _x){
+  Compile::Guards::IsFloatType<T>();
+  T _y = std::nextafter(_x,std::numeric_limits<T>::max());
+  return _y-_x;
 }
 
 /**
@@ -79,7 +85,8 @@ return _y-_x;
 * --> taken from https://de.mathworks.com/matlabcentral/answers/135291-can-i-compare-two-numbers-using-unit-in-the-last-place-ulps-in-matlab?requestedDomain=www.mathworks.com
 * @return
 */
-template<class T> auto estimatealmostequal(T const& _x,T const& _y) -> T{
+template<typename T> T estimatealmostequal(T const& _x,T const& _y){
+  Compile::Guards::IsFloatType<T>();
   double u    = 0.0;
   double ey   = eps<T>(_y);
   double absy = abs(_y);
@@ -99,7 +106,8 @@ return u;
  * @param _y - number 2
  * @param _d - distance bound
  */
-template<class T> auto checkalmostequal(T const& _x,T const& _y,T const& _d) -> s8{
+template<typename T> s8 checkalmostequal(T const& _x,T const& _y,T const& _d){
+  Compile::Guards::IsFloatType<T>();
   s8 res = 0;
 
   //Larger or smaller?
@@ -133,19 +141,20 @@ template<class T> auto checkalmostequal(T const& _x,T const& _y,T const& _d) -> 
 * @param true if numbers are equal within the definition
 * @return
 */
-template<class T> auto checkequal(T const& _x,T const& _y,T const& _d,T const& _u) -> bool{
-bool res = true;
-//Distance check between X & Y
-res &= (checkalmostequal<T>(_x,_y,_d)==0)?(true):(false);
-//Check if both numbers are "near" to each other
-res &= (estimatealmostequal<T>(_x,_y)<=_u)?(true):(false); //
-return res;
+template<typename T> bool checkequal(T const _x,T const _y,T const _d,T const _u){
+  Compile::Guards::IsFloatType<T>();
+  bool res = true;
+  //Distance check between X & Y
+  res &= (checkalmostequal<T>(_x,_y,_d)==0)?(true):(false);
+  //Check if both numbers are "near" to each other
+  res &= (estimatealmostequal<T>(_x,_y)<=_u)?(true):(false); //
+  return res;
 }
 
 //-----
 
-bool AlmostEqual2sComplement(float  A, float  B, s32 maxUlps);
-bool AlmostEqual2sComplement(double A, double B, s64 maxUlps);
+bool AlmostEqual2sComplement(float  const A, float  const B, s32 const maxUlps);
+bool AlmostEqual2sComplement(double const A, double const B, s64 const maxUlps);
 
 
 //-----

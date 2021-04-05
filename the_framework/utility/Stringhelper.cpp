@@ -82,7 +82,7 @@ string Utility::Strings::comma2WS(string const& str){
  * @return
  */
 string Utility::Strings::replace(string const& str1, string const& str2, string const& str3){
-  string::size_type pos;
+  string::size_type pos = 0;
   string tstr(str1);
   for(string::iterator it = tstr.begin(); it != tstr.end();){
     pos = tstr.find(str2);

@@ -129,7 +129,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
       });
       CAPTURE(ii);
       REQUIRE( !found.first );
-      REQUIRE( (ii-1) == found.second );
+      REQUIRE( u16(ii-1) == found.second );
     }
   }
 
@@ -148,7 +148,7 @@ TEST_CASE("Datastructures::dbllnkdlst"){
       });
       CAPTURE(ii);
       REQUIRE( !found.first );
-      REQUIRE( (ii-1) == found.second );
+      REQUIRE( u16(ii-1) == found.second );
     }
   }
 

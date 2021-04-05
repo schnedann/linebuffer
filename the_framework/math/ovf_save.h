@@ -188,7 +188,7 @@ public:
   template<typename T> auto mul(T const&,T const&)->T;
   template<typename T> auto div(T const&,T const&)->T;
 
-  auto get_of()->bool;
+  bool get_of() const;
 
   template<typename T> static auto mean(T const&,T const&)->T;
 };

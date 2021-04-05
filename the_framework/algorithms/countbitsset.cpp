@@ -43,6 +43,31 @@
 
 #include "countbitsset.h"
 
+//----- Count Bits Set to 1
+
+/**
+ * Most Efficient Code for the
+ * Hamming Weight:
+ * Count the Number of Set Bits
+ */
+/*u8 hamming_weight16(u16 val){
+  u16 res=val;
+  res -= (res >> 2) & 0x5555u;
+  res  = (res & 0x3333u) + ((res >> 2) & 0x3333u);
+  res  = (res + (res >> 4)) & 0x0f0fu;
+  res += res >> 8;
+  return static_cast<u8>(res & 0x1fu);
+}*/
+
+/*u8 hamming_weight32(u32 val){
+  u32 res=val;
+  res -= (res >> 2) & 0x55555555u;
+  res  = (res & 0x33333333u) + ((res >> 2) & 0x33333333u);
+  res  = (res + (res >> 4)) & 0x0f0f0f0fu;
+  res += res >> 24;
+  return static_cast<u8>(res & 0x1fu);
+}*/
+
 //----- only uses operations: shifts, adding, and
 
 /**
@@ -50,13 +75,13 @@
  * using a temporary variable c
  */
 u8 Algorithms::CountBitsset::parallel32(u32 const v) noexcept{
-  u32 c; // store the total here
+  u32 c=0; // store the total here
   //Shifts
-  static const u8 S[] = {1, 2, 4, 8, 16};
+  static std::array<u8,5> const S = {1, 2, 4, 8, 16};
   //Masks
-  static const u32 M[] = {0x55555555ul, 0x33333333ul,
-                          0x0F0F0F0Ful, 0x00FF00FFul,
-                          0x0000FFFFul};
+  static std::array<u32,5> const M = {0x55555555ul, 0x33333333ul,
+                                      0x0F0F0F0Ful, 0x00FF00FFul,
+                                      0x0000FFFFul};
   //2bit bucket
   c = v - ((v >> 1) & M[0]);
   //4bit bucket
@@ -76,13 +101,13 @@ u8 Algorithms::CountBitsset::parallel32(u32 const v) noexcept{
  * using a temporary variable c
  */
 u8 Algorithms::CountBitsset::parallel64(u64 const v) noexcept{
-  u64 c; // store the total here
+  u64 c=0; // store the total here
   //Shifts
-  static const u8 S[] = {1, 2, 4, 8, 16, 32};
+  static std::array<u8,6> const S = {1, 2, 4, 8, 16, 32};
   //Masks
-  static const u64 M[] = {0x5555555555555555ull, 0x3333333333333333ull,
-                          0x0F0F0F0F0F0F0F0Full, 0x00FF00FF00FF00FFull,
-                          0x0000FFFF0000FFFFull, 0x00000000FFFFFFFFull};
+  static std::array<u64,6> const M = {0x5555555555555555ull, 0x3333333333333333ull,
+                                      0x0F0F0F0F0F0F0F0Full, 0x00FF00FF00FF00FFull,
+                                      0x0000FFFF0000FFFFull, 0x00000000FFFFFFFFull};
   //2bit bucket
   c = v - ((v >> S[0]) & M[0]);
   //4bit bucket
@@ -111,18 +136,22 @@ u8 Algorithms::CountBitsset::parallel64(u64 const v) noexcept{
  * @return
  */
 u8 Algorithms::CountBitsset::parallel32_2(u32 const v) noexcept{
+  constexpr u32 const mask_2bit   = 0x55555555ul;
+  constexpr u32 const mask_4bit   = 0x33333333ul;
+  constexpr u32 const mask_8bit   = 0x0F0F0F0Ful;
+  constexpr u64 const mask_result = 0x0000003Ful;
   u32 x = v;
   //2bit bucket
-  x -=  ((x >> 1) & 0x55555555ul);
+  x -=  ((x >> 1) & mask_2bit);
   //4bit bucket
-  x  = (((x >> 2) & 0x33333333ul) + (x & 0x33333333ul));
+  x  = (((x >> 2) & mask_4bit) + (x & mask_4bit));
   //8bit bucket
-  x  = (((x >> 4) + x) & 0x0f0f0f0ful);
+  x  = (((x >> 4) + x) & mask_8bit);
 
   x += (x >> 8);  //Sum two  8bit buckets
   x += (x >> 16); //Sum two 16bit buckets
 
-  return u8(x & 0x0000003Ful);
+  return u8(x & mask_result);
 }
 
 /**
@@ -131,18 +160,22 @@ u8 Algorithms::CountBitsset::parallel32_2(u32 const v) noexcept{
  * @return
  */
 u8 Algorithms::CountBitsset::parallel64_2(u64 const v) noexcept{
+  constexpr u64 const mask_2bit   = 0x5555555555555555ull;
+  constexpr u64 const mask_4bit   = 0x3333333333333333ull;
+  constexpr u64 const mask_8bit   = 0x0F0F0F0F0F0F0F0Full;
+  constexpr u64 const mask_result = 0x000000000000007Ful;
   u64 x = v;
   //2bit bucket
-  x -=  ((x >> 1) & 0x5555555555555555ull);
+  x -=  ((x >> 1) & mask_2bit);
   //4bit bucket
-  x  = (((x >> 2) & 0x3333333333333333ull) + (x & 0x3333333333333333ull));
+  x  = (((x >> 2) & mask_4bit) + (x & mask_4bit));
   //8bit bucket
-  x  = (((x >> 4) + x) & 0x0f0f0f0f0f0f0f0full);
+  x  = (((x >> 4) + x) & mask_8bit);
 
   x += (x >> 8);  //Sum two  8bit buckets
   x += (x >> 16); //Sum two 16bit buckets
   x += (x >> 32); //Sum two 64bit buckets
-  return u8(x & 0x000000000000007Ful);
+  return u8(x & mask_result);
 }
 
 //----- More optimized but needs HW Multiplier
@@ -165,17 +198,22 @@ u8 Algorithms::CountBitsset::parallel64_2(u64 const v) noexcept{
  * @return
  */
 u8 Algorithms::CountBitsset::parallel32_3(u32 const v) noexcept{
+  constexpr u32 const mask_2bit   = 0x55555555ul;
+  constexpr u32 const mask_4bit   = 0x33333333ul;
+  constexpr u32 const mask_8bit   = 0x0F0F0F0Ful;
+  constexpr u32 const mask_sum    = 0x01010101ul;
+  constexpr u32 const mask_result = 0x0000003Ful;
   u32 c = v;
   //2bit buckets
-  c-= ( (c >> 1) & 0x55555555ul);
+  c-= ( (c >> 1) & mask_2bit);
   //4bit buckets
-  c = ( (c >> 2) & 0x33333333ul) + (c & 0x33333333ul);
+  c = ( (c >> 2) & mask_4bit) + (c & mask_4bit);
   //8bit buckets
-  c = (((c >> 4) + c) & 0x0F0F0F0Ful);
+  c = (((c >> 4) + c) & mask_8bit);
   //sum all buckets
-  c = (c * 0x01010101ul) >> 24;
+  c = (c * mask_sum) >> 24;
   //
-  return u8(c & 0x0000003Ful);
+  return u8(c & mask_result);
 }
 
 /**
@@ -184,17 +222,22 @@ u8 Algorithms::CountBitsset::parallel32_3(u32 const v) noexcept{
  * @return
  */
 u8 Algorithms::CountBitsset::parallel64_3(u64 const v) noexcept{
+  constexpr u64 const mask_2bit   = 0x5555555555555555ull;
+  constexpr u64 const mask_4bit   = 0x3333333333333333ull;
+  constexpr u64 const mask_8bit   = 0x0F0F0F0F0F0F0F0Full;
+  constexpr u64 const mask_sum    = 0x0101010101010101ull;
+  constexpr u64 const mask_result = 0x000000000000007Full;
   u64 c = v;
   //2bit buckets
-  c-= ((c >> 1) & 0x5555555555555555ull);
+  c-= ((c >> 1) & mask_2bit);
   //4bit buckets
-  c = ((c >> 2) & 0x3333333333333333ull) + (c & 0x3333333333333333ull);
+  c = ((c >> 2) & mask_4bit) + (c & mask_4bit);
   //8bit buckets
-  c = ((c + (c >> 4)) & 0x0F0F0F0F0F0F0F0Full);
+  c = ((c + (c >> 4)) & mask_8bit);
   //sum all buckets
-  c = (c * 0x0101010101010101ull) >> 56;
+  c = (c * mask_sum) >> 56;
   //
-  return u8(c & 0x000000000000007Full);
+  return u8(c & mask_result);
 }
 
 //-----

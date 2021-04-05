@@ -1,5 +1,7 @@
 #include "endianness_detect.h"
 
+#include <array>
+
 /**
  * @brief Enviroment::Endianness::endianness
  * @return found Endianness
@@ -7,7 +9,7 @@
 Enviroment::Endianness::endianness_t Enviroment::Endianness::endianness(void){
   union{
     u32 value;
-    u8 data[sizeof(u32)];
+    std::array<u8,sizeof(u32)> data;
   } number;
   number.data[0] = 0x00;
   number.data[1] = 0x01;

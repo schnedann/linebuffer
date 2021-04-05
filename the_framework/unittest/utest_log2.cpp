@@ -24,11 +24,13 @@
  */
 
 #include <random>
+#include <array>
+#include <cmath>
 
 #include "catch.hpp"
 
 #include "dtypes.h"
-#include "log_base2.h"
+#include "log2.h"
 #include "bitmacros.h"
 #include "flowpoint_util.h"
 #include "Stringhelper.h"
@@ -37,8 +39,8 @@ TEST_CASE("Log2 using stdlib as reference"){
 
   SECTION("ceil_log2"){
     auto rnd = u32(GENERATE(take(10000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
-    auto res = Algorithms::Log2::ceil_log2<u32>(rnd);
-    auto ref = ceill(log2l(rnd));
+    auto res = Math::Log2::ceil_log2<u32>(rnd);
+    auto ref = static_cast<u32>(ceill(std::log2l(rnd)));
     CAPTURE(rnd);
     CAPTURE(res);
     CAPTURE(ref);
@@ -48,8 +50,8 @@ TEST_CASE("Log2 using stdlib as reference"){
 
   SECTION("floor_log2"){
     auto rnd = u32(GENERATE(take(10000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
-    auto res = Algorithms::Log2::floor_log2<u32>(rnd);
-    auto ref = static_cast<u32>(floorl(log2l(rnd)));
+    auto res = Math::Log2::floor_log2<u32>(rnd);
+    auto ref = static_cast<u32>(floorl(std::log2l(rnd)));
     CAPTURE(rnd);
     CAPTURE(res);
     CAPTURE(ref);
@@ -57,9 +59,11 @@ TEST_CASE("Log2 using stdlib as reference"){
     REQUIRE( u16(ref) == u16(res) );
   }
 
+  //-----
+
   SECTION("is_power_of_2"){
     auto rnd = u32(GENERATE(take(10000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
-    auto res = Algorithms::Log2::is_power_of_2<u32>(rnd);
+    auto res = Math::Log2::is_power_of_2<u32>(rnd);
     auto ref = Math::Boolean::IS_ONEHOT<u32>(rnd);
     CAPTURE(rnd);
     CAPTURE(res);
@@ -68,9 +72,11 @@ TEST_CASE("Log2 using stdlib as reference"){
     REQUIRE( u16(ref) == u16(res) );
   }
 
+  //-----
+
   SECTION("ceil_log2_v1"){
     auto rnd = u32(GENERATE(take(10000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
-    auto res = Algorithms::Log2::ceil_log2_v1<u32>(rnd);
+    auto res = Math::Log2::ceil_log2_v1<u32>(rnd);
     auto ref = ceill(log2l(rnd));
     CAPTURE(rnd);
     CAPTURE(res);
@@ -81,7 +87,7 @@ TEST_CASE("Log2 using stdlib as reference"){
 
   SECTION("floor_log2_v1"){
     auto rnd = u32(GENERATE(take(10000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
-    auto res = Algorithms::Log2::floor_log2_v1<u32>(rnd);
+    auto res = Math::Log2::floor_log2_v1<u32>(rnd);
     auto ref = floorl(log2l(rnd));
     CAPTURE(rnd);
     CAPTURE(res);
@@ -90,16 +96,104 @@ TEST_CASE("Log2 using stdlib as reference"){
     REQUIRE( Math::Flowpoint::approximatelyEqual<long double>(ref,static_cast<long double>(res),static_cast<long double>(0.5)) );
   }
 
+  //-----
+
   SECTION("log2c"){
     auto rnd = u32(GENERATE(take(10000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
-    auto res = Algorithms::Log2::log2c<u32>(rnd);
+    auto res = Math::Log2::log2c<u32>(rnd);
     auto ref = floorl(log2l(rnd));
     CAPTURE(rnd);
     CAPTURE(res);
     CAPTURE(ref);
     CAPTURE(PRNBINVAR(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
     REQUIRE( Math::Flowpoint::approximatelyEqual<long double>(ref,static_cast<long double>(res),static_cast<long double>(0.5)) );
+  }
+
+  //-----
+
+  SECTION("Math::Log2::log2 1/3"){
+    std::array<u8,50> res{};
+    for(u64 ii=0; ii<res.size(); ++ii){
+      res[ii] = u8(Math::Log2::log2<u64>(ii));
+    }
+    Utility::Strings::print_array<u8>(res.data(),res.size());
+  }
+
+  SECTION("Math::Log2::log2 2/3"){
+    {
+      //Compare log2 from stdlib with own implementation
+
+      /* http://www.cplusplus.com/doc/tutorial/typecasting/
+       * If the conversion is from a floating-point type to an integer type,
+       * the value is truncated (the decimal part is removed). If the result
+       * lies outside the range of representable values by the type,
+       * the conversion causes undefined behavior.
+       */
+
+      for(u64 ii=1; ii>0; ii<<=1){
+        CAPTURE(ii);
+        auto res1 = Math::Log2::log2<u64>(ii);
+        auto res2 = u64(std::log2(ii));
+        REQUIRE(res1==res2);
+      }
+    }
+  }
+
+  SECTION("Math::Log2::log2 3/3"){
+//TODO
+    /*{
+      for(u64 ii=1; ii>0; ii=ii*2+1){
+        CAPTURE(ii);
+        auto res1 = Math::Log2::log2<u64>(ii);
+        double res_i = std::round(std::log2(ii)); //std::round()
+        CAPTURE(res_i);
+        auto res2 = u64(res_i);
+        REQUIRE(res1==res2);
+      }
+    }*/
   }
 
 }
 
+TEST_CASE("Math::Log2::minilog2"){
+
+  SECTION("Math::Log2::minilog2"){
+    for(u16 ii=0; ii<u16(256); ++ii){
+      auto dut = Math::Log2::minilog2(ii);
+      CAPTURE(ii);
+
+      u8 ref = 0;
+      u8 mask = Math::Boolean::MASK_MSB<u8>();
+      if((ii>0) && (ii>=mask)){
+        ref = 7;
+      }else{
+      mask = Math::Boolean::ARITHSHR<u8>(mask,1);
+      if((ii>0) && (ii>=mask)){
+        ref = 6;
+      }else{
+      mask = Math::Boolean::ARITHSHR<u8>(mask,1);
+      if((ii>0) && (ii>=mask)){
+        ref = 5;
+      }else{
+      mask = Math::Boolean::ARITHSHR<u8>(mask,1);
+      if((ii>0) && (ii>=mask)){
+        ref = 4;
+      }else{
+      mask = Math::Boolean::ARITHSHR<u8>(mask,1);
+      if((ii>0) && (ii>=mask)){
+        ref = 3;
+      }else{
+      mask = Math::Boolean::ARITHSHR<u8>(mask,1);
+      if((ii>0) && (ii>=mask)){
+        ref = 2;
+      }else{
+      mask = Math::Boolean::ARITHSHR<u8>(mask,1);
+      if((ii>0) && (ii>=mask)){
+        ref = 1;
+      }}}}}}}
+
+      REQUIRE(ref == dut);
+    }
+  }
+
+}

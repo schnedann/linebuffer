@@ -1,30 +1,10 @@
 #include "global_config.h"
 #include "math_discrete.h"
 
+#include <array>
+
 using namespace Math::Discrete;
 using namespace Math::Boolean;
-
-//-----
-
-/**
- * @brief log2u32
- * @param _x
- * @return
- */
-u8 Math::Discrete::log2u32(u32 const _x){
-  u32 lx = _x;
-  const u32 b[] = {0x2, 0xC, 0xF0, 0xFF00, 0xFFFF0000};
-  const u32 S[] = {1, 2, 4, 8, 16};
-
-  u32 res = 0; // result of log2(_x) will go here
-  for (int ii = 4; ii >= 0; --ii){ // unroll for speed...
-    if (lx & b[ii]){
-      lx >>= S[ii];
-      res |= S[ii];
-    }
-  }
-  return u8(res);
-}
 
 //-----
 
@@ -97,31 +77,6 @@ s64 div_to_nearest(s64 n, s64 d) {
 
 */
 
-//----- Count Bits Set to 1
-
-/**
- * Most Efficient Code for the
- * Hamming Weight:
- * Count the Number of Set Bits
- */
-u8 hamming_weight16(u16 val){
-  u16 res=val;
-  res -= (res >> 2) & 0x5555u;
-  res  = (res & 0x3333u) + ((res >> 2) & 0x3333u);
-  res  = (res + (res >> 4)) & 0x0f0fu;
-  res += res >> 8;
-  return static_cast<u8>(res & 0x1fu);
-}
-
-u8 hamming_weight32(u32 val){
-  u32 res=val;
-  res -= (res >> 2) & 0x55555555u;
-  res  = (res & 0x33333333u) + ((res >> 2) & 0x33333333u);
-  res  = (res + (res >> 4)) & 0x0f0f0f0fu;
-  res += res >> 24;
-  return static_cast<u8>(res & 0x1fu);
-}
-
 /**
  * Signed Division with rounding Mode Ceil()
  * eg. Gnu Compiler rounds to Zero normaly
@@ -146,37 +101,8 @@ u16 udivceil(u16 a, u16 b){
   return div;
 }
 
-//--------------------------------------------------------------------------------
-
-/**
- * Returns the floor form of binary logarithm for a 32 bit integer.
- * -1 is returned if n is 0.
- */
-s32 floorLog2_32(u32 n){
-  u32 pos = 0;
-  if (n >= 1<<16) { n >>= 16; pos += 16; }
-  if (n >= 1<< 8) { n >>=  8; pos +=  8; }
-  if (n >= 1<< 4) { n >>=  4; pos +=  4; }
-  if (n >= 1<< 2) { n >>=  2; pos +=  2; }
-  if (n >= 1<< 1) {           pos +=  1; }
-  return (n==0)?(-1):(static_cast<s32>(pos));
-}
-
-/**
- * Returns the floor form of binary logarithm for a 32 bit integer.
- * -1 is returned if n is 0.
- */
-s16 floorLog2_16(u16 n){
-  u32 pos = 0;
-  if (n >= 1<< 4) { n >>=  4; pos +=  4; }
-  if (n >= 1<< 2) { n >>=  2; pos +=  2; }
-  if (n >= 1<< 1) {           pos +=  1; }
-  return (n==0)?(-1):(static_cast<s16>(pos));
-}
 
 //--------------------------------------------------------------------------------
-
-//-----
 
 /**
  * Inverse square Root
