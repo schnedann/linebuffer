@@ -124,20 +124,24 @@ TEST_CASE("Bitreverse"){
     auto const bits = u8(GENERATE(take(10, random(4, 32))));
     auto const mask = Math::Boolean::GETFULLMASK<u32>(bits);
     auto const orig = Math::Boolean::MASKBITS<u32>(u32(GENERATE(take(5000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>())))),mask);
+    auto const nibbles = Math::Boolean::BITS2NIBBLES<u8>(bits);
+
 
     auto bitrev0 = Algorithms::Bitreverse::simple_method<u32>(orig,bits);
-    auto bitrev1 = Algorithms::Bitreverse::nibbleLut_method<u32>(orig);
-    auto bitrev2 = Algorithms::Bitreverse::nibbleLut_methodV2<u32>(orig);
+    auto bitrev1 = Algorithms::Bitreverse::nibbleLut_method<u32>(orig,nibbles);
+    auto bitrev2 = Algorithms::Bitreverse::nibbleLut_methodV2<u32>(orig,nibbles);
     auto bitrev3 = Algorithms::Bitreverse::maskshift_method<u32>(orig,bits);
     auto bitrev4 = Algorithms::Bitreverse::maskshift_methodV2<u32>(orig,bits);
     auto bitrev5 = Algorithms::Bitreverse::numerical_method<u32>(orig,bits);
 
 
+    bool use_nibble_algos = 0==(bits%4);
+    CAPTURE(use_nibble_algos);
     CAPTURE(u16(bits));
     CAPTURE(PRNBINVAR(mask,32));
     CAPTURE(PRNBINVAR(orig,32));
 
-    if(0==(bits%4)){
+    if(use_nibble_algos){
       REQUIRE( bitrev0 == bitrev1 );
       REQUIRE( bitrev1 == bitrev2 );
       REQUIRE( bitrev2 == bitrev3 );
