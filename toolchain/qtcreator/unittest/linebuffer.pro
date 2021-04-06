@@ -19,7 +19,7 @@ SOURCES += \
   $$PWD/../../../the_framework/algorithms/large_mul.cpp \
   $$PWD/../../../the_framework/core/error_mgnt.cpp \
   $$PWD/../../../the_framework/enviroment/endianness_detect.cpp \
-  $$PWD/../../../the_framework/i18n/i18n_strings.cpp \
+ #$$PWD/../../../the_framework/i18n/i18n_strings.cpp \
   $$PWD/../../../the_framework/math/flowpoint_util.cpp \
   $$PWD/../../../the_framework/math/log2.cpp \
   $$PWD/../../../the_framework/math/math_discrete.cpp \
@@ -32,7 +32,7 @@ SOURCES += \
   $$PWD/../../../the_framework/unittest/utest_dbllnkdlst.cpp \
   $$PWD/../../../the_framework/unittest/utest_fields.cpp \
   $$PWD/../../../the_framework/unittest/utest_helpers.cpp \
-  $$PWD/../../../the_framework/unittest/utest_i18n.cpp \
+ #$$PWD/../../../the_framework/unittest/utest_i18n.cpp \
   $$PWD/../../../the_framework/unittest/utest_large_mul.cpp \
   $$PWD/../../../the_framework/unittest/utest_linebuffer.cpp \
   $$PWD/../../../the_framework/unittest/utest_linear_equation.cpp \
@@ -42,7 +42,8 @@ SOURCES += \
   $$PWD/../../../the_framework/unittest/utest_minmax.cpp \
   $$PWD/../../../the_framework/utility/linebuffer.cpp \
   $$PWD/../../../the_framework/utility/Stringhelper.cpp \
-  $$PWD/../../../the_framework/utility/utility_fkt.cpp
+  $$PWD/../../../the_framework/utility/utility_fkt.cpp \
+  ../../../the_framework/unittest/utest_dtypes.cpp
 
 HEADERS += \
   $$PWD/../../../external/Catch2/single_include/catch2/catch.hpp \
@@ -65,7 +66,7 @@ HEADERS += \
   $$PWD/../../../the_framework/enviroment/env_detect.h \
   $$PWD/../../../the_framework/enviroment/gccversion.h \
   $$PWD/../../../the_framework/enviroment/posix_detect.h \
-  $$PWD/../../../the_framework/i18n/i18n_strings.h \
+ #$$PWD/../../../the_framework/i18n/i18n_strings.h \
   $$PWD/../../../the_framework/math/bitreverse.h \
   $$PWD/../../../the_framework/math/control_pid.h \
   $$PWD/../../../the_framework/math/flowpoint_util.h \
@@ -86,7 +87,7 @@ INCLUDEPATH += \
   $$PWD/../../../the_framework/core \
   $$PWD/../../../the_framework/dstruct \
   $$PWD/../../../the_framework/enviroment \
-  $$PWD/../../../the_framework/i18n \
+ #$$PWD/../../../the_framework/i18n \
   $$PWD/../../../the_framework/math \
   $$PWD/../../../the_framework/targets/unittest \
   $$PWD/../../../the_framework/utility \
