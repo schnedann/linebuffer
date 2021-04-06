@@ -1,6 +1,7 @@
 /******************************************************************************/
-/** Target Endianness Detection                                              **/
+/** Target Endianness Detection Detect endianness at run-time                **/
 /** see predefined macros @ Sourceforge                                      **/
+/**     https://sourceforge.net/p/predef/wiki/Endianness/                    **/
 /** Danny Schneider, 2017-2021                                               **/
 /******************************************************************************/
 
@@ -30,7 +31,7 @@
  */
 
 /**
- * Detect endianness at run-time
+ *
  * https://sourceforge.net/p/predef/wiki/Endianness/
  */
 
