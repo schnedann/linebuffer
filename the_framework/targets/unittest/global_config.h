@@ -32,15 +32,17 @@
 #ifndef GLOBAL_CONFIG_H
 #define GLOBAL_CONFIG_H
 
-#define DEBUG_CODE 0
-#define NPOS       1
+#define DEBUG_CODE   0
+#define DEBUG_OUTPUT 1
+#define NPOS         1
 
 namespace Global{
 
 namespace Config{
 
-  constexpr bool const USE_DEBUG_CODE = DEBUG_CODE;
-  constexpr bool const USE_NPOS       = NPOS;
+  constexpr static bool const USE_DEBUG_CODE = DEBUG_CODE;
+  constexpr static bool const USE_NPOS       = NPOS;
+  constexpr static bool const USE_DBGOUT     = DEBUG_OUTPUT;
 
 } //namespace
 

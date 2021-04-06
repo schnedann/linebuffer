@@ -216,7 +216,7 @@ template<typename T, T X> struct Fibonacci {
   constexpr static int const result = fibonacci_detail::Fibonacci_Step<T,std::integral_constant<T,X-1>>::result + fibonacci_detail::Fibonacci_Step<T,std::integral_constant<T,X-2>>::result;
 };
 
-//----- 
+//-----
 
 template <typename T> struct Discrete{
   constexpr void typecheck(){
@@ -437,10 +437,24 @@ template<typename T> struct nested_init_lists_st<T,0>{
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 template<typename T> struct replace8bitint{
-  using type = if_else_t<(sizeof(T)==1 && std::is_integral<T>() && std::is_unsigned<T>()),u16,
-               if_else_t<(sizeof(T)==1 && std::is_integral<T>() && std::is_signed<T>()),s16,
-               T>>;
+
+  using type = if_else_t<std::is_same<u8,T>::value,u16,
+               if_else_t<std::is_same<s8,T>::value,s16,
+               if_else_t<std::is_same<u8&,T>::value,u16&,
+               if_else_t<std::is_same<s8&,T>::value,s16&,
+               if_else_t<std::is_same<u8 const,T>::value,u16 const,
+               if_else_t<std::is_same<s8 const,T>::value,s16 const,
+               if_else_t<std::is_same<u8 const&,T>::value,u16 const&,
+               if_else_t<std::is_same<s8 const&,T>::value,s16 const&,
+               T>>>>>>>>;
+
+  /*using type = if_else_t<(sizeof(T)==1 && std::is_integral<T>() && std::is_unsigned<T>()),u16,
+               if_else_t<(sizeof(T)==1 && std::is_integral<T>() && std::is_signed<T>())  ,s16,
+               T>>;*/
 };
+
+template<typename T> using replace8bitint_t = typename Meta::Types::replace8bitint<T>::type;
+//template<typename T> using replace8bitint_t = typename Meta::Types::replace8bitint<typename std::remove_cv<T>::type>::type;
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 

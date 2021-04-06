@@ -26,6 +26,8 @@
 #include <string>
 #include <array>
 #include <vector>
+#include <type_traits>
+
 #include "catch.hpp"
 
 #include "dtypes.h"
@@ -233,4 +235,26 @@ TEST_CASE("Meta"){
     };
     Meta::Varadic::print_container<std::vector,u16>(set);
   }
+
+  SECTION("Meta::Types::replace8bitint<T>::type"){
+    REQUIRE( std::is_same<u16,typename Meta::Types::replace8bitint<u8>::type>::value );
+    REQUIRE( std::is_same<s16,typename Meta::Types::replace8bitint<s8>::type>::value );
+
+    REQUIRE( std::is_same<u16,typename Meta::Types::replace8bitint<u16>::type>::value );
+    REQUIRE( std::is_same<s16,typename Meta::Types::replace8bitint<s16>::type>::value );
+
+    REQUIRE( std::is_same<u32,typename Meta::Types::replace8bitint<u32>::type>::value );
+    REQUIRE( std::is_same<s32,typename Meta::Types::replace8bitint<s32>::type>::value );
+
+    //REQUIRE( std::is_same<u8,Meta::Types::replace8bitint_t<u8 const&>>::value );
+    //REQUIRE( std::is_same<u16,Meta::Types::replace8bitint_t<u8 const&>>::value );
+    //REQUIRE( std::is_same<s16,Meta::Types::replace8bitint_t<s8 const&>>::value );
+    //
+    //REQUIRE( std::is_same<u16,Meta::Types::replace8bitint_t<u16 const&>>::value );
+    //REQUIRE( std::is_same<s16,Meta::Types::replace8bitint_t<s16 const&>>::value );
+    //
+    //REQUIRE( std::is_same<u32,Meta::Types::replace8bitint_t<u32 const&>>::value );
+    //REQUIRE( std::is_same<s32,Meta::Types::replace8bitint_t<s32 const&>>::value );
+  }
+
 }

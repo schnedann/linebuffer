@@ -23,13 +23,17 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef Stringhelper_H_
-#define Stringhelper_H_
+#ifndef Stringhelper_H
+#define Stringhelper_H
 
 #include <string>
 #include <sstream>
 #include <iomanip>
 #include <array>
+#include <typeinfo>
+#if defined(__GNUC__)
+  #include <cxxabi.h>
+#endif
 
 #include "dtypes.h"
 #include "compile_guards.h"
@@ -37,6 +41,7 @@
 #include "iterators.h"
 #include "meta.h"
 #include "math_discrete.h"
+
 
 namespace Utility{
 
@@ -106,13 +111,20 @@ template<class T> T str2unum(std::string const& str, conmode_t const dechex){
 //-----
 
 /**
+ * @brief demangle - Convert mangled Name to an unmangled name
+ * @param mangled
+ * @return
+ */
+std::string demangle(Core::Container::citerator_t<char> mangled);
+
+/**
  * @brief to_string - Convert a Variable of any Type to String as long as an known conversion exists
  * @note signed and unsigned 8Bit Integers are handled as 16Bit values to prevent char output
  */
 template<typename T> std::string to_string(std::string name, T const& _x){
   std::stringstream ss;
-  using insert_type_t = typename Meta::Types::replace8bitint<T>::type;
-  ss << name << ": " << insert_type_t(_x);
+  using repl_t = typename Meta::Types::replace8bitint_t<T>;
+  ss << demangle(typeid(T).name()) << " " << name << ": " << repl_t(_x);
   return ss.str();
 }
 
@@ -305,4 +317,4 @@ template<typename T, size_t N> std::string print_array(T data[N]){
 
 } //namespace
 
-#endif // Stringhelper_H_
+#endif // Stringhelper_H

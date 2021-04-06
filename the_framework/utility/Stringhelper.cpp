@@ -24,6 +24,7 @@
  */
 
 #include <algorithm>
+#include <cstring>
 
 #include "Stringhelper.h"
 #include "bitmacros.h"
@@ -132,4 +133,19 @@ std::string Utility::Strings::tolower(std::string const& str){
   string xstr = str;
   std::transform(xstr.begin(), xstr.end(), xstr.begin(), ::tolower);
   return xstr;
+}
+
+/**
+ * Convert the string returned by typeid(xyz).name() into something human readable
+ */
+std::string Utility::Strings::demangle(Core::Container::citerator_t<char> mangled){
+#if __GNUC__
+  int status=0;
+  //Call __cxa_demangle and store result of variable length in self destructing C-Array (as defined by __cxa_demangle)
+  std::unique_ptr<char[], void (*)(void*)> result(abi::__cxa_demangle(mangled, nullptr, nullptr, &status), std::free);
+  return ((result!=nullptr) && (0==status))?(std::string(result.get(),std::strlen(result.get()))):("error occurred");
+#else
+//ToDo: implement for non GNU Compilers
+  return std::string();
+#endif
 }

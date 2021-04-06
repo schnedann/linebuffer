@@ -34,7 +34,10 @@
 
 #include <iostream>
 
-constexpr static bool const USE_DBGOUT = true;
-#define DBGOUT(_x) {if(USE_DBGOUT){std::cout << (#_x) << ": " << _x << "\n";}}
+#include "dtypes.h"
+#include "Stringhelper.h"
+
+#define DBGOUT(_x) {if(Global::Config::USE_DBGOUT){std::cout << (_x) << "\n";}}
+#define DBGPUT(_x) {if(Global::Config::USE_DBGOUT){std::cout << (_x) << "\n";}}
 
 #endif // DEBUG_HLP_H
