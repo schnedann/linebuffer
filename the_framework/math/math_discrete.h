@@ -40,6 +40,12 @@
 #include "bitmacros.h"
 
 //----------------------------------------
+
+namespace Math{
+
+namespace Averaging{
+
+//----------------------------------------
 //----- Averaging
 //----------------------------------------
 
@@ -52,10 +58,18 @@
  * init:        C=0; or C=dMEAN2(Min,Max);
  * consecutive: C=dMEAN2(Value,C);
  */
-#define dMEAN2(_x,_y) (((_x)>(_y))?(_y+(((_x)-(_y))>>1LLU)):(_x+(((_y)-(_x))>>1LLU)))
+#define dMEAN2(_x,_y) (((_x)>(_y))?(_y+(((_x)-(_y))>>T(1))):(_x+(((_y)-(_x))>>T(1))))
+
+/**
+ * calculate the mean of two values
+ */
+template<typename T> constexpr T mean_of_two(T const _x, T const _y) noexcept{
+  //Compile::Guards::IsInteger<T>();
+  return dMEAN2(_x,_y);
+}
 
 //----------------------------------------
-// Median of Three
+//----- Median of Three
 //----------------------------------------
 
 /*
@@ -68,26 +82,19 @@
 */
 #define dMEDIAN3(_x,_y,_z) (((_x)>(_y))?(((_y)>(_z))?(_y):(((_x)>(_z))?(_z):(_x))):(((_x)>(_z))?(_x):(((_y)>(_z))?(_z):(_y))))
 
-
-//----------------------------------------
-
-namespace Math{
-
-namespace Discrete{
-
-/**
- * calculate the mean of two values
- */
-template<typename T> constexpr T ofs_mean(T const _x, T const _y){
-  return dMEAN2(_x,_y);
-}
-
 /**
  * calculate the median of three values
  */
-template<typename T> constexpr T median_of_three(T const _x, T const _y, T const _z){
-  return dMEDIAN3(_x,_y,_z);
+template<typename T> constexpr T median_of_three(T const _x, T const _y, T const _z) noexcept{
+  return  dMEDIAN3(_x,_y,_z);
 }
+
+
+} //namespace
+
+//----------------------------------------
+
+namespace Discrete{
 
 //--------------------------------------------------
 
@@ -117,7 +124,7 @@ template<typename T> constexpr bool is_odd(T const _x){
  * @param  y
  * @return
  */
-template<typename T> constexpr auto multiply_low_part(T const _x, T const _y) noexcept ->T{
+template<typename T> constexpr T multiply_low_part(T const _x, T const _y) noexcept{
   Compile::Guards::IsInteger<T>();
   constexpr u8 const hbits = sizeof(T)<<2;
   T const a = _x>>hbits;
@@ -135,7 +142,7 @@ template<typename T> constexpr auto multiply_low_part(T const _x, T const _y) no
  * @param  y
  * @return
  */
-template<typename T> constexpr auto multiply_high_part(T const _x, T const _y) noexcept ->T{
+template<typename T> constexpr T multiply_high_part(T const _x, T const _y) noexcept{
   Compile::Guards::IsInteger<T>();
   constexpr u8 const hbits = sizeof(T)<<2;
   T const a = _x>>hbits;
@@ -231,7 +238,7 @@ template<typename T> T nextpow2(T const _x){
  * @param step
  * @return
  */
-template<class T> constexpr auto intpower(T const x, T const p) -> T{
+template<class T> constexpr T intpower(T const x, T const p){
   Compile::Guards::IsUnsigned<T>();
   T res = x;
   if(0 == p){
@@ -306,14 +313,15 @@ template<typename T> constexpr T ceildiv_v2(T const _x, T const _y){
 //----------------------------------------
 
 /**
- * @brief nearrounddiv
- *
+ * @brief nearrounddiv - rounds towards nearest integer
+ *        e.g.  5/7 = 1 and  3/9=0
+ *        e.g. 20/9 = 2 and 13/5=3
  * @param  x
  * @param  y
- * @return
+ * @return normal up/down rounding of integer division (C Compiler normally rounds towards zero for positive numbers)
  */
-template<typename T> constexpr bool nearrounddiv(T const x, T const y){
-  Compile::Guards::IsInteger<T>();
+template<typename T> constexpr T nearrounddiv(T const x, T const y){
+  Compile::Guards::IsSigned<T>();
   return ((x+(y>>1))/y);
 }
 
@@ -360,14 +368,8 @@ template<class T> auto linear_interpol(T const x1, T const x2, T const y1, T con
  */
 u64 nlpo2(u64 const data, u8 const bits);
 
-/*
- * Bitreverse
- * Example: 4Bits 3 --> 12
- */
-u64 bitreverse(u64 const data, u8 const bits);
-
 //-----
-u8 hamming_weight(u16 const val);
+
 //-----
 s16 sdivceil(s16 const a, s16 const b);
 u16 udivceil(u16 const a, u16 const b);

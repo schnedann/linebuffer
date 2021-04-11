@@ -1,3 +1,34 @@
+/******************************************************************************/
+/** Algorithms for Integer Mathematics                                       **/
+/** developed , collected and / or implemented by                            **/
+/** Danny Schneider, 2017-2019                                               **/
+/******************************************************************************/
+
+/*
+ * Copyright 2017-2019,Danny Schneider
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #include "global_config.h"
 #include "math_discrete.h"
 
@@ -11,7 +42,7 @@ using namespace Math::Boolean;
 /*
  * Next largest (Integer which is a) Power of 2
  */
-u64 nlpo2(u64 const data, u8 const bits){
+u64 Math::Discrete::nlpo2(u64 const data, u8 const bits){
   u64 res = data;
   //Not Power of Two
   if(is_power_of_2<u64>(res)==0){
@@ -25,29 +56,7 @@ u64 nlpo2(u64 const data, u8 const bits){
   return res;
 }
 
-/*
- * General purpouse Bitreverse
- */
-u64 bitreverse(u64 const data, u8 const bits){
-  u64 res = 0;
-  u64 lmask = MASK_MSB<u64>(bits);
-  u64 rmask = 1;
-
-  while(lmask > rmask){
-    res |= (data&lmask)?(rmask):(0);
-    res |= (data&rmask)?(lmask):(0);
-#if DEBUG_CODE == 1
-    cout << im_prnbin(res,bits) << endl;
-#endif
-    lmask >>= 1;
-    rmask <<= 1;
-  }
-  return res;
-}
-
 //-----
-
-
 
 //-----
 
@@ -81,7 +90,7 @@ s64 div_to_nearest(s64 n, s64 d) {
  * Signed Division with rounding Mode Ceil()
  * eg. Gnu Compiler rounds to Zero normaly
  */
-s16 sdivceil(s16 a, s16 b){
+s16 Math::Discrete::sdivceil(s16 const a, s16 const b){
   s16 div = a / b;
   if (((a ^ b) >= 0) && (a % b != 0)){
       div++;
@@ -93,7 +102,7 @@ s16 sdivceil(s16 a, s16 b){
  * Unsigned Division with rounding Mode Ceil()
  * eg. Gnu Compiler rounds to Zero normaly
  */
-u16 udivceil(u16 a, u16 b){
+u16 Math::Discrete::udivceil(u16 const a, u16 const b){
   u16 div = a / b;
   if (a % b != 0){
     div++;

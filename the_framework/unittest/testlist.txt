@@ -1,21 +1,24 @@
-Math::Boolean
-Bitreverse
-Compiler Math
-Compiler Datatypes
-endianness-detect
-GCC Version
-Count-Bits_Set - Brute Force Test
-Count-Bits_Set - Quick Test
-Datastructures::dbllnkdlst
-fields
-Helper: Stringhelper
-Helper: Flowpoint
-I18N
-linebuffer
-Linear Equation
-Log2 using stdlib as reference
-Math::Discrete
+#Math::Boolean
+#Bitreverse
+#Compiler Math
+#Compiler Datatypes
+#endianness-detect
+#GCC Version
+#Count-Bits_Set - Brute Force Test
+#Count-Bits_Set - Quick Test
+#Datastructures::dbllnkdlst
+#fields
+#Helper: Stringhelper
+#Helper: Flowpoint
+#I18N
+#linebuffer
+#Linear Equation
+Math::Log2 using stdlib as reference
+Math::Log2::minilog2
+#Math::Discrete
+#Math::Averaging
 Meta
-Algorithms::minmax
-Algorithms::Log2::minilog2
+#Algorithms::minmax
 Math::Large_Mul
+dtypes
+Math::OverflowSafe

@@ -387,6 +387,8 @@ template<typename T> u8 floor_log2_v1(T _x){
 }*/
 
 template<typename T> u8 log2c(T const _x){
+  Compile::Guards::IsUnsigned<T>();
+
   u8 res = 0;
 
   if(_x>0){
@@ -414,12 +416,74 @@ template<typename T> u8 log2c(T const _x){
 
 //--------------------------------------------------
 
-s32 floorLog2_32(u32 const n);
-s16 floorLog2_16(u16 const n);
+/**
+ * ceil(log2)
+ */
+template<typename T> u8 ceil_log2_v2(T const val){
+  Compile::Guards::IsUnsigned<T>();
+  // Leading Nibble Bits
+  u8 const lut1[] = {1,1,2,2,3,3,3,3,4,4,4,4,4,4,4,4};
+  // exact exponent of 2 dectection table
+  bool const lut2[] = {false,true,true ,false,
+                       true ,false,false,false,
+                       true ,false,false,false,
+                       false,false,false,false};
+  u8 res = 0;
+  if(val>0){
+    u8 cnt = (sizeof(T)<<1);
+    u8 nibble = cnt-1; //second higest nibble
+    bool is_exact = false;
+    do{
+      u8 ndata = (val>>(nibble<<2))&0x0Fu;
+      // ensure zero only bits for exact exponent of 2
+      if((res>0) && (ndata>0)) is_exact &= false;
+      //For leading nibble --> first log2 estimation
+      if((res==0) && (ndata>0)){
+        is_exact |= lut2[ndata];
+        res = lut1[ndata];
+        res += nibble<<2;
+      }
+      if(nibble>0) --nibble;
+      --cnt;
+    }while(cnt>0);
+    // exact exponent of 2 correction
+    if(is_exact) --res;
+  }
+  return res;
+}
+
+/**
+ * floor(log2)
+ */
+template<typename T> u8 floor_log2_v2(T const val){
+  Compile::Guards::IsUnsigned<T>();
+  // Leading Nibble Bits
+  u8  const lut1[] = {0,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3};
+  u8 res = 0;
+  if(val>0){
+    u8 cnt = (sizeof(T)<<1);
+    u8 nibble = cnt-1; //second higest nibble
+    do{
+      u8 ndata = (val>>(nibble<<2))&0x0Fu;
+      if((res==0) && (ndata>0)){
+        res = lut1[ndata];
+        res += nibble<<2;
+      }
+      if(nibble>0) --nibble;
+      --cnt;
+    }while(cnt>0);
+  }
+  return res;
+}
+
+//--------------------------------------------------
+
+[[deprecated]] s32 floorLog2_32(u32 const n);
+[[deprecated]] s16 floorLog2_16(u16 const n);
 
 //-----
 
-u8 log2u32(u32 const _x);
+[[deprecated]] u8 log2u32(u32 const _x);
 
 //-----
 

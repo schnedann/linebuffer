@@ -23,13 +23,13 @@ SOURCES += \
   $$PWD/../../../the_framework/math/flowpoint_util.cpp \
   $$PWD/../../../the_framework/math/log2.cpp \
   $$PWD/../../../the_framework/math/math_discrete.cpp \
-  $$PWD/../../../the_framework/math/ovf_save.cpp \
   $$PWD/../../../the_framework/targets/unittest/main.cpp \
   $$PWD/../../../the_framework/unittest/utest_bitmacros.cpp \
   $$PWD/../../../the_framework/unittest/utest_bitreverse.cpp \
   $$PWD/../../../the_framework/unittest/utest_compiler.cpp \
   $$PWD/../../../the_framework/unittest/utest_countbitsset.cpp \
   $$PWD/../../../the_framework/unittest/utest_dbllnkdlst.cpp \
+  $$PWD/../../../the_framework/unittest/utest_dtypes.cpp \
   $$PWD/../../../the_framework/unittest/utest_fields.cpp \
   $$PWD/../../../the_framework/unittest/utest_helpers.cpp \
  #$$PWD/../../../the_framework/unittest/utest_i18n.cpp \
@@ -40,10 +40,11 @@ SOURCES += \
   $$PWD/../../../the_framework/unittest/utest_math_discrete.cpp \
   $$PWD/../../../the_framework/unittest/utest_meta.cpp \
   $$PWD/../../../the_framework/unittest/utest_minmax.cpp \
+  $$PWD/../../../the_framework/unittest/utest_ovf_save.cpp \
+  $$PWD/../../../the_framework/unittest/utest_utility_fct.cpp \
   $$PWD/../../../the_framework/utility/linebuffer.cpp \
   $$PWD/../../../the_framework/utility/Stringhelper.cpp \
-  $$PWD/../../../the_framework/utility/utility_fkt.cpp \
-  ../../../the_framework/unittest/utest_dtypes.cpp
+  $$PWD/../../../the_framework/utility/utility_fct.cpp
 
 HEADERS += \
   $$PWD/../../../external/Catch2/single_include/catch2/catch.hpp \
@@ -80,7 +81,7 @@ HEADERS += \
   $$PWD/../../../the_framework/utility/Stringhelper.h \
   $$PWD/../../../the_framework/utility/debug_hlp.h \
   $$PWD/../../../the_framework/utility/linebuffer.h \
-  $$PWD/../../../the_framework/utility/utility_fkt.h
+  $$PWD/../../../the_framework/utility/utility_fct.h
 
 INCLUDEPATH += \
   $$PWD/../../../the_framework/algorithms \

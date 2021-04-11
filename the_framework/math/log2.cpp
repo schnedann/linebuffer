@@ -53,6 +53,7 @@ s32 Math::Log2::floorLog2_32(u32 n){
  */
 s16 Math::Log2::floorLog2_16(u16 n){
   u32 pos = 0;
+  if (n >= 1<< 8) { n >>=  8; pos +=  8; }
   if (n >= 1<< 4) { n >>=  4; pos +=  4; }
   if (n >= 1<< 2) { n >>=  2; pos +=  2; }
   if (n >= 1<< 1) {           pos +=  1; }

@@ -290,9 +290,9 @@ template<typename T> constexpr T clr_rightmost_1bit(T const _x) noexcept{
  *  2 - 4 -  100
  *  3 - 8 - 1000
  */
-template<typename T> constexpr T GETMASKBIT(size_t bits) noexcept{
+template<typename T> constexpr T GETMASKBIT(size_t bit) noexcept{
   Compile::Guards::IsInteger<T>();
-  return T(1)<<(GETMAXBITS<T>(bits));
+  return T(1)<<(GETMAXBITS<T>(bit));
 }
 
 /**

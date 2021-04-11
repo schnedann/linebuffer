@@ -44,21 +44,24 @@ using namespace std;
 
 //--- Code
 
-TEST_CASE("Math::Discrete","[math discrete]"){
+TEST_CASE("Math::Averaging","[math discrete]"){
 
-  SECTION("Math::Discrete::median_of_three"){
-    REQUIRE( 2 == Math::Discrete::median_of_three(1,2,3));
-    REQUIRE( 2 == Math::Discrete::median_of_three(2,3,1));
-    REQUIRE( 2 == Math::Discrete::median_of_three(3,1,2));
+  SECTION("Math::Averaging::median_of_three"){
+    REQUIRE( 2 == Math::Averaging::median_of_three(1,2,3));
+    REQUIRE( 2 == Math::Averaging::median_of_three(2,3,1));
+    REQUIRE( 2 == Math::Averaging::median_of_three(3,1,2));
 
-    REQUIRE( 2 == Math::Discrete::median_of_three(1,3,2));
-    REQUIRE( 2 == Math::Discrete::median_of_three(3,2,1));
-    REQUIRE( 2 == Math::Discrete::median_of_three(2,1,3));
+    REQUIRE( 2 == Math::Averaging::median_of_three(1,3,2));
+    REQUIRE( 2 == Math::Averaging::median_of_three(3,2,1));
+    REQUIRE( 2 == Math::Averaging::median_of_three(2,1,3));
 
-    REQUIRE( 2 == Math::Discrete::median_of_three(2,1,3));
-    REQUIRE( 2 == Math::Discrete::median_of_three(1,3,2));
-    REQUIRE( 2 == Math::Discrete::median_of_three(3,2,1));
+    REQUIRE( 2 == Math::Averaging::median_of_three(2,1,3));
+    REQUIRE( 2 == Math::Averaging::median_of_three(1,3,2));
+    REQUIRE( 2 == Math::Averaging::median_of_three(3,2,1));
   }
+}
+
+TEST_CASE("Math::Discrete","[math discrete]"){
 
   SECTION("Math::Discrete::multiply_low_part"){
     auto const a = u16(GENERATE(take(75, random(0, 65535))));
