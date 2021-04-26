@@ -44,7 +44,9 @@ SOURCES += \
   $$PWD/../../../the_framework/unittest/utest_utility_fct.cpp \
   $$PWD/../../../the_framework/utility/linebuffer.cpp \
   $$PWD/../../../the_framework/utility/Stringhelper.cpp \
-  $$PWD/../../../the_framework/utility/utility_fct.cpp
+  $$PWD/../../../the_framework/utility/utility_fct.cpp \
+  ../../../the_framework/unittest/utest_fifo_fixed_size.cpp \
+  ../../../the_framework/unittest/utest_median_filter.cpp
 
 HEADERS += \
   $$PWD/../../../external/Catch2/single_include/catch2/catch.hpp \
@@ -81,7 +83,10 @@ HEADERS += \
   $$PWD/../../../the_framework/utility/Stringhelper.h \
   $$PWD/../../../the_framework/utility/debug_hlp.h \
   $$PWD/../../../the_framework/utility/linebuffer.h \
-  $$PWD/../../../the_framework/utility/utility_fct.h
+  $$PWD/../../../the_framework/utility/utility_fct.h \
+  ../../../the_framework/algorithms/fifo_fixed_size.h \
+  ../../../the_framework/algorithms/median_filter.h \
+  ../../../the_framework/algorithms/moving_average.h
 
 INCLUDEPATH += \
   $$PWD/../../../the_framework/algorithms \
