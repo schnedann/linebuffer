@@ -3,10 +3,12 @@
 /** if not stated otherwise:                                                 **/
 /** Assume Unsigned Integer Numbers and Two'sCompliment Arithmethic          **/
 /** developed , collected and / or implemented by                            **/
-/** Danny Schneider, 2017-2021                                               **/
+/** Danny Schneider, 2014-2021                                               **/
 /**                                                                          **/
 /** Sources & Ideas for Algorithms used here:                                **/
 /** http://aggregate.org/MAGIC/                                              **/
+/** http://graphics.stanford.edu/~seander/bithacks.html                      **/
+/** http://gurmeet.net/puzzles/fast-bit-counting-routines/                   **/
 /**                                                                          **/
 /**                                                                          **/
 /**                                                                          **/

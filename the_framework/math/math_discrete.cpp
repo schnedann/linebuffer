@@ -86,31 +86,6 @@ s64 div_to_nearest(s64 n, s64 d) {
 
 */
 
-/**
- * Signed Division with rounding Mode Ceil()
- * eg. Gnu Compiler rounds to Zero normaly
- */
-s16 Math::Discrete::sdivceil(s16 const a, s16 const b){
-  s16 div = a / b;
-  if (((a ^ b) >= 0) && (a % b != 0)){
-      div++;
-  }
-  return div;
-}
-
-/**
- * Unsigned Division with rounding Mode Ceil()
- * eg. Gnu Compiler rounds to Zero normaly
- */
-u16 Math::Discrete::udivceil(u16 const a, u16 const b){
-  u16 div = a / b;
-  if (a % b != 0){
-    div++;
-  }
-  return div;
-}
-
-
 //--------------------------------------------------------------------------------
 
 /**

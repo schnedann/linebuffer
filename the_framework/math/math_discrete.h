@@ -291,24 +291,7 @@ template<typename T> constexpr T dec2gray(T const v){
 
 //----------------------------------------
 
-/**
- * @brief ceildiv - Integer Division with Rouning up
- *
- * @param  x
- * @param  y
- * @return
- */
-template<typename T> constexpr T ceildiv(T const x, T const y){
-  Compile::Guards::IsInteger<T>();
-  return ((y>0)?((x+y-1)/y):(0));
-  //return ((y>0)?(1+((x-1)/y)):(0)); //Alternate Code
-}
 
-// so far Code does not working with signed numners...
-template<typename T> constexpr T ceildiv_v2(T const _x, T const _y){
-  Compile::Guards::IsInteger<T>();
-  return ((_y)!=0)?(((_x)>0)?(((((_x)-1)/(_y))+1)):((_x)/(_y))):(0);
-}
 
 //----------------------------------------
 
@@ -371,8 +354,7 @@ u64 nlpo2(u64 const data, u8 const bits);
 //-----
 
 //-----
-s16 sdivceil(s16 const a, s16 const b);
-u16 udivceil(u16 const a, u16 const b);
+
 //-----
 float  Q_rsqrt( float const  number );
 double Q_rsqrt( double const number );
@@ -530,6 +512,114 @@ u32 hibitvalue(u32 n){
   return(n & ~(n >> 1));
 }
 #endif
+
+//--------------------------------------------------
+
+template<typename T> T divide_by_shift(T const _a, T const _b, bool const round=false){
+  bool is_signed = std::is_signed<T>::value;
+
+  T res = 0;
+
+  if(_b>0){ //divisor
+    if(_a != _b){
+      auto rest = _a;
+      while(rest>_b){
+        size_t shift = 0;
+        while(1){
+          auto tmp = Math::Boolean::ARITHSHL<T>(_b,shift);
+          bool do_shift = rest > (_b+tmp);
+          bool signflip = is_signed & Math::Boolean::MASKBITS<T>(Math::Boolean::XOR<T>(_b,tmp),Math::Boolean::MASK_MSB<T>());
+          if(do_shift && !signflip){
+            ++shift;
+          }else{
+            if((rest != tmp) && !signflip){
+              shift = (shift>0)?(shift-1):(shift);
+            }
+            break;
+          }
+        }
+        res  += Math::Boolean::GETMASKBIT<T>(shift);
+        rest -= Math::Boolean::ARITHSHL<T>(_b,shift);
+      }
+
+      if(round && (Math::Boolean::ARITHSHL<T>(rest,1)>=_b)){
+          ++res;
+      }
+    }else{
+      res = 1;
+    }
+  }
+  return res;
+}
+
+//--------------------------------------------------
+
+/**
+ * @brief ceildiv - Integer Division with Rouning up
+ *
+ * @param  x
+ * @param  y
+ * @return
+ */
+template<typename T> constexpr T ceildiv(T const x, T const y){
+  Compile::Guards::IsInteger<T>();
+  return ((y>0)?((x+y-1)/y):(0));
+  //return ((y>0)?(1+((x-1)/y)):(0)); //Alternate Code
+}
+
+// so far Code does not working with signed numners...
+template<typename T> constexpr T ceildiv_v2(T const _x, T const _y){
+  Compile::Guards::IsInteger<T>();
+  return ((_y)!=0)?(((_x)>0)?(((((_x)-1)/(_y))+1)):((_x)/(_y))):(0);
+}
+
+/**
+ * Signed Division with rounding Mode Ceil()
+ * eg. Gnu Compiler rounds to Zero normaly
+ */
+template<typename T> T sdivceil(T const a, T const b){
+  Compile::Guards::IsInteger<T>();
+  T div = 0;
+  if(b > 0){
+    div = a / b;
+    if (((a ^ b) >= 0) && ((a % b) != 0)){
+      div++;
+    }
+  }
+  return div;
+}
+
+/**
+ * Unsigned Division with rounding Mode Ceil()
+ * eg. Gnu Compiler rounds to Zero normaly
+ */
+template<typename T> T udivceil(T const a, T const b){
+  Compile::Guards::IsUnsigned<T>();
+  T div = 0;
+  if(b > 0){
+    div = a / b;
+    if ((a % b) != 0){
+      div++;
+    }
+  }
+  return div;
+}
+
+/**
+ *
+ */
+template<typename T> T udivround(T const _a, T const _b){
+  Compile::Guards::IsUnsigned<T>();
+  T div = 0;
+  if(_b > 0){
+    div = _a / _b;
+    auto rest = _a - (div * _b);
+    if(Math::Boolean::ARITHSHL<T>(rest,1)>=_b){
+      ++div;
+    }
+  }
+  return div;
+}
 
 //--------------------------------------------------
 

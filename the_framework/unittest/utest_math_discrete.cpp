@@ -105,4 +105,103 @@ TEST_CASE("Math::Discrete","[math discrete]"){
 
   }
 
-}
+  SECTION("Math::Discrete::udivceil<u16>"){
+    auto const a = u16(GENERATE(take(150, random(0, 65535))));
+    auto const b = u16(GENERATE(take(150, random(0, 65535))));
+
+    auto ref = (b>0)?(a / b):(0);
+         ref += ((a%b)>0)?(1):(0);
+
+    auto dut = Math::Discrete::udivceil<u16>(a,b);
+    auto dut2 = Math::Discrete::ceildiv<u16>(a,b);
+
+    CAPTURE(a);
+    CAPTURE(b);
+    REQUIRE( ref == dut );
+    REQUIRE( ref == dut2 );
+  }
+
+  SECTION("Math::Discrete::divide_by_shift<u16>"){
+    auto const a = u16(GENERATE(take(150, random(0, 65535))));
+    auto const b = u16(GENERATE(take(150, random(0, 65535))));
+
+    auto ref = (b>0)?(a / b):(0);
+    auto dut = Math::Discrete::divide_by_shift<u16>(a,b);
+
+    CAPTURE(a);
+    CAPTURE(b);
+
+    REQUIRE( ref == dut );
+  }
+
+  SECTION("Math::Discrete::divide_by_shift<u16> with rounding"){
+    auto const a = u16(GENERATE(take(150, random(0, 65535))));
+    auto const b = u16(GENERATE(take(150, random(0, 65535))));
+
+    auto ref = Math::Discrete::udivround<u16>(a,b);
+    auto dut = Math::Discrete::divide_by_shift<u16>(a,b,true);
+
+    CAPTURE(a);
+    CAPTURE(b);
+
+    REQUIRE( ref == dut );
+  }
+
+  //SECTION("Math::Discrete::divide_by_shift<u16> test"){
+  //  {
+  //    u16 a = 100;
+  //    u16 b = 5;
+  //    auto ref = a / b;
+  //    auto dut = Math::Discrete::divide_by_shift<u16>(a,b);
+  //    CAPTURE(a);
+  //    CAPTURE(b);
+  //    REQUIRE( ref == dut );
+  //  }
+  //  {
+  //    u16 a = 100;
+  //    u16 b = 7;
+  //    auto ref = a / b;
+  //    auto dut = Math::Discrete::divide_by_shift<u16>(a,b);
+  //    CAPTURE(a);
+  //    CAPTURE(b);
+  //    REQUIRE( ref == dut );
+  //  }
+  //  {
+  //    u16 a = 100;
+  //    u16 b = 11;
+  //    auto ref = a / b;
+  //    auto dut = Math::Discrete::divide_by_shift<u16>(a,b);
+  //    CAPTURE(a);
+  //    CAPTURE(b);
+  //    REQUIRE( ref == dut );
+  //  }
+  //  {
+  //    u16 a = 100;
+  //    u16 b = 13;
+  //    auto ref = a / b;
+  //    auto dut = Math::Discrete::divide_by_shift<u16>(a,b);
+  //    CAPTURE(a);
+  //    CAPTURE(b);
+  //    REQUIRE( ref == dut );
+  //  }
+  //  {
+  //    u16 a = 100;
+  //    u16 b = 17;
+  //    auto ref = a / b;
+  //    auto dut = Math::Discrete::divide_by_shift<u16>(a,b);
+  //    CAPTURE(a);
+  //    CAPTURE(b);
+  //    REQUIRE( ref == dut );
+  //  }
+  //  {
+  //    u16 a = 10356;
+  //    u16 b = 10356;
+  //    auto ref = a / b;
+  //    auto dut = Math::Discrete::divide_by_shift<u16>(a,b);
+  //    CAPTURE(a);
+  //    CAPTURE(b);
+  //    REQUIRE( ref == dut );
+  //  }
+  //}
+
+} //TestCase
