@@ -9,12 +9,9 @@
 #ifndef _LARGE_MUL_H_
 #define _LARGE_MUL_H_
 
-//#include <array>
 #include <vector>
 
 #include "dtypes.h"
-
-//#define DEBUG
 
 namespace Math{
 
@@ -29,12 +26,12 @@ template<typename T, u64 cnt> class ux_t{
 using u128 = ux_t<u64,2>; //Define 128Bit Type
 
 //General Purpose Multiply
-auto multiply(std::vector<u8> const& _a, std::vector<u8> const& _b) -> std::vector<u8>;
+std::vector<u8> multiply(std::vector<u8> const& _a, std::vector<u8> const& _b);
 
 //Specialized Multiply Implementations
-auto mulu16(u16 const& _a,u16 const& _b) -> u32;
-auto mulu32(u32 const& _a,u32 const& _b) -> u64;
-auto mulu64(u64 const& _a,u64 const& _b) -> u128;
+u32 mulu16(u16 const& _a,u16 const& _b);
+u64 mulu32(u32 const& _a,u32 const& _b);
+u128 mulu64(u64 const& _a,u64 const& _b);
 
 } //Namespace
 

@@ -1,6 +1,6 @@
 /******************************************************************************/
-/** Debug Helper                                                             **/
-/** developed , collected and / or implemented by                            **/
+/** Configuration Flags                                                      **/
+/** collected and / or implemented by                                        **/
 /** Danny Schneider, 2017-2021                                               **/
 /******************************************************************************/
 
@@ -29,15 +29,25 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DEBUG_HLP_H
-#define DEBUG_HLP_H
+#ifndef GLOBAL_CONFIG_H
+#define GLOBAL_CONFIG_H
 
-#include <iostream>
+#define DEBUG_CODE   0
+#define DEBUG_OUTPUT 1
+#define NPOS         1
 
-#include "dtypes.h"
-#include "Stringhelper.h"
+namespace Global{
 
-#define DBGOUT(_x) {if(Global::Config::USE_DBGOUT){std::cout << (_x) << "\n";}}
-#define DBGPUT(_x) {if(Global::Config::USE_DBGOUT){std::cout << (_x);}}
+namespace Config{
 
-#endif // DEBUG_HLP_H
+  constexpr static bool const USE_DEBUG_CODE = DEBUG_CODE;
+  constexpr static bool const USE_NPOS       = NPOS;
+  constexpr static bool const USE_DBGOUT     = DEBUG_OUTPUT;
+
+} //namespace
+
+} //namespace
+
+
+
+#endif // GLOBAL_CONFIG_H

@@ -146,6 +146,31 @@ TEST_CASE("Math::Log2 using stdlib as reference"){
 
   //-----
 
+  SECTION("floor_log2_v3"){
+    auto rnd = u32(GENERATE(take(10000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
+    auto res = Math::Log2::floor_log2_v3<u32>(rnd);
+    auto ref = floorl(log2l(rnd));
+    CAPTURE(rnd);
+    CAPTURE(res);
+    CAPTURE(ref);
+    CAPTURE(PRNBINVAR(rnd,Math::Boolean::GETBITSOFTYPE<decltype(rnd)>()));
+    REQUIRE( Math::Flowpoint::approximatelyEqual<long double>(ref,static_cast<long double>(res),static_cast<long double>(0.5)) );
+  }
+
+  SECTION( "floor_log2_v3 2/2" ) {
+    INFO( "Xref Test LOG2 --> Math::OverflowSafe::ovf_save" );
+    for(u16 ii=0; ii<Math::Boolean::GETFULLMASK<u16>(Math::Boolean::GETBITSOFTYPE<u8>()); ++ii){
+      u8 res = Math::Log2::floor_log2_v3<u8>(static_cast<u8>(ii));
+      CAPTURE(  ii );
+      CAPTURE( u16(res) );
+      double dbl = std::floor(std::log2(ii));
+      CAPTURE( dbl );
+      REQUIRE( res == static_cast<u8>(dbl) );
+    }
+  }
+
+  //-----
+
   SECTION("log2c"){
     auto rnd = u32(GENERATE(take(10000, random(Math::Boolean::__MIN<s32>(), Math::Boolean::__MAX<s32>()))));
     auto res = Math::Log2::log2c<u32>(rnd);

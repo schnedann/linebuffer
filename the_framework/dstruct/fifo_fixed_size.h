@@ -5,7 +5,7 @@
 
 #include "dtypes.h"
 
-namespace Algorithms {
+namespace Datastructures{
 
 template<typename T, size_t N> class fifo_fixed_size{
 private:
@@ -27,12 +27,12 @@ public:
     return filled;
   }
 
-  T& get(){
+  T const& get() const{
     auto idy = (filled)?(idx):(0);
     return fifo[idy];
   }
 
-  std::array<T,N>& buffer(){
+  std::array<T,N> const& buffer() const{
     return fifo;
   }
 

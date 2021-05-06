@@ -88,8 +88,9 @@ TEST_CASE("Math::Boolean","[boolean]"){
 
 //--------------------------------------------------
 
-  SECTION("2 - next_power_of_2"){
+  SECTION("2 - Math::Boolean::next_power_of_2<u64>()"){
     u64 mask = 1;
+    REQUIRE( 0 == Math::Boolean::next_power_of_2<u64>(0) );
     do{
       CAPTURE( mask );
       REQUIRE( ((1==mask)?(1):(mask+1)) == Math::Boolean::next_power_of_2<u64>(mask) );
@@ -530,6 +531,57 @@ TEST_CASE("Math::Boolean","[boolean]"){
     REQUIRE(max == Math::Boolean::__MAX<dut_t>());
     REQUIRE(max == Math::Boolean::__MAX_SIGNED<dut_t>());
     REQUIRE(half == Math::Boolean::__HALF_MAX_SIGNED<dut_t>());
+  }
+
+//--------------------------------------------------
+
+  SECTION("22 - Math::Boolean::get_msb<u8>() 1/4"){
+    using x_t = u8;
+    x_t ref  = 1;
+    x_t mask = 1;
+    REQUIRE( 0 == Math::Boolean::get_msb<x_t>(0) );
+    do{
+      CAPTURE( mask );
+      REQUIRE( ref == Math::Boolean::get_msb<x_t>(mask) );
+      mask = (mask<<1) | 1;
+      ref <<= 1;
+    }while(mask != Math::Boolean::GETFULLMASK<x_t>(Math::Boolean::GETBITSOFTYPE<x_t>()));
+  }
+  SECTION("22 - Math::Boolean::get_msb<u16>() 2/4"){
+    using x_t = u16;
+    x_t ref  = 1;
+    x_t mask = 1;
+    REQUIRE( 0 == Math::Boolean::get_msb<x_t>(0) );
+    do{
+      CAPTURE( mask );
+      REQUIRE( ref == Math::Boolean::get_msb<x_t>(mask) );
+      mask = (mask<<1) | 1;
+      ref <<= 1;
+    }while(mask != Math::Boolean::GETFULLMASK<x_t>(Math::Boolean::GETBITSOFTYPE<x_t>()));
+  }
+  SECTION("22 - Math::Boolean::get_msb<u8>() 3/4"){
+    using x_t = u32;
+    x_t ref  = 1;
+    x_t mask = 1;
+    REQUIRE( 0 == Math::Boolean::get_msb<x_t>(0) );
+    do{
+      CAPTURE( mask );
+      REQUIRE( ref == Math::Boolean::get_msb<x_t>(mask) );
+      mask = (mask<<1) | 1;
+      ref <<= 1;
+    }while(mask != Math::Boolean::GETFULLMASK<x_t>(Math::Boolean::GETBITSOFTYPE<x_t>()));
+  }
+  SECTION("22 - Math::Boolean::get_msb<u8>() 4/4"){
+    using x_t = u64;
+    x_t ref  = 1;
+    x_t mask = 1;
+    REQUIRE( 0 == Math::Boolean::get_msb<x_t>(0) );
+    do{
+      CAPTURE( mask );
+      REQUIRE( ref == Math::Boolean::get_msb<x_t>(mask) );
+      mask = (mask<<1) | 1;
+      ref <<= 1;
+    }while(mask != Math::Boolean::GETFULLMASK<x_t>(Math::Boolean::GETBITSOFTYPE<x_t>()));
   }
 
 //--------------------------------------------------

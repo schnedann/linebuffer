@@ -93,6 +93,19 @@ TEST_CASE("Math::Discrete","[math discrete]"){
     }
   }
 
+  SECTION("Math::nextpow2"){
+    u32 nextpower = 1;
+    for(u32 ii=0; ii<0x8001U; ++ii){
+      bool const is_nextpower = (ii==nextpower);
+      CAPTURE(ii);
+      auto dut = Math::Discrete::nextpow2<u32>(ii);
+      REQUIRE( nextpower == dut );
+      if(is_nextpower){
+        nextpower = Math::Boolean::ARITHSHL<u32>(nextpower,1);
+      }
+    }
+  }
+
   SECTION("Math::Discrete::odd"){
 
   }

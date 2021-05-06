@@ -34,6 +34,7 @@ SOURCES += \
   $$PWD/../../../the_framework/unittest/utest_helpers.cpp \
  #$$PWD/../../../the_framework/unittest/utest_i18n.cpp \
   $$PWD/../../../the_framework/unittest/utest_large_mul.cpp \
+  $$PWD/../../../the_framework/unittest/utest_large_mul_v2.cpp \
   $$PWD/../../../the_framework/unittest/utest_linebuffer.cpp \
   $$PWD/../../../the_framework/unittest/utest_linear_equation.cpp \
   $$PWD/../../../the_framework/unittest/utest_log2.cpp \
@@ -45,15 +46,28 @@ SOURCES += \
   $$PWD/../../../the_framework/utility/linebuffer.cpp \
   $$PWD/../../../the_framework/utility/Stringhelper.cpp \
   $$PWD/../../../the_framework/utility/utility_fct.cpp \
-  ../../../the_framework/unittest/utest_fifo_fixed_size.cpp \
-  ../../../the_framework/unittest/utest_median_filter.cpp
+  $$PWD/../../../the_framework/algorithms/crc/base_crc.cpp \
+  $$PWD/../../../the_framework/algorithms/crc/para_crc.cpp \
+  $$PWD/../../../the_framework/algorithms/crc/para_crc_sets.cpp \
+  $$PWD/../../../the_framework/unittest/utest_fifo_fixed_size.cpp \
+  $$PWD/../../../the_framework/unittest/utest_median_filter.cpp \
+  $$PWD/../../../the_framework/unittest/utest_moving_average.cpp \
+  $$PWD/../../../the_framework/unittest/utest_fastcopy.cpp \
+  $$PWD/../../../the_framework/unittest/utest_ringbuffer.cpp
 
 HEADERS += \
   $$PWD/../../../external/Catch2/single_include/catch2/catch.hpp \
   $$PWD/../../../the_framework/algorithms/bitreverse.h \
   $$PWD/../../../the_framework/algorithms/countbitsset.h \
+  $$PWD/../../../the_framework/algorithms/crc/base_crc.h \
+  $$PWD/../../../the_framework/algorithms/crc/para_crc.h \
+  $$PWD/../../../the_framework/algorithms/crc/para_crc_sets.h \
+  $$PWD/../../../the_framework/dstruct/fifo_fixed_size.h \
   $$PWD/../../../the_framework/algorithms/large_mul.h \
+  $$PWD/../../../the_framework/algorithms/large_mul_v2.h \
   $$PWD/../../../the_framework/algorithms/minmax.h \
+  $$PWD/../../../the_framework/algorithms/median_filter.h \
+  $$PWD/../../../the_framework/algorithms/moving_average.h \
   $$PWD/../../../the_framework/core/array_fun.h \
   $$PWD/../../../the_framework/core/bitmacros.h \
   $$PWD/../../../the_framework/core/compile_guards.h \
@@ -84,9 +98,8 @@ HEADERS += \
   $$PWD/../../../the_framework/utility/debug_hlp.h \
   $$PWD/../../../the_framework/utility/linebuffer.h \
   $$PWD/../../../the_framework/utility/utility_fct.h \
-  ../../../the_framework/algorithms/fifo_fixed_size.h \
-  ../../../the_framework/algorithms/median_filter.h \
-  ../../../the_framework/algorithms/moving_average.h
+  $$PWD/../../../the_framework/algorithms/fastcopy.h \
+  $$PWD/../../../the_framework/dstruct/ringbuffer.h
 
 INCLUDEPATH += \
   $$PWD/../../../the_framework/algorithms \

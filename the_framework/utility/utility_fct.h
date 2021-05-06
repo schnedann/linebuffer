@@ -47,6 +47,14 @@ template<typename T> u8 estimatedecimalplaces(T num){
 
 //--------------------------------------------------
 
+namespace Bittwiddle {
+
+u16 byteswap(u16 val);
+
+} //namespace
+
+//--------------------------------------------------
+
 } //namespace
 
 #endif

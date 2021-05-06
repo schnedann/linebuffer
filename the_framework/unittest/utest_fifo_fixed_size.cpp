@@ -9,7 +9,7 @@ TEST_CASE("Algorithms::fifo_fixed_size"){
   SECTION("Algorithms::fifo_fixed_size"){
     constexpr size_t const depth = 10;
     constexpr u32 const max = 65536;
-    Algorithms::fifo_fixed_size<u16,depth> ffs;
+    Datastructures::fifo_fixed_size<u16,depth> ffs;
 
     u16 ij = 0;
     for(u32 ii=0; ii<max; ++ii){

@@ -216,18 +216,42 @@ template<typename T> constexpr bool is_power_of_2(T const v){
  */
 template<typename T> T nextpow2(T const _x){
   Compile::Guards::IsUnsigned<T>();
-  constexpr u8 const tbits = Math::Boolean::GETBITSOFTYPE<T>();
-  T lx = _x;
+  constexpr u8 const bytes = sizeof(T);
+  T lx = (_x>0)?(_x):(1);
   --lx;
   lx |= lx >> 1;
   lx |= lx >> 2;
   lx |= lx >> 4;
-  if(tbits> 8) lx |= lx >> 8;
-  if(tbits>16) lx |= lx >> 16;
-  if(tbits>32) lx |= lx >> 32;
+  if(bytes>=2){lx |= lx >> 8;}
+  if(bytes>=4){lx |= lx >> 16;}
+  if(bytes>=8){lx |= lx >> 32;}
   ++lx;
   return lx;
 }
+
+/*
+ * Next largest (Integer which is a) Power of 2
+ */
+template<typename T> T nlpo2(T const data, u8 const bits){
+  Compile::Guards::IsUnsigned<T>();
+  u64 res = data;
+  //Not Power of Two
+  if(is_power_of_2<u64>(res)==0){
+    //clog2(bits)
+    for(u8 ii=1; ii<bits; ii<<=1){
+      //Set all Lower Bits
+      res |= (res >> ii);
+    }
+    res += 1;
+  }
+  return res;
+}
+
+/*
+ * Next largest Integer witch is a Power of 2
+ * Example: 3,4 --> 4
+ */
+//u64 nlpo2(u64 const data, u8 const bits);
 
 //--------------------------------------------------
 
@@ -345,11 +369,7 @@ template<class T> auto linear_interpol(T const x1, T const x2, T const y1, T con
 
 //-----
 
-/*
- * Next largest Integer witch is a Power of 2
- * Example: 3,4 --> 4
- */
-u64 nlpo2(u64 const data, u8 const bits);
+
 
 //-----
 

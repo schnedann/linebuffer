@@ -20,4 +20,4 @@ TEST_CASE("Algorithms::minmax"){
     REQUIRE(max==mm.get_max());
   }
 
-}
+} //TestCase

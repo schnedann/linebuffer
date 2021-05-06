@@ -201,7 +201,7 @@ template<typename T> T satt_sadd(T const a, T const b){
 /**
  * General Purpose (signed) Saturated Subtraction
  */
-template<typename T> T satt_ssub(T const a, T const b){
+template<typename T> T sma(T const a, T const b){
   Compile::Guards::IsInteger<T>();
   return satt_sadd<T>(a, (T(-1) * b));
 }

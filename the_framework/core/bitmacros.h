@@ -242,6 +242,24 @@ template<typename T> constexpr T next_power_of_2(T const _x) noexcept{
 }
 
 /**
+ * @brief get_msb - Most Significant Bit set
+ * @param _a
+ * @return
+ */
+template<typename T> constexpr T get_msb(T const _a){
+  Compile::Guards::IsUnsigned<T>();
+  constexpr auto const bytes = sizeof(T);
+  T x = _a;
+  x |= (x >>  1);
+  x |= (x >>  2);
+  x |= (x >>  4);
+  if(2>=bytes){x |= (x >>  8);} //u16
+  if(4>=bytes){x |= (x >> 16);} //u32
+  if(8>=bytes){x |= (x >> 32);} //u64
+  return(x & ~(x >> 1));
+}
+
+/**
  *
  */
 template<typename T> constexpr T right_propagate_rightmost_1bit(T const _x) noexcept{

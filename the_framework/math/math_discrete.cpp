@@ -42,7 +42,7 @@ using namespace Math::Boolean;
 /*
  * Next largest (Integer which is a) Power of 2
  */
-u64 Math::Discrete::nlpo2(u64 const data, u8 const bits){
+/*u64 Math::Discrete::nlpo2(u64 const data, u8 const bits){
   u64 res = data;
   //Not Power of Two
   if(is_power_of_2<u64>(res)==0){
@@ -54,7 +54,7 @@ u64 Math::Discrete::nlpo2(u64 const data, u8 const bits){
     res += 1;
   }
   return res;
-}
+}*/
 
 //-----
 

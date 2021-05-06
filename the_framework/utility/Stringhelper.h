@@ -121,7 +121,7 @@ std::string demangle(Core::Container::citerator_t<char> mangled);
  * @brief to_string - Convert a Variable of any Type to String as long as an known conversion exists
  * @note signed and unsigned 8Bit Integers are handled as 16Bit values to prevent char output
  */
-template<typename T> std::string to_string(std::string name, T const& _x){
+template<typename T> std::string to_string(std::string const& name, T const& _x){
   std::stringstream ss;
   using repl_t = typename Meta::Types::replace8bitint_t<T>;
   ss << demangle(typeid(T).name()) << " " << name << ": " << repl_t(_x);
@@ -140,7 +140,7 @@ template<typename T> std::string to_string(std::string name, T const& _x){
  * @note signed and unsigned 8Bit Integers are handled as 16Bit values to prevent char output,
  *       also any integer is converted in Hexadecimal notation
  */
-template<typename T> std::string to_hstring(std::string name, T const& _x){
+template<typename T> std::string to_hstring(std::string const& name, T const& _x){
   std::stringstream ss;
   using insert_type_t = typename Meta::Types::replace8bitint<T>::type;
   constexpr bool const is_int = std::is_integral<T>::value;
@@ -226,7 +226,7 @@ template<typename T> std::string X_2str(T const& _x, int const w=0, char const f
 /**
  * @brief str2_X - Convert String to type T
  */
-template<typename T> T str2_X(std::string& str){
+template<typename T> T str2_X(std::string const& str){
   T res;
   std::istringstream(str)>>res;
   return res;
@@ -274,7 +274,7 @@ std::string tolower(std::string const& str);
 /**
  *  Print all Elements of a Array in one single Line divided by a '|'
  */
-template<typename T> std::string print_array_Line(T data[], size_t size){
+template<typename T> std::string print_array_Line(T data[], size_t const size){
   std::stringstream ss;
   ss << "|";
   for(size_t ii = 0; ii < size; ++ii){
@@ -285,8 +285,10 @@ template<typename T> std::string print_array_Line(T data[], size_t size){
 }
 
 
-
-template<typename T> std::string print_array(Core::Container::citerator_t<T> ptr, size_t size, size_t elem_per_line=10){
+/**
+ * @brief print_array
+ */
+template<typename T> std::string print_array(Core::Container::citerator_t<T> ptr, size_t const size, size_t const elem_per_line=10){
   std::stringstream ss;
   u64 ii=1;
   for(u64 ij=0; ij<size; ++ij){
@@ -303,7 +305,10 @@ template<typename T> std::string print_array(Core::Container::citerator_t<T> ptr
   return ss.str();
 }
 
-template<typename T, size_t N> std::string print_array(T data[N]){
+/**
+ * @brief print_array
+ */
+template<typename T, size_t N> std::string print_array(T const data[N]){
   return print_array(&data, N);
 }
 

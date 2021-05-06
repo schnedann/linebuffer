@@ -38,6 +38,7 @@
 #include "compile_guards.h"
 #include "bitmacros.h"
 #include "bitreverse.h"
+#include "countbitsset.h"
 
 namespace Math {
 
@@ -275,6 +276,9 @@ template<typename T> bool dbg_is_power_of_2(T _x){
   return res;
 }
 #endif
+
+//-----
+
 template<typename T> bool is_power_of_2(T _x){
   Compile::Guards::IsUnsigned<T>();
   bool res = (1==_x)?(true):(false);
@@ -474,6 +478,22 @@ template<typename T> u8 floor_log2_v2(T const val){
     }while(cnt>0);
   }
   return res;
+}
+
+//--------------------------------------------------
+
+// Floor(log2(x))
+template<typename T> u8 floor_log2_v3(T const _a){
+  Compile::Guards::IsUnsigned<T>();
+  auto const bytes = sizeof(T);
+  T x = _a;
+  x |= (x >> 1);
+  x |= (x >> 2);
+  x |= (x >> 4);
+  if(2>=bytes){x |= (x >> 8);}
+  if(4>=bytes){x |= (x >> 16);}
+  if(8>=bytes){x |= (x >> 32);}
+  return u8(Algorithms::CountBitsset::parallel<T>(x) - 1);
 }
 
 //--------------------------------------------------
