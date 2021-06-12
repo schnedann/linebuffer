@@ -1,0 +1,266 @@
+[AMD Ryzen 7 3800X 8-Core Processor ]
+-Wall -Wextra -std=c++17 -O3 -mtune=znver2 -march=native
+Compiler Version: 90200
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               9.615[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               9.604[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               8.814[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               13.328[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           12.92[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                13.437[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     14.331[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 5.872[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              5.905[s]
+
+-Wall -Wextra -std=c++17 -Ofast -mtune=native -march=native -fexpensive-optimizations -flto -funroll-loops -frename-registers  -Wformat -Wformat-security -fpic -shared -fasynchronous-unwind-tables -D_GLIBCXX_ASSERTIONS -fstack-clash-protection -fstack-protector-all -fcf-protection -pipe -msse3
+Compiler Version: 90200
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               9.627[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               9.556[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               8.767[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               13.292[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           12.869[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                13.378[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     14.261[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 5.846[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              5.869[s] <-- WOW, the Compiler seem to have recognized the Code and replaced it with the Intrinsic
+
+-Wall -Wextra -std=c++17 -Ofast -mtune=znver1 -march=native -fexpensive-optimizations -flto -funroll-loops -frename-registers  -Wformat -Wformat-security -fpic -shared -fasynchronous-unwind-tables -D_GLIBCXX_ASSERTIONS -fstack-clash-protection -fstack-protector-all -fcf-protection -pipe -msse3
+Compiler Version: 90200
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               9.59[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               9.55[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               8.748[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               13.263[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           12.85[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                13.364[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     14.252[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 5.848[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              5.864[s]
+
+[RaspberryPi 3+]
+Compiler Version: 60300
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               67.59[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               67.538[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               73.685[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               101.307[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           119.729[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                98.242[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     119.726[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 98.237[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              225[s]
+
+[Intel Core i5 520]
+Compiler Version: 100100 - rebuild + cooldown Cycles
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               17.665[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               15.998[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               13.773[s]
+Algorithm 3: Parallel Counting   V1 Template   -> Version of CountBitsSet               17.735[s]
+Algorithm 4: Parallel Counting   V3 Template   -> Version of CountBitsSet               6.833[s]
+Algorithm 5: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               18.774[s]
+Algorithm 6: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           40.072[s]
+Algorithm 7: Nibble LUT Unrolled V1            -> Access Bytes by shifts                19.537[s]
+Algorithm 8: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     31.576[s]
+Algorithm 9: Compiler intrinsic                -> using optimized Assembler if possible 6.913[s]
+Algorithm 10: wegner methof / briankernighansway-> Human readable Algorithm              7.689[s]
+
+Compiler Version: 100100
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               17.894[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               15.929[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               13.742[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               18.931[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           39.922[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                19.574[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     31.419[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 6.983[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              7.658[s]
+
+Compiler Version: 100100 <-- Wow, most versions are now faster!
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               18.147[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               16.603[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               14.879[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               19.285[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           41.729[s] <-- ?
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                20.767[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     32.514[s] <-- ?
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 6.96[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              7.591[s]
+
+Compiler Version: 90300
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               19.498[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               17.434[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               16.488[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               22.597[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           27.261[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                22.584[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     22.741[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 10.416[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              10.41[s]
+
+new v9 GCC Compiler, even while watching a youtube video in Background.
+Compiler Version: 90300
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               21.998[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               19.567[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               18.591[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               25.711[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           30.901[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                25.736[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     25.749[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 11.119[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              11.445[s] <-- WOW, the Compiler seem to have recognized the Code and replaced it with the Intrinsic
+
+modularization and more convinient callbacks -> same ratios but less performance
+Compiler Version: 80201
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               22.212[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               20.066[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               17.574[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               37.448[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           39.213[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                36.729[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     37.913[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 10.635[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              87.791[s]
+
+Linux Gnu Compiler 8.2.1
+Compiler Version: 80201
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               19.517[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               20.326[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               20.323[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               20.918[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           21.149[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                21.105[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     21.614[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 6.725[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              78.835[s]
+
+Windows, GNU Compiler 7.3 MinGW 64Bit (Release Build)
+C++17 -Ofast -fexpensive-optimizations -mtune=native -march=native -flto -funroll-loops -frename-registers
+Compiler Version: 70300
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               19.91[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               18.017[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               17.964[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               23.957[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           22.477[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                22.556[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     22.506[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 6.519[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              80.127[s]
+
+Windows, GNU Compiler 7.3 MinGW 64Bit (Debug Build)
+C++17 -Ofast -fexpensive-optimizations -mtune=native -march=native -flto -funroll-loops
+Compiler Version: 70300
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               19.548[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               17.403[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               17.379[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               21.041[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           20.913[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                21.124[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     20.96[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 7.945[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              85.102[s]
+
+Linux, GNU Compiler 7.x
+-g;-O3;-std=c++14;-Wall;-mtune=native;-march=native
+
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               19.662[s]   331%
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               17.385[s]   293%
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               17.383[s]   293%
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               22.348[s]   376%
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           22.367[s]   377%
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                22.363[s]   376%
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     22.361[s]   376%
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 5.94[s]     100%
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              86.448[s]   1422%
+
+---
+
+Linux, GNU Compiler 7.x
+-g;-Ofast;-std=c++14;-Wall;-mtune=native;-march=native;-frename-registers;-funroll-loops
+
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               19.9[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               17.511[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               17.517[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               20.915[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           20.923[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                22.387[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     20.955[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 7.383[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              77.895[s]
+
+---
+
+Linux, GNU Compiler 7.x
+-g;-O3;-std=c++14;-Wall
+
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               18.814[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               18.46[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               17.991[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               22.345[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           20.954[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                20.845[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     22.323[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 20.79[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              79.264[s]
+
+---
+
+mingw530_32
+-Ofast -fexpensive-optimizations -mtune=native -march=native -flto -funroll-loops
+
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               18.532[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               19.6[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               19.579[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               29.353[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           25.766[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                24.349[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     24.057[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 6.262[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              89.051[s]
+
+---
+gcc (i686-posix-dwarf-rev0, Built by MinGW-W64 project) 5.3.0
+QMAKE_CXXFLAGS += -Ofast -fexpensive-optimizations -mtune=native -march=native -flto -funroll-loops
+
+Benchmarking Algorithms for "Count Set Bits"
+Running all Algorithms with Input from 0 to 4294967295...
+Algorithm 0: Parallel Counting   V1            -> Version of CountBitsSet               17.814[s]
+Algorithm 1: Parallel Counting   V2            -> Version of CountBitsSet               18.016[s]
+Algorithm 2: Parallel Counting   V3            -> Version of CountBitsSet               19.813[s]
+Algorithm 3: Nibble LookUpTable  V1            -> 1 Nibble per cycle only               27.002[s]
+Algorithm 4: Nibble LookUpTable  V2            -> 2 Nibbles of a Byte at once           22.547[s]
+Algorithm 5: Nibble LUT Unrolled V1            -> Access Bytes by shifts                22.579[s]
+Algorithm 6: Nibble LUT Unrolled V2            -> Access Bytes via union (Compiler)     22.657[s]
+Algorithm 7: Compiler intrinsic                -> using optimized Assembler if possible 5.968[s]
+Algorithm 8: wegner methof / briankernighansway-> Human readable Algorithm              85.722[s]
+Betõtigen Sie die <RETURN> Taste, um das Fenster zu schlie▀en...

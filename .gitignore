@@ -6,6 +6,8 @@
 *.lo
 *.o
 *.obj
+*.i
+*.s
 
 # Precompiled Headers
 *.gch
@@ -76,3 +78,4 @@ build/*
 *.exe
 
 external/
+archive/

@@ -15,37 +15,35 @@ QMAKE_LFLAGS_RELEASE += -Wl,-z,now -Wl,-z,relro
 QMAKE_LFLAGS += -Wl,-Map=signslots.map
 
 SOURCES += \
-  $$PWD/../../../the_framework/algorithms/crc/crc_calc.cpp \
-  $$PWD/../../../the_framework/math/math_discrete.cpp \
-  $$PWD/../../../the_framework/targets/gen_hdl_crc/main.cpp \
-  $$PWD/../../../the_framework/targets/gen_hdl_crc/hdlgenerate.cpp \
-  $$PWD/../../../the_framework/utility/gendata.cpp \
-  $$PWD/../../../the_framework/utility/Stringhelper.cpp \
-  $$PWD/../../../the_framework/utility/utility_fct.cpp
+  $$PWD/../../../src/the_framework/algorithms/crc/crc_calc.cpp \
+  $$PWD/../../../src/the_framework/math/math_discrete.cpp \
+  $$PWD/../../../src/targets/gen_hdl_crc/main.cpp \
+  $$PWD/../../../src/targets/gen_hdl_crc/hdlgenerate.cpp \
+  $$PWD/../../../src/the_framework/utility/gendata.cpp \
+  $$PWD/../../../src/the_framework/utility/Stringhelper.cpp \
+  $$PWD/../../../src/the_framework/utility/utility_fct.cpp
 
 HEADERS += \
-  $$PWD/../../../the_framework/targets/gen_hdl_crc/global_config.h \
-  $$PWD/../../../the_framework/targets/gen_hdl_crc/hdlgenerate.h \
-  $$PWD/../../../the_framework/algorithms/bitreverse.h \
-  $$PWD/../../../the_framework/algorithms/crc/crc_calc.h \
-  $$PWD/../../../the_framework/core/bitmacros.h \
-  $$PWD/../../../the_framework/core/compile_guards.h \
-  $$PWD/../../../the_framework/core/dtypes.h \
-  $$PWD/../../../the_framework/core/paramodifiers.h \
-  $$PWD/../../../the_framework/math/math_discrete.h \
-  $$PWD/../../../the_framework/utility/debug_hlp.h \
-  $$PWD/../../../the_framework/utility/gendata.h \
-  $$PWD/../../../the_framework/utility/Stringhelper.h \
-  $$PWD/../../../the_framework/utility/utility_fct.h
-
-
+  $$PWD/../../../src/targets/gen_hdl_crc/global_config.h \
+  $$PWD/../../../src/targets/gen_hdl_crc/hdlgenerate.h \
+  $$PWD/../../../src/the_framework/algorithms/bitreverse.h \
+  $$PWD/../../../src/the_framework/algorithms/crc/crc_calc.h \
+  $$PWD/../../../src/the_framework/core/bitmacros.h \
+  $$PWD/../../../src/the_framework/core/compile_guards.h \
+  $$PWD/../../../src/the_framework/core/dtypes.h \
+  $$PWD/../../../src/the_framework/core/paramodifiers.h \
+  $$PWD/../../../src/the_framework/math/math_discrete.h \
+  $$PWD/../../../src/the_framework/utility/debug_hlp.h \
+  $$PWD/../../../src/the_framework/utility/gendata.h \
+  $$PWD/../../../src/the_framework/utility/Stringhelper.h \
+  $$PWD/../../../src/the_framework/utility/utility_fct.h
 
 INCLUDEPATH += \
-  $$PWD/../../../the_framework/targets/gen_hdl_crc \
-  $$PWD/../../../the_framework/algorithms \
-  $$PWD/../../../the_framework/algorithms/crc \
-  $$PWD/../../../the_framework/core \
-  $$PWD/../../../the_framework/math \
-  $$PWD/../../../the_framework/utility
+  $$PWD/../../../src/targets/gen_hdl_crc \
+  $$PWD/../../../src/the_framework/algorithms \
+  $$PWD/../../../src/the_framework/algorithms/crc \
+  $$PWD/../../../src/the_framework/core \
+  $$PWD/../../../src/the_framework/math \
+  $$PWD/../../../src/the_framework/utility
 
-
+LIBS += -lpthread

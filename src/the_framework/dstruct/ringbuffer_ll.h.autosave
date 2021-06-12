@@ -1,0 +1,129 @@
+/******************************************************************************/
+/* Ringbuffer with linked lists                                               */
+/* configureable,resizeable Ringbuffers                                       */
+/*                                                                            */
+/*----------------------------------------------------------------------------*/
+/* Copyright Danny Schneider, 2009                                            */
+/******************************************************************************/
+
+#ifndef _RINGBUFFER_SLL_H_
+#define _RINGBUFFER_SLL_H_
+
+/********************
+ * Includes
+ ********************/
+
+#include <memory>
+
+#include "dtypes.h"
+#include "compile_guards.h"
+#include "bitmacros.h"
+#include "iterators.h"
+
+namespace Datastructures {
+
+static constexpr struct rb_codes_st{
+  u8 RB_NULL    ;
+  u8 RB_EMPTY   ;
+  u8 RB_OVERFLOW;
+  u8 RB_FULL    ;
+}rb_codes = {0,1,2,4};
+
+/********************
+ * Structures / Unions
+ ********************/
+
+/**
+ *  Buffer Element
+ *  Double Linked List
+ */
+template<typename  T> struct rb_elem_st{   
+    Core::Container::weak_ptr_t<struct rb_elem_st> previous;
+    Core::Container::owning_ptr_t<struct rb_elem_st> next;
+    Core::Container::weak_ptr_t<T> data;
+};
+template<typename  T> using rb_elem_t = struct rb_elem_st<T>;
+
+template<typename  T> class ringbuffer_II{
+private:
+  
+  using base_ptr_t = Core::Container::owning_ptr_t<rb_elem_t<T>>;
+  using elem_ptr_t = Core::Container::weak_ptr_t<rb_elem_t<T>>;
+  
+  base_ptr_t base{nullptr};  //List-Base
+  elem_ptr_t read{nullptr};  //Read-Pointer
+  elem_ptr_t write{nullptr}; //Write-Pointer
+  u8  rbsbfa{rb_codes.RB_NULL};  //
+  u64 count_e{0}; //Number of Elements
+public:  
+  ringbuffer_II()=default;
+  ringbuffer_II(ringbuffer_II const&)=default;
+  ringbuffer_II(ringbuffer_II&&)=default;
+  ~ringbuffer_II()=default;
+  
+  ringbuffer_II& operator=(ringbuffer_II const&)=default;
+  
+  /** Initialisize the Ringbuffer
+   *  noe    : Number of Elements
+   *  initvar: Initial Value of Elements
+   */
+  void init_rb(u64 const noe, T const& initvar){
+      //Init Control Structure
+      base    = nullptr;
+      read    = nullptr;
+      write   = nullptr;
+      rbsbfa  = rb_codes.RB_NULL;
+      count_e = 0;
+  
+      //Build buffer with initial capacity
+      for(u64 ii=0; ii<noe; ++ii){
+        add_elem(initvar);
+      }
+      return;
+  }
+  
+  /** Add a new Element to the Ringbuffer
+   *  increasing the buffer capacity
+   *  chain in in front of the write pointer
+   */
+  void add_elem(T const& initvar){
+      elem_ptr_t tmp_ptr;
+  
+      //Create new Element
+      tmp_ptr = (RB_Elem*) calloc(1,sizeof(RB_Elem));
+      tmp_ptr->data = NULL;
+  
+      
+      if(Math::Boolean::AND<u8>(rbsbfa,rb_codes.RB_NULL)){
+          base
+        
+          //Set link-pointer of new Element
+          tmp_ptr->previous = tmp_ptr;
+          tmp_ptr->next     = tmp_ptr;
+          //Chain new Element into the List
+          base = tmp_ptr;
+          //Buffer now contains at least one empty Element
+          
+          rbsbfa = Math::Boolean::AND<u8>(rbsbfa,rb_codes.RB_EMPTY);
+      }else{
+          //Set link-pointer of new Element
+          tmp_ptr->previous = write;
+          tmp_ptr->next     = write->next;
+          //Chain new Element into the List
+          tmp_ptr->previous->next = tmp_ptr;
+          tmp_ptr->next->previous = tmp_ptr;
+          //Buffer now has at least one empty Element to fill
+          //Overflow Condition is unchanged
+          Clearb(rbsbfa,RB_FULL);
+      }
+      //Count new Element
+      ++(count_e);
+      return;
+  }
+};
+
+} //namespace
+
+#endif
+
+//EOF
