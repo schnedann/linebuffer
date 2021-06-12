@@ -1,13 +1,13 @@
 Math::Boolean
-##Bitreverse
-##Compiler Math
-##Compiler Datatypes
-##endianness-detect
+Bitreverse
+Compiler Math
+Compiler Datatypes
+endianness-detect
 ##GCC Version
 ##Count-Bits_Set - Brute Force Test
 ##Count-Bits_Set - Quick Test
 ##Datastructures::dbllnkdlst
-##fields
+fields
 ##Helper: Stringhelper
 ##Helper: Flowpoint
 ##I18N
@@ -21,7 +21,7 @@ Math::Discrete
 ##Algorithms::minmax
 #Math::Large_Mul
 Math::Large_Mul_V2
-#dtypes
+dtypes
 #Math::OverflowSafe
 Algorithms::fifo_fixed_size
 Algorithms::median_filter"

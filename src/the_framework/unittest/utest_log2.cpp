@@ -165,7 +165,7 @@ TEST_CASE("Math::Log2 using stdlib as reference"){
       CAPTURE( u16(res) );
       double dbl = std::floor(std::log2(ii));
       CAPTURE( dbl );
-      REQUIRE( res == static_cast<u8>(dbl) );
+      REQUIRE( u16(res) == static_cast<u8>(dbl) );
     }
   }
 

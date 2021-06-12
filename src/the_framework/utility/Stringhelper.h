@@ -31,6 +31,7 @@
 #include <iomanip>
 #include <array>
 #include <typeinfo>
+#include <bitset>
 #if defined(__GNUC__)
   #include <cxxabi.h>
 #endif
@@ -183,6 +184,17 @@ template<typename T> std::string prnbin(T const data, u8 const length = Math::Bo
   return ss.str();
 }
 
+/**
+ *
+ */
+template<typename T, std::size_t N=Math::Boolean::GETBITSOFTYPE<T>()> std::string prnbin_bitset(T const data){
+  Compile::Guards::IsInteger<T>();
+  std::stringstream ss;
+  ss << std::bitset<N>(data);
+  return ss.str();
+}
+
+#define PRNBIN(_X)       (Utility::Strings::prnbin<decltype(_X)>(_X))
 #define PRNBINVAR(_X,_b) (Utility::Strings::stradd<3>({#_X,": ",Utility::Strings::prnbin<decltype(_X)>((_X),(_b))}))
 
 //-----

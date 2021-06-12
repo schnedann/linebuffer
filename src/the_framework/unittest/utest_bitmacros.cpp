@@ -36,6 +36,7 @@
 #include "bitmacros.h"
 #include "math_discrete.h"
 #include "simple_hash_fct.h"
+#include "Stringhelper.h"
 
 /****************************************
  * Defines
@@ -239,13 +240,27 @@ TEST_CASE("Math::Boolean","[boolean]"){
     auto ref =  tmp;
     auto dut = 0-tmp;
 
-    CAPTURE(tmp);
-    CAPTURE(ref);
-    CAPTURE(dut);
+    CAPTURE(s32(tmp));
+    CAPTURE(PRNBIN(tmp));
 
-    auto ref3 = Math::Boolean::INTABS_V3<s32>(dut);
-    auto ref2 = Math::Boolean::INTABS_V2<s32>(dut);
-    auto  res = Math::Boolean::INTABS<s32>(dut);
+    CAPTURE(s32(ref));
+    CAPTURE(PRNBIN(ref));
+
+    CAPTURE(s32(dut));
+    CAPTURE(PRNBIN(dut));
+
+    auto ref3 = Math::Boolean::INTABS_V3<s32>(s32(dut));
+    auto ref2 = Math::Boolean::INTABS_V2<s32>(s32(dut));
+    auto  res = Math::Boolean::INTABS<s32>(s32(dut));
+
+    CAPTURE(ref3);
+    CAPTURE(PRNBIN(ref3));
+
+    CAPTURE(ref2);
+    CAPTURE(PRNBIN(ref2));
+
+    CAPTURE(res);
+    CAPTURE(PRNBIN(res));
 
     REQUIRE(  ref == res );
     REQUIRE( ref2 == res );
@@ -582,6 +597,44 @@ TEST_CASE("Math::Boolean","[boolean]"){
       mask = (mask<<1) | 1;
       ref <<= 1;
     }while(mask != Math::Boolean::GETFULLMASK<x_t>(Math::Boolean::GETBITSOFTYPE<x_t>()));
+  }
+
+//--------------------------------------------------
+
+  SECTION("Math::Boolean::Logic_Shift_L"){
+    REQUIRE( 0xC3D40000ul == Math::Boolean::Logic_Shift_L<u32>(0xA1B2C3D4ul,16) );
+    REQUIRE( 0x0D961EA0ul == Math::Boolean::Logic_Shift_L<u32>(0xA1B2C3D4ul,3) );
+    REQUIRE( 0x80000000ul == Math::Boolean::Logic_Shift_L<u32>(0xA1B2C3D4ul,29) );
+  }
+
+  SECTION("Math::Boolean::Logic_Shift_R"){
+    REQUIRE( 0x0000A1B2ul == Math::Boolean::Logic_Shift_R<u32>(0xA1B2C3D4ul,16) );
+    REQUIRE( 0x1436587aul == Math::Boolean::Logic_Shift_R<u32>(0xA1B2C3D4ul,3) );
+    REQUIRE( 0x00000005ul == Math::Boolean::Logic_Shift_R<u32>(0xA1B2C3D4ul,29) );
+  }
+
+  SECTION("Math::Boolean::Arith_Shift_L"){
+    REQUIRE( 0xC3D40000ul      == Math::Boolean::Arith_Shift_L<u32>(0xA1B2C3D4ul,16) );
+    REQUIRE( s32(0xC3D40000ul) == Math::Boolean::Arith_Shift_L<s32>(s32(0xA1B2C3D4ul),16) );
+  }
+
+  SECTION("Math::Boolean::Arith_Shift_R"){
+    REQUIRE( 0x0000A1B2ul      == Math::Boolean::Arith_Shift_R<u32>(0xA1B2C3D4ul,16) );
+    REQUIRE( s32(0xFFFFA1B2ul) == Math::Boolean::Arith_Shift_R<s32>(s32(0xA1B2C3D4ul),16) );
+    REQUIRE( s32(0xF436587Aul) == Math::Boolean::Arith_Shift_R<s32>(s32(0xA1B2C3D4ul),3) );
+    REQUIRE( s32(0xFFFFFFFDul) == Math::Boolean::Arith_Shift_R<s32>(s32(0xA1B2C3D4ul),29) );
+  }
+
+  SECTION("Math::Boolean::ROTL"){
+    REQUIRE( 0xC3D4A1B2ul == Math::Boolean::ROTL<u32>(0xA1B2C3D4ul,16) );
+    REQUIRE( 0xB2C3D4A1ul == Math::Boolean::ROTL<u32>(0xA1B2C3D4ul,8) );
+    REQUIRE( 0x6587A943ul == Math::Boolean::ROTL<u32>(0xA1B2C3D4ul,9) );
+  }
+
+  SECTION("Math::Boolean::ROTR"){
+    REQUIRE( 0xC3D4A1B2ul == Math::Boolean::ROTR<u32>(0xA1B2C3D4ul,16) );
+    REQUIRE( 0xD4A1B2C3ul == Math::Boolean::ROTR<u32>(0xA1B2C3D4ul,8) );
+    REQUIRE( 0xEA50D961ul == Math::Boolean::ROTR<u32>(0xA1B2C3D4ul,9) );
   }
 
 //--------------------------------------------------

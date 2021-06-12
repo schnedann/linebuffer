@@ -548,11 +548,12 @@ template<typename T> constexpr bool TESTBITS(T const _x, T const _y) noexcept{
 /**
  * @brief - Logic_Shift_L
  * @note https://en.wikipedia.org/w/index.php?title=Logical_shift&oldid=1016534066
+ * @param
  */
 template<typename T> constexpr T Logic_Shift_L(T const _x, u8 const bits, bool shift_in_one=false) noexcept{
   Compile::Guards::IsUnsigned<T>();
   constexpr auto const TBits = u8(Math::Boolean::GETBITSOFTYPE<T>());
-  return ((bits<TBits)?((_x<<bits)|((shift_in_one)?(1):(0))):(0));
+  return (((bits>0)&&(bits<TBits))?((_x<<bits)|((shift_in_one)?(1):(0))):(0));
 }
 
 /**
@@ -561,7 +562,7 @@ template<typename T> constexpr T Logic_Shift_L(T const _x, u8 const bits, bool s
 template<typename T> constexpr T Logic_Shift_R(T const _x, u8 const bits, bool shift_in_one=false) noexcept{
   Compile::Guards::IsUnsigned<T>();
   constexpr auto const TBits = u8(Math::Boolean::GETBITSOFTYPE<T>());
-  return ((bits<TBits)?((_x>>bits)|((shift_in_one)?(Math::Boolean::MASK_MSB<T>()):(0))):(0));
+  return (((bits>0)&&(bits<TBits))?((_x>>bits)|((shift_in_one)?(Math::Boolean::MASK_MSB<T>()):(0))):(0));
 }
 
 /**
@@ -587,7 +588,7 @@ template<typename T> constexpr T ROTR(T const _x, u8 const bits) noexcept{
  */
 template<typename T> constexpr T Arith_Shift_L(T const _x, u8 const bits) noexcept{
   Compile::Guards::IsInteger<T>();
-  return T(Logic_Shift_L<T>(unsigned_t<T>(_x),bits,false));
+  return T(Logic_Shift_L<unsigned_t<T>>(unsigned_t<T>(_x),bits,false));
 }
 
 /**
@@ -596,8 +597,15 @@ template<typename T> constexpr T Arith_Shift_L(T const _x, u8 const bits) noexce
  */
 template<typename T> constexpr T Arith_Shift_R(T const _x, u8 const bits) noexcept{
   Compile::Guards::IsInteger<T>();
-  bool is_MSB_set = (Math::Boolean::AND<T>(_x,Math::Boolean::MASK_MSB<T>())>0);
-  return T(Logic_Shift_R<>(unsigned_t<T>(_x),bits,is_MSB_set));
+  constexpr auto const TBits = u8(Math::Boolean::GETBITSOFTYPE<T>());
+
+  auto shifted = Logic_Shift_R<unsigned_t<T>>(unsigned_t<T>(_x),bits);
+  if(std::is_signed<T>::value && (0>_x)){
+    bool is_MSB_set = (Math::Boolean::AND<unsigned_t<T>>(unsigned_t<T>(_x),Math::Boolean::MASK_MSB<unsigned_t<T>>())>0);
+    auto mask    = Math::Boolean::Logic_Shift_L<unsigned_t<T>>(Math::Boolean::GETFULLMASK<unsigned_t<T>>(bits),(TBits-bits));
+    shifted = T(Math::Boolean::OR<unsigned_t<T>>(shifted,(is_MSB_set)?(mask):(0)));
+  }
+  return shifted;
 }
 
 //--------------------------------------------------

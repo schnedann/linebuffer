@@ -485,15 +485,19 @@ template<typename T> u8 floor_log2_v2(T const val){
 // Floor(log2(x))
 template<typename T> u8 floor_log2_v3(T const _a){
   Compile::Guards::IsUnsigned<T>();
-  auto const bytes = sizeof(T);
-  T x = _a;
-  x |= (x >> 1);
-  x |= (x >> 2);
-  x |= (x >> 4);
-  if(2>=bytes){x |= (x >> 8);}
-  if(4>=bytes){x |= (x >> 16);}
-  if(8>=bytes){x |= (x >> 32);}
-  return u8(Algorithms::CountBitsset::parallel<T>(x) - 1);
+  u8 res = 0;
+  if(_a>0){
+    auto const bytes = sizeof(T);
+    T x = _a;
+    x |= (x >> 1);
+    x |= (x >> 2);
+    x |= (x >> 4);
+    if(2>=bytes){x |= (x >> 8);}
+    if(4>=bytes){x |= (x >> 16);}
+    if(8>=bytes){x |= (x >> 32);}
+    res = u8(Algorithms::CountBitsset::parallel<T>(x) - 1);
+  }
+  return res;
 }
 
 //--------------------------------------------------
